@@ -1,0 +1,58 @@
+.HeaderBarOuter {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+
+	color:white;
+	padding-top: 10px;
+	margin: 0 10px;
+	gap: 10px;
+}
+
+.HeaderBarOuter .HeaderBar_Title,
+.HeaderBarOuter .HeaderBar_Navbar {
+	width: 100%;
+	max-width: 1200px;
+
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-start;
+	align-items: flex-end;
+}
+
+/* Title */
+.HeaderBar_Title {
+	gap: 10px;
+}
+#WebIcon {
+	width: 60px;
+	height: 60px;
+	background-image: url("../favicon.png");
+	background-size: cover;
+	align-self: flex-end;
+	flex-shrink: 0;
+}
+#WebTitle {
+	font-size: 32px;
+	flex-shrink: 0;
+}
+#WebVersion {
+	flex-shrink: 1;
+}
+
+@media only screen and (max-width: 400px) {
+  #WebVersion { display:none; }
+}
+
+/* NavBar */
+.HeaderBar_Navbar {
+	display: flex;
+	align-items: baseline;
+	gap: 5px;
+}
+.HeaderBar_Navbar .navbtn {
+	padding: 5px 10px;
+	border-radius: 5px;
+	//background-color: var(--color-navbtn);
+}

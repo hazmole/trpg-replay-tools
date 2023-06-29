@@ -1,1 +1,16 @@
 /* You can add global styles to this file, and also import other style files */
+:root {
+	--color-background: #070f17;
+	--color-background2: #050d31;
+	--color-navbtn: #313358;
+}
+
+html {
+	min-width: 350px;
+	
+}
+body {
+	margin: 0;
+	background: linear-gradient(var(--color-background), var(--color-background2)) fixed;
+
+}
