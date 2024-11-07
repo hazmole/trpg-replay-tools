@@ -5,11 +5,14 @@
       <div id="WebVersion">ver.{{ version }}</div>
   </div>
   <div class="HeaderBar_Navbar">
-    <div *ngFor="let navObj of navbarArr" class="navbtn">
+    <div *ngFor="let navObj of navbarArr" class="navbtn clickable" (click)="pageChange(navObj.url)">
       {{ navObj.title }}
     </div>
   </div>
 </div>
 
-
-<router-outlet></router-outlet>
+<div class="BodyPanelOuter">
+  <div class="BodyPanel">
+    <router-outlet></router-outlet>
+  </div>
+</div>

@@ -7,6 +7,7 @@
 	color:white;
 	padding-top: 10px;
 	margin: 0 10px;
+	margin-bottom: 1rem;
 	gap: 10px;
 }
 
@@ -47,12 +48,36 @@
 
 /* NavBar */
 .HeaderBar_Navbar {
+	background: var(--color-navbar-bg);
+	border-color: var(--color-navbar-border);
+	border-width: 1px 0;
+	border-style: solid;
+
 	display: flex;
 	align-items: baseline;
 	gap: 5px;
 }
 .HeaderBar_Navbar .navbtn {
 	padding: 5px 10px;
-	border-radius: 5px;
-	//background-color: var(--color-navbtn);
+	color: var(--color-navbtn-text);
+}
+.HeaderBar_Navbar .navbtn:hover {
+	background-color: #0000003b;
+	color: var(--color-navbtn-text-hover);
+}
+
+
+/* BodyPanel */
+.BodyPanelOuter {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+.BodyPanelOuter .BodyPanel {
+	width: 100%;
+	max-width: 1200px;
+
+	background: var(--color-body-panel-ground);
+	height: calc(100vh - 150px);
 }

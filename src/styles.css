@@ -1,8 +1,13 @@
 /* You can add global styles to this file, and also import other style files */
 :root {
 	--color-background: #070f17;
-	--color-background2: #050d31;
-	--color-navbtn: #313358;
+	--color-background2: #2a232c;
+	--color-navbar-bg: #313358;
+	--color-navbar-border: #4e5073;
+	
+	--color-navbtn-text: #d7c6ff;
+	--color-navbtn-text-hover: #f2edff;
+	--color-body-panel-ground: #312e3d;
 }
 
 html {
@@ -12,5 +17,8 @@ html {
 body {
 	margin: 0;
 	background: linear-gradient(var(--color-background), var(--color-background2)) fixed;
+}
 
+.clickable {
+	cursor: pointer;
 }

@@ -9,7 +9,13 @@ export class AppComponent {
   title = '哈絲的團錄工具';
   version = "0.01";
   navbarArr = [
+    { title: '首頁', url: '' },
     { title: '編輯器', url: 'editor' },
     { title: '播放器', url: 'player' },
   ];
+
+  public pageChange(url :string): void {
+    
+    window.location.href = `/${url}`;
+  } 
 }
