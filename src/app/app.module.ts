@@ -18,7 +18,6 @@ import { PlayerComponent } from './views/home/player/player.component';
     BrowserModule,
     AppRoutingModule
   ],
-  providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
