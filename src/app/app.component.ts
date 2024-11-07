@@ -14,8 +14,4 @@ export class AppComponent {
     { title: '播放器', url: 'player' },
   ];
 
-  public pageChange(url :string): void {
-    
-    window.location.href = `/${url}`;
-  } 
 }

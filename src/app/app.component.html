@@ -5,7 +5,7 @@
       <div id="WebVersion">ver.{{ version }}</div>
   </div>
   <div class="HeaderBar_Navbar">
-    <div *ngFor="let navObj of navbarArr" class="navbtn clickable" (click)="pageChange(navObj.url)">
+    <div *ngFor="let navObj of navbarArr" class="navbtn clickable" routerLink="{{ navObj.url }}">
       {{ navObj.title }}
     </div>
   </div>
