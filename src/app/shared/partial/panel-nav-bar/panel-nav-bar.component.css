@@ -1,0 +1,7 @@
+.PanelNavBar {
+    display: flex;
+    gap: 3px;
+    padding: 5px;
+
+    background-color: var(--color-panel-navbar-bg);
+}

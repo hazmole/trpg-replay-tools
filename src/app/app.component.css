@@ -65,6 +65,10 @@
 	background-color: #0000003b;
 	color: var(--color-navbtn-text-hover);
 }
+.HeaderBar_Navbar .navbtn.active {
+	background-color: #0000003b;
+	color: var(--color-navbtn-text-hover);
+}
 
 
 /* BodyPanel */
@@ -77,7 +81,5 @@
 .BodyPanelOuter .BodyPanel {
 	width: 100%;
 	max-width: 1200px;
-
-	background: var(--color-body-panel-ground);
-	height: calc(100vh - 150px);
+	color: gray;
 }

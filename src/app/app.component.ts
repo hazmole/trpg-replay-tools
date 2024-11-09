@@ -22,7 +22,7 @@ export class AppComponent implements OnInit {
   title = '哈絲的團錄工具';
   version = "0.01";
   navbarArr = [
-    { title: '首頁', url: '' },
+    { title: '首頁', url: 'home' },
     { title: '編輯器', url: 'editor' },
     { title: '播放器', url: 'player' },
   ];

@@ -1,0 +1,27 @@
+.btn {
+    width: 75px;
+    height: 60px;
+    background-color: var(--color-panel-navbtn-bg);
+    padding: 5px 0 0 0;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.btn:hover {
+    background-color: var(--color-panel-navbtn-bg-hover);
+}
+.btn:active,
+.btn.active {
+    background-color: var(--color-panel-navbtn-bg-active);
+}
+
+.btn .icon img {
+    height: 35px;
+    width: 35px;
+}
+
+.btn .text {
+    font-size: .8em;
+    color: #d1d1d1;
+}

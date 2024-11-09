@@ -1,1 +1,19 @@
-<p>editor works!</p>
+<app-base-layer>
+    <app-panel-nav-bar>
+        <app-panel-nav-button 
+            *ngFor="let navKey of navbarArr" 
+            [key]="navKey"
+            [isActive]="currentTabKey==navKey"
+            (click)="clickTab(navKey)"
+        ></app-panel-nav-button>
+    </app-panel-nav-bar>
+    
+    <!-- MainPanel -->
+    <div class="EditPanel">
+        <app-editor-import  *ngIf="currentTabKey=='import'"></app-editor-import>
+        <app-editor-export  *ngIf="currentTabKey=='export'"></app-editor-export>
+        <app-editor-actor   *ngIf="currentTabKey=='actors'"></app-editor-actor>
+        <app-editor-content *ngIf="currentTabKey=='content-edit'"></app-editor-content>
+
+    </div>
+</app-base-layer>

@@ -7,7 +7,12 @@
 	
 	--color-navbtn-text: #d7c6ff;
 	--color-navbtn-text-hover: #f2edff;
-	--color-body-panel-ground: #312e3d;
+	--color-body-panel-ground: #292937;
+	
+	--color-panel-navbar-bg: #19191c;
+	--color-panel-navbtn-bg: #3a3d4b;
+	--color-panel-navbtn-bg-hover:  #676672;;
+	--color-panel-navbtn-bg-active: #333361;
 }
 
 html {

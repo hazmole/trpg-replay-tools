@@ -1,1 +1,16 @@
-<p>player works!</p>
+<app-base-layer>
+    <app-panel-nav-bar>
+        <app-panel-nav-button 
+            *ngFor="let navKey of navbarArr" 
+            [key]="navKey"
+            [isActive]="currentTabKey==navKey"
+            (click)="clickTab(navKey)"
+        ></app-panel-nav-button>
+    </app-panel-nav-bar>
+    
+    <!-- MainPanel -->
+    <div class="EditPanel">
+
+
+    </div>
+</app-base-layer>
