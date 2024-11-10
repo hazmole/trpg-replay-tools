@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { WelcomeComponent } from './views/home/welcome/welcome.component';
-import { EditorComponent } from './views/home/editor/editor.component';
-import { PlayerComponent } from './views/home/player/player.component';
+import { WelcomeComponent } from './views/main/welcome/welcome.component';
+import { EditorComponent } from './views/main/editor/editor.component';
+import { PlayerComponent } from './views/main/player/player.component';
 
 const webTitle_prefix = "哈絲的團錄工具 - ";
 

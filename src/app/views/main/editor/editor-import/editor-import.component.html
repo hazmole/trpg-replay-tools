@@ -1,0 +1,33 @@
+<div class="panelRoot">
+
+    <h2>匯入檔案</h2>
+
+    <div class="paragraph">
+        你可以選擇讀取已輸出的團錄檔案、或是直接從跑團平台的房間匯入紀錄。<br/>
+        目前支援的格式和平台如下：
+        <ul>
+            <li>此工具輸出的文件 (.html, .hzrp)</li>
+            <li>どどんとふ (.html)</li>
+            <li>ccfolia (.html)</li>
+        </ul>
+    </div>
+
+    <div class="paragraph">
+        <app-input-title titleText="匯入方式"></app-input-title>
+        <select id="_input_importMethod">
+            <option value="file">讀取團錄檔案</option>
+            <!--<option value="api">從跑團平台匯入 (TRPG網頁版)</option>-->
+        </select>
+    </div>
+
+    <hr>
+    <div class="paragraph">
+        <input class="fullWidth" type="file" accept=".html,.hzrp" (change)="onFileSelected($event)">
+    </div>
+
+    <hr>
+    <div class="paragraph right">
+        <app-button-apply text="匯入團錄" (click)="importFile()"></app-button-apply>
+    </div>
+
+</div>

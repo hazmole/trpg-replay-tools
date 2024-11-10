@@ -1,0 +1,24 @@
+:host {
+    --message-box-width: 500px;
+}
+
+
+div {
+    position: absolute;
+
+    width: var(--message-box-width);
+    z-index: 100;
+
+    left: calc(50%);
+    margin-left: calc(var(--message-box-width) / 2 * -1);
+
+    border-radius: 5px;
+    padding: 5px;
+    color: black;
+    
+    text-align: center;
+}
+
+.success { background: #7ced99; }
+.warning { background: #ffbe46; }
+.error   { background: #ed7f7f; }

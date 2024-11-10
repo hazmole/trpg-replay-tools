@@ -1,4 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
+import { ViewContainerRef } from '@angular/core';
 
 import { environment } from 'src/environments/environment';
 import { DOCUMENT } from '@angular/common';
@@ -10,7 +11,10 @@ import { DOCUMENT } from '@angular/common';
 })
 export class AppComponent implements OnInit {
 
-  constructor(@Inject(DOCUMENT) private document: Document) {}
+  constructor(
+    @Inject(DOCUMENT) private document: Document,
+    public viewRef: ViewContainerRef
+  ) {}
 
   ngOnInit(): void {
       let bases = this.document.getElementsByTagName('base');

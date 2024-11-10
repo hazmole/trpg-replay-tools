@@ -7,11 +7,10 @@
 	
 	--color-navbtn-text: #d7c6ff;
 	--color-navbtn-text-hover: #f2edff;
-	--color-body-panel-ground: #292937;
 	
 	--color-panel-navbar-bg: #19191c;
 	--color-panel-navbtn-bg: #3a3d4b;
-	--color-panel-navbtn-bg-hover:  #676672;;
+	--color-panel-navbtn-bg-hover:  #676672;
 	--color-panel-navbtn-bg-active: #333361;
 }
 
@@ -24,6 +23,25 @@ body {
 	background: linear-gradient(var(--color-background), var(--color-background2)) fixed;
 }
 
+h2 {
+    margin-top: 0;
+}
+hr {
+	border-style: solid;
+	border-color: #00000060;
+	margin-top: 1rem;
+	margin-bottom: 1rem;
+}
+
+
+
+.paragraph {
+	margin-top:    10px;
+	margin-bottom: 10px;
+}
+.fullWidth {
+	width: 100%;
+}
 .clickable {
 	cursor: pointer;
 }

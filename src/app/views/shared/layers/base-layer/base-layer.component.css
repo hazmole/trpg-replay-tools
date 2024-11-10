@@ -1,5 +1,7 @@
 .BaseLayer {
 	width: 100%;
     height: calc(100vh - 180px);
-	background: var(--color-body-panel-ground);
+
+	display: flex;
+	flex-direction: column;
 }
