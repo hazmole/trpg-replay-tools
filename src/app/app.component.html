@@ -5,7 +5,10 @@
       <div id="WebVersion">ver.{{ version }}</div>
   </div>
   <div class="HeaderBar_Navbar">
-    <div *ngFor="let navObj of navbarArr" class="navbtn clickable" routerLink="{{ navObj.url }}" routerLinkActive="active">
+    <div *ngFor="let navObj of navbarArr" 
+      class="navbtn clickable"
+      [ngClass]="{'active': currentTabKey==navObj.url}"
+      (click)="clickTab(navObj.url)" >
       {{ navObj.title }}
     </div>
   </div>
@@ -13,6 +16,8 @@
 
 <div class="BodyPanelOuter">
   <div class="BodyPanel">
-    <router-outlet></router-outlet>
+    <app-welcome *ngIf="currentTabKey=='home'"></app-welcome>
+    <app-editor *ngIf="currentTabKey=='editor'"></app-editor>
+    <app-player *ngIf="currentTabKey=='player'"></app-player>
   </div>
 </div>

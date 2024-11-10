@@ -1,8 +1,8 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { ViewContainerRef } from '@angular/core';
+import { DOCUMENT } from '@angular/common';
 
 import { environment } from 'src/environments/environment';
-import { DOCUMENT } from '@angular/common';
 
 @Component({
   selector: 'app-root',
@@ -25,10 +25,15 @@ export class AppComponent implements OnInit {
 
   title = '哈絲的團錄工具';
   version = "0.01";
+
   navbarArr = [
-    { title: '首頁', url: 'home' },
+    { title: '首頁',   url: 'home' },
     { title: '編輯器', url: 'editor' },
     { title: '播放器', url: 'player' },
   ];
+  public currentTabKey:string = "home";
 
+  public clickTab(newTab:string) {
+    this.currentTabKey = newTab;
+  }
 }

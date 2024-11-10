@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { AppRoutingModule } from './app-routing.module';
+//import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
 /* Components */
@@ -49,7 +49,7 @@ import { ToolService } from './services/tool.service';
     BrowserAnimationsModule,
     FormsModule,
     ReactiveFormsModule,
-    AppRoutingModule,
+    //AppRoutingModule,
   ],
   providers: [
     ReplayManagerService,
