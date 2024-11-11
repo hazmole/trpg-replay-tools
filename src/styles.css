@@ -14,6 +14,10 @@
 	--color-panel-navbtn-bg-active: #333361;
 
 	--color-main-panel-bg: #cdd2db;
+
+	--color-apply-btn-bg: #34446e;
+	--color-apply-btn-bg-hover: #5b6b95;
+	--color-apply-btn-bg-active: #333361;
 }
 
 html {

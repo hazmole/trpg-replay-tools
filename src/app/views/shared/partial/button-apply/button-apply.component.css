@@ -1,15 +1,15 @@
 button {
     width: 100px;
     padding: 15px;
-    background-color: #34446e;
+    background-color: var(--color-apply-btn-bg);
     color: white;
     cursor: pointer;
 }
 button:hover {
-    background-color: #5b6b95;
+    background-color: var(--color-apply-btn-bg-hover);
 }
 button:active {
-    background-color: var(--color-panel-navbtn-bg-active)
+    background-color: var(--color-apply-btn-bg-active)
 }
 
 button.critical {

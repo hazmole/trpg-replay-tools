@@ -16,9 +16,12 @@ export class ToolService {
 
 
   // Confirm Dialog
-  public PopupDialog() {
+  public PopupDialog(message: string, callback: Function) {
     const viewRef = (this.appRef.components[0].instance as AppComponent).viewRef;
     const comp = viewRef.createComponent(PopupDialogComponent);
+    comp.setInput("title", "警告");
+    comp.setInput("message", message);
+    comp.setInput("comfirmCallback", callback);
 
   }
 

@@ -106,8 +106,11 @@ export class EditorActorComponent implements OnInit {
   }
 
   RemoveActor(): void {
-    //this.tool.PopupErrorNotify("此功能尚未實作")
-    this.tool.PopupDialog();
+    this.tool.PopupDialog("你確定要刪除這個使用者嗎？", () => {
+      this.rpManager.DeleteActorInfo(this.currentActorId);
+      this.currentActorId = -1;
+      this.initList();
+    });
   }
 
 }

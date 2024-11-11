@@ -1,7 +1,20 @@
 <div class="block-screen">
-    <div class="dialog">
-        <div class="header"></div>
-        <div class="body"> </div>
-        <div class="footer"> </div>
+    <div class="dialog" cdkDrag>
+        <!-- Header -->
+        <div class="header" cdkDragHandle>
+            <div class="title">{{ title }}</div>
+            <img class="icon" src="assets/images/cancel.png" (click)="close()">
+        </div>
+
+        <!-- Body -->
+        <div class="body">
+            {{ message }}
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <button (click)="confirm()">確認</button>
+            <button (click)="close()">取消</button>
+        </div>
     </div>
 </div>

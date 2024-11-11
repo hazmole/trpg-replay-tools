@@ -13,20 +13,54 @@
 
 .dialog {
     position: absolute;
-
-
-
+    background-color: var(--color-main-panel-bg);
+    border: 2px solid var(--color-panel-navbar-bg);
 
     width: 500px;
 }
 .dialog .header {
-    height: 30px;
-    background-color: rgba(255, 232, 25, 0.514);
+    background-color: var(--color-panel-navbar-bg);
+    cursor: pointer;
+
+    line-height: 30px;
+    font-size: 14px;
+    display: flex;
+    justify-content: space-between;
+    color: white;
 }
+.header .title {
+    padding: 0 .5em;
+}
+.header .icon {
+    width: 30px;
+    height: 30px;
+}
+.header .icon:hover {
+    filter:brightness(1.5);
+}
+
 .dialog .body {
-    background-color: rgb(50, 205, 97);
+    min-height: 20px;
+    padding: 1rem;
 }
 .dialog .footer {
-    height: 50px;
-    background-color: rgba(19, 47, 107, 0.589);
+    /*border-top: 1px solid #00000060;*/
+    padding: 5px;
+
+    display: flex;
+    justify-content: end;
+    gap: 5px;
+}
+
+.footer button {
+    height: 30px;
+    padding: 2px 2rem;
+    background-color: var(--color-panel-navbtn-bg);
+    color: white;
+}
+.footer button:hover {
+    background-color: var(--color-panel-navbtn-bg-hover);
+}
+.footer button:active {
+    background-color: var(--color-panel-navbtn-bg-active);
 }

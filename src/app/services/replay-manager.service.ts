@@ -59,6 +59,10 @@ export class ReplayManagerService {
       actorList[id] = Object.assign({ id, name: "", color: "888888", imgUrl: "" }, newValues);
     }
   }
+  public DeleteActorInfo(id: number) {
+    const actorList = this.replayInfo.actors;
+    delete actorList[id];
+  }
 
   public Test() {
     console.log(this.replayInfo);
