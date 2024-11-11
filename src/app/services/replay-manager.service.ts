@@ -41,6 +41,13 @@ export class ReplayManagerService {
     return (this.replayInfo.isLoaded);
   }
 
+  public GetInfoJSON(): Object {
+    return this.replayInfo;
+  }
+  public SetInfoFromJSON(info: any): void {
+    this.replayInfo = info;
+  }
+
   public GetActorList(): Record<number, ActorInfo> {
     return (this.replayInfo.actors);
   }

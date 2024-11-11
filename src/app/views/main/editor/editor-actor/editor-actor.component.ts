@@ -20,6 +20,8 @@ export class EditorActorComponent implements OnInit {
 
   public currentActorId: number = -1;
   public actorList: Array<ActorInfo> = [];
+  
+  public errImgFlag: boolean = false;
 
   public formGroup = new FormGroup({
     actorName: new FormControl<string>(''),
@@ -53,6 +55,7 @@ export class EditorActorComponent implements OnInit {
       this.formGroup.controls.colorPick.setValue(actor.color);
       this.formGroup.controls.colorText.setValue(actor.color);
       this.formGroup.controls.imgUrl.setValue(actor.imgUrl);
+      this.errImgFlag = false;
     }
   }
 
@@ -63,6 +66,13 @@ export class EditorActorComponent implements OnInit {
   ChangeColorText(): void {
     let colorCode = (this.formGroup.controls.colorText.value || "#888888").toUpperCase();
     this.formGroup.controls.colorPick.setValue(colorCode);
+  }
+
+  ChangeImageUrl(): void {
+    this.errImgFlag = false;
+  }
+  OnImageError(): void {
+    this.errImgFlag = true;
   }
 
   SaveActor(): void {
@@ -93,6 +103,11 @@ export class EditorActorComponent implements OnInit {
 
     this.rpManager.SetActorInfo(newActor.id, newActor);
     this.initList();
+  }
+
+  RemoveActor(): void {
+    //this.tool.PopupErrorNotify("此功能尚未實作")
+    this.tool.PopupDialog();
   }
 
 }

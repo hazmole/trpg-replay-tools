@@ -3,6 +3,7 @@ import { ViewContainerRef } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 
 import { environment } from 'src/environments/environment';
+import { StorageManagerService } from 'src/app/services/storage-manager.service';
 
 @Component({
   selector: 'app-root',
@@ -13,7 +14,8 @@ export class AppComponent implements OnInit {
 
   constructor(
     @Inject(DOCUMENT) private document: Document,
-    public viewRef: ViewContainerRef
+    public viewRef: ViewContainerRef,
+    private storage: StorageManagerService,
   ) {}
 
   ngOnInit(): void {
@@ -21,6 +23,8 @@ export class AppComponent implements OnInit {
       if (bases.length > 0) {
         bases[0].setAttribute('url', environment.baseHref);
       }
+
+      this.storage.Load();
   }
 
   title = '哈絲的團錄工具';

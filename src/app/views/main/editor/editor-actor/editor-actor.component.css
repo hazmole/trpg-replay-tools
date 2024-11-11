@@ -47,7 +47,8 @@
 }
 .plusBtn:hover  { background-color: rgba(0, 0, 0, 0.2); }
 .plusBtn:active { background-color: rgba(0, 0, 0, 0.5); }
-.plusBtn::before {
+
+.plusBtn .icon {
     content: '';
     display: inline-block;
     background: url("/assets/images/plus.png");
@@ -58,7 +59,7 @@
     height: 20px;
     margin-right: .5em;
 }
-.plusBtn:active::before {
+.plusBtn:active .icon {
     filter: brightness(0.8);
 }
 
@@ -110,4 +111,10 @@
 .img-url-input {
     max-width: 800px;
     width: 100%;
+}
+
+
+.btn-list {
+    display: flex;
+    gap: 10px;
 }

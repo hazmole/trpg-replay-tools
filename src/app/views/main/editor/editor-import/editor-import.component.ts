@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 
 import { ReplayManagerService } from 'src/app/services/replay-manager.service';
+import { StorageManagerService } from 'src/app/services/storage-manager.service';
 import { ToolService } from 'src/app/services/tool.service';
 
 @Component({
@@ -12,6 +13,7 @@ export class EditorImportComponent {
 
   constructor(
     private rpManager: ReplayManagerService,
+    private storage: StorageManagerService,
     private tool: ToolService,
   ){ }
 
@@ -29,6 +31,9 @@ export class EditorImportComponent {
         .then(() => {
           this.rpManager.Test();
           this.tool.PopupNotifyMsg("success", "讀取成功！");
+        })
+        .then(() => {
+          this.storage.Save();
         })
         .catch((err) => {
           console.error(err);

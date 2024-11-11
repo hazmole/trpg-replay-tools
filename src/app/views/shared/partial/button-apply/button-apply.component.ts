@@ -7,6 +7,6 @@ import { Component, Input } from '@angular/core';
 })
 export class ButtonApplyComponent {
   @Input() text: string = "";
-
+  @Input() type: string = "";
 
 }

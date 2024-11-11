@@ -13,6 +13,7 @@
 
             <!-- Add Button -->
             <div class="plusBtn clickable" (click)="AddActor()">
+                <div class="icon"></div>
                 新增登場角色
             </div>
 
@@ -34,14 +35,16 @@
                     <app-input-title titleText="角色頭像預覽"></app-input-title>
                     <div class="actorImg">
                         <div *ngIf="getImgUrl()==''">未設定頭像</div>
-                        <img *ngIf="getImgUrl()!=''" [src]="getImgUrl()">
+                        <div *ngIf="errImgFlag">圖片無法顯示！</div>
+                        <img *ngIf="getImgUrl()!='' && !errImgFlag" [src]="getImgUrl()" (error)="OnImageError()">
                     </div>
 
                     <app-input-title titleText="頭像連結"></app-input-title>
-                    <div><input class="img-url-input" type="text" formControlName="imgUrl"></div>
+                    <div><input class="img-url-input" type="text" formControlName="imgUrl" (change)="ChangeImageUrl()"></div>
 
-                    <div class="paragraph">
+                    <div class="paragraph btn-list">
                         <app-button-apply text="儲存" (click)="SaveActor()"></app-button-apply>
+                        <app-button-apply text="刪除" (click)="RemoveActor()" type="critical"></app-button-apply>
                     </div>
                 </div>
             </form>

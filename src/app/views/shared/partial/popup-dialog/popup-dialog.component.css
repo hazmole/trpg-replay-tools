@@ -1,0 +1,32 @@
+.block-screen {
+    position: absolute;
+	top: 0; left: 0;
+    width: calc(100vw);
+	height: calc(100vh);
+    z-index: 20;
+	background: rgba(0,0,0,0.5);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.dialog {
+    position: absolute;
+
+
+
+
+    width: 500px;
+}
+.dialog .header {
+    height: 30px;
+    background-color: rgba(255, 232, 25, 0.514);
+}
+.dialog .body {
+    background-color: rgb(50, 205, 97);
+}
+.dialog .footer {
+    height: 50px;
+    background-color: rgba(19, 47, 107, 0.589);
+}

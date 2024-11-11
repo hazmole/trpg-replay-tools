@@ -9,5 +9,15 @@ button:hover {
     background-color: #5b6b95;
 }
 button:active {
-    background-color: #232e4a;
+    background-color: var(--color-panel-navbtn-bg-active)
+}
+
+button.critical {
+    background-color: #7f0505;
+}
+button.critical:hover {
+    background-color: #914545;
+}
+button.critical:active {
+    background-color: #530000;
 }

@@ -1,7 +1,6 @@
 .TabLayer {
     padding: 1rem;
 
-    border-radius: 0 0 .5rem .5rem;
     background: var(--color-main-panel-bg);
     color: black;
 
