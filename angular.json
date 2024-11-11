@@ -11,11 +11,12 @@
       "prefix": "app",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:browser",
+          "builder": "@angular-devkit/build-angular:application",
           "options": {
-            "outputPath": "dist/trpg-replay-tools",
+            "outputPath": {
+              "base": "dist/trpg-replay-tools"
+            },
             "index": "src/index.html",
-            "main": "src/main.ts",
             "polyfills": [
               "zone.js"
             ],
@@ -27,7 +28,8 @@
             "styles": [
               "src/styles.css"
             ],
-            "scripts": []
+            "scripts": [],
+            "browser": "src/main.ts"
           },
           "configurations": {
             "production": {
@@ -36,8 +38,6 @@
               "sourceMap": false,
               "namedChunks": false,
               "extractLicenses": true,
-              "vendorChunk": false,
-              "buildOptimizer": true,
               "budgets": [
                 {
                   "type": "initial",
@@ -53,9 +53,7 @@
               ]
             },
             "development": {
-              "vendorChunk": true,
               "extractLicenses": false,
-              "buildOptimizer": false,
               "sourceMap": true,
               "optimization": false,
               "namedChunks": true,
@@ -81,10 +79,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "trpg-replay-tools:build:production"
+              "buildTarget": "trpg-replay-tools:build:production"
             },
             "development": {
-              "browserTarget": "trpg-replay-tools:build:development"
+              "buildTarget": "trpg-replay-tools:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -92,7 +90,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "trpg-replay-tools:build"
+            "buildTarget": "trpg-replay-tools:build"
           }
         },
         "test": {
