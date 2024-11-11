@@ -1,6 +1,14 @@
-<app-tab-layer titleText="團錄編輯" >
+<app-tab-layer titleText="團錄編輯" text="你可以在這邊編輯並預覽你的團錄文件。" >
+    <div class="button-bar"></div>
 
 
-
+    <div class="script-edit-panel" cdkDropList (cdkDropListDropped)="drop($event)">
+        @for (entry of entryList; track entry) {
+            <div class="entryItem" cdkDrag >
+                <div class="dragable" cdkDragHandle>||</div>
+                <div class="content">{{ entry.content }}</div>
+            </div>
+        }
+    </div>
 
 </app-tab-layer>

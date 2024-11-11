@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ReplayInfo } from 'src/app/interfaces/replay-info.interface';
+import { ReplayInfo, ScriptEntry } from 'src/app/interfaces/replay-info.interface';
 import { ParserService } from './parser.service';
 
 import { ActorInfo, newReplayInfo } from 'src/app/interfaces/replay-info.interface';
@@ -48,6 +48,7 @@ export class ReplayManagerService {
     this.replayInfo = info;
   }
 
+  /* Actor */
   public GetActorList(): Record<number, ActorInfo> {
     return (this.replayInfo.actors);
   }
@@ -63,6 +64,13 @@ export class ReplayManagerService {
     const actorList = this.replayInfo.actors;
     delete actorList[id];
   }
+
+
+  /* Script */
+  public GetScriptEntryList(): Array<ScriptEntry> {
+    return (this.replayInfo.script);
+  }
+
 
   public Test() {
     console.log(this.replayInfo);

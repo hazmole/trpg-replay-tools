@@ -46,6 +46,11 @@
                         <app-button-apply text="儲存" (click)="SaveActor()"></app-button-apply>
                         <app-button-apply text="刪除" (click)="RemoveActor()" type="critical"></app-button-apply>
                     </div>
+
+                    <hr>
+                    <div><b>角色UID：</b>{{ outputList.actorID }}</div>
+                    <div><b>發言次數：</b>{{ outputList.scriptOwnCount }}</div>
+
                 </div>
             </form>
 

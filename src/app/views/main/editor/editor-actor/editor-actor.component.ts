@@ -31,11 +31,15 @@ export class EditorActorComponent implements OnInit {
   });
 
 
+  public outputList = {
+    actorID: -1,
+    scriptOwnCount: 0,
+  };
+
   ngOnInit(): void {
     this.initList();
-
-
   }
+  
   initList(): void {
     this.actorList = Object.values(this.rpManager.GetActorList());
   }
@@ -56,6 +60,11 @@ export class EditorActorComponent implements OnInit {
       this.formGroup.controls.colorText.setValue(actor.color);
       this.formGroup.controls.imgUrl.setValue(actor.imgUrl);
       this.errImgFlag = false;
+
+      this.outputList.actorID = actor.id;
+      this.outputList.scriptOwnCount = Object.values(this.rpManager.GetScriptEntryList()).filter((script)=>{
+        return (script.actorId != null) && script.actorId == actor.id;
+      }).length;
     }
   }
 

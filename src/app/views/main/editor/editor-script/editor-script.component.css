@@ -1,0 +1,30 @@
+.script-edit-panel {
+    flex-grow: 1;
+    min-height: 0;
+
+    overflow: auto;
+
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.entryItem {
+    background-color: white;
+
+    display: flex;
+}
+
+.entryItem .dragable {
+    cursor: grab;
+    width: 20px;
+    flex-grow: 0;
+    flex-shrink: 0;
+
+    text-align: center;
+    background-color: #dddddd;
+}
+.entryItem .content {
+    padding: 5px;
+    flex-grow: 1;
+}

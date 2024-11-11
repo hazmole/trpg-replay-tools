@@ -26,7 +26,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      NODE_VERSION: '18.x'
+      NODE_VERSION: '20.18.0'
     steps:
       - uses: actions/checkout@v4
 
