@@ -3,6 +3,7 @@ export interface ReplayInfo {
     config: ReplayConfig;
     actors: Record<number, ActorInfo>;
     script: Array<ScriptEntry>;
+    isLoaded: boolean;
 }
 export const newReplayInfo = () => {
     return {
@@ -10,6 +11,7 @@ export const newReplayInfo = () => {
         config: {},
         actors: {},
         script: [],
+        isLoaded: false,
     }
 }
 

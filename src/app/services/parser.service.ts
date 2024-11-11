@@ -15,7 +15,7 @@ export class ParserService {
   constructor() { }
 
   Parse(fileName:string, fileData:string): (ReplayInfo | null) {
-    let infoObj:(ReplayInfo | null) = null;
+    let infoObj:(ReplayInfo|null) = null;
     
     let sourceType = this.CheckMode(fileData);
     switch(sourceType) {
@@ -25,8 +25,9 @@ export class ParserService {
       case 'hazrp':     infoObj = ParseHazRpJSON(fileData); break;
     }
     
-    if(infoObj!=null) {
+    if(infoObj != null) {
       infoObj.filename = fileName;
+      infoObj.isLoaded = true;
     }
     
     return infoObj;

@@ -12,6 +12,8 @@
 	--color-panel-navbtn-bg: #3a3d4b;
 	--color-panel-navbtn-bg-hover:  #676672;
 	--color-panel-navbtn-bg-active: #333361;
+
+	--color-main-panel-bg: #cdd2db;
 }
 
 html {
@@ -33,7 +35,9 @@ hr {
 	margin-bottom: 1rem;
 }
 
-
+input[type=text] {
+	height: 20px;
+}
 
 .paragraph {
 	margin-top:    10px;
@@ -44,4 +48,7 @@ hr {
 }
 .clickable {
 	cursor: pointer;
+}
+.hidden {
+	display: none;
 }

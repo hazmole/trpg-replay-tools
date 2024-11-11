@@ -53,7 +53,7 @@ function registerActorByName(table: Record<string, ActorInfo>, actorName:string,
         const newActor = {
             id: Object.keys(table).length,
             name: actorName,
-            color: color,
+            color: "#"+color.toUpperCase(),
             imgUrl: "",
         };
         table[actorName] = newActor;

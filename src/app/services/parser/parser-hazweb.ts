@@ -11,7 +11,7 @@ export const ParseHazWeb:ParserFunc = (content:string) => {
     (style.match(RegExpList.hazv1_actorCss) || []).forEach((actorData) => {
         let matchMap = [...actorData.matchAll(RegExpList.hazv1_actorCss)][0];
         let id     = parseInt(matchMap[1]);
-        let color  = (matchMap[2] || "888888");
+        let color  = "#"+(matchMap[2] || "888888").toUpperCase();
         let name   = (matchMap[3] || "");
         let imgUrl = (matchMap[4] || "");
 

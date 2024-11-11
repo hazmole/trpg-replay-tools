@@ -15,7 +15,7 @@ import { PanelNavBarComponent } from './views/shared/partial/panel-nav-bar/panel
 import { EditorImportComponent } from './views/main/editor/editor-import/editor-import.component';
 import { EditorExportComponent } from './views/main/editor/editor-export/editor-export.component';
 import { EditorActorComponent } from './views/main/editor/editor-actor/editor-actor.component';
-import { EditorContentComponent } from './views/main/editor/editor-content/editor-content.component';
+import { EditorScriptComponent } from './views/main/editor/editor-script/editor-script.component';
 import { InputTitleComponent } from './views/shared/partial/input-title/input-title.component';
 import { InputDropdownSelectComponent } from './views/shared/partial/input-dropdown-select/input-dropdown-select.component';
 import { ButtonApplyComponent } from './views/shared/partial/button-apply/button-apply.component';
@@ -25,6 +25,7 @@ import { NotifyMessageComponent } from './views/shared/partial/notify-message/no
 import { ReplayManagerService } from './services/replay-manager.service';
 import { ParserService } from './services/parser.service';
 import { ToolService } from './services/tool.service';
+import { TabLayerComponent } from './views/shared/layers/tab-layer/tab-layer.component';
 
 @NgModule({
   declarations: [
@@ -38,11 +39,12 @@ import { ToolService } from './services/tool.service';
     EditorImportComponent,
     EditorExportComponent,
     EditorActorComponent,
-    EditorContentComponent,
+    EditorScriptComponent,
     InputTitleComponent,
     InputDropdownSelectComponent,
     ButtonApplyComponent,
     NotifyMessageComponent,
+    TabLayerComponent,
   ],
   imports: [
     BrowserModule,

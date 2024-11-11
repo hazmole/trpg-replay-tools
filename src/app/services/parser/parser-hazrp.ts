@@ -9,6 +9,7 @@ export const ParseHazRpJSON:ParserFunc = (content:string) => {
         filename: "",
         config: {},
         actors: [],
-        script: []
+        script: [],
+        isLoaded: false
     };
 };

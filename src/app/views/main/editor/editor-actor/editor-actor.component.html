@@ -1,1 +1,55 @@
-<p>editor-actor works!</p>
+<app-tab-layer titleText="角色設定" text="請點選左側的登場角色進行個別設定。">
+
+    <div class="flexContainer">
+        <div class="leftCol">
+
+            <!-- Actor List -->
+            <div *ngFor="let actor of actorList" class="actorBtn clickable" 
+                [ngClass]="{'active': currentActorId==actor.id}"
+                (click)="SelectActor(actor)">
+                <div class="hidden">{{ actor.id }}</div>
+                <div class="name">{{ actor.name }}</div>
+            </div>
+
+            <!-- Add Button -->
+            <div class="plusBtn clickable" (click)="AddActor()">
+                新增登場角色
+            </div>
+
+        </div>
+        <div class="rightCol">
+
+            <!-- Actor Setting Panel -->
+            <form [formGroup]="formGroup">
+                <div *ngIf="isSelected()" >
+                    <app-input-title titleText="名稱"></app-input-title>
+                    <div><input type="text" formControlName="actorName"></div>
+
+                    <app-input-title titleText="代表色"></app-input-title>
+                    <div class="colorPicker">
+                        <input type="text"  formControlName="colorText" class="colorPicker-text" placeholder="#RRGGBB" (change)="ChangeColorText()">
+                        <input type="color" formControlName="colorPick" class="colorPicker-button" (change)="ChangeColorPick()">
+                    </div>
+
+                    <app-input-title titleText="角色頭像預覽"></app-input-title>
+                    <div class="actorImg">
+                        <div *ngIf="getImgUrl()==''">未設定頭像</div>
+                        <img *ngIf="getImgUrl()!=''" [src]="getImgUrl()">
+                    </div>
+
+                    <app-input-title titleText="頭像連結"></app-input-title>
+                    <div><input class="img-url-input" type="text" formControlName="imgUrl"></div>
+
+                    <div class="paragraph">
+                        <app-button-apply text="儲存" (click)="SaveActor()"></app-button-apply>
+                    </div>
+                </div>
+            </form>
+
+            
+        </div>
+    </div>
+
+
+
+</app-tab-layer>

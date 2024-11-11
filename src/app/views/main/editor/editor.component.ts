@@ -7,7 +7,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class EditorComponent implements OnInit {
 
-  public navbarArr:Array<string> = [ "import", "export", "actors", "content-edit" ];
+  public navbarArr:Array<string> = [ "import", "export", "actors", "scripts" ];
   public currentTabKey:string = "";
 
   ngOnInit(): void {

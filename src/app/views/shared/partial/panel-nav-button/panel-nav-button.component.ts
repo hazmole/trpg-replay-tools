@@ -26,7 +26,7 @@ export class PanelNavButtonComponent implements OnInit {
       text: "角色設定",
       imgUrl: "assets/images/mona-lisa.png"
     },
-    'content-edit': {
+    scripts: {
       text: "團錄編輯",
       imgUrl: "assets/images/open-book.png"
     },
