@@ -1,0 +1,20 @@
+.footer {
+    /*border-top: 1px solid #00000060;*/
+    padding: 5px;
+
+    display: flex;
+    justify-content: end;
+    gap: 5px;
+}
+.footer button {
+    height: 30px;
+    padding: 2px 2rem;
+    background-color: var(--color-panel-navbtn-bg);
+    color: white;
+}
+.footer button:hover {
+    background-color: var(--color-panel-navbtn-bg-hover);
+}
+.footer button:active {
+    background-color: var(--color-panel-navbtn-bg-active);
+}

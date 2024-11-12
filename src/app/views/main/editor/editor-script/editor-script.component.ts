@@ -4,7 +4,7 @@ import {CdkDragDrop} from '@angular/cdk/drag-drop';
 import { ReplayManagerService } from 'src/app/services/replay-manager.service';
 import { ToolService } from 'src/app/services/tool.service';
 
-import { ScriptEntry } from 'src/app/interfaces/replay-info.interface';
+import { ScriptEntry, ActorInfo } from 'src/app/interfaces/replay-info.interface';
 
 @Component({
   selector: 'app-editor-script',
@@ -29,42 +29,69 @@ export class EditorScriptComponent implements OnInit {
   }
 
 
+  getEntryClass(entry:ScriptEntry): string {
+    switch(entry.type) {
+      case "talk":
+        return `talk ${entry.channel}`;
+      default:
+        return "special";
+    }
+  }
+  getEntryTitle(entry:ScriptEntry): string {
+    switch(entry.type) {
+      case "talk":
+        let actorInfo = this.getActor(entry);
+        let channel = (entry.channel === "main"? "": "[場外]");
+        return `${channel}${actorInfo.name}`;
+      case "halt":
+        return "分段符號";
+      case "title":
+        return `段落標題：${ entry.content }`;
+      case "setBg":
+        return `顯示背景圖片`;
+    }
+  }
+  getEntryTitleStyle(entry:ScriptEntry): Object {
+    switch(entry.type) {
+      case "talk":
+        let actorInfo = this.getActor(entry);
+        return { color: actorInfo.color };
+      default:
+        return {};
+    }
+  }
+  isShowEntryContent(entry:ScriptEntry): boolean {
+    switch(entry.type) {
+      case "talk":
+      case "setBg":
+        return true;
+      default:
+        return false;
+    }
+  }
 
-  // Talk
+
+  getActor(entry: ScriptEntry): (ActorInfo) {
+    const actorList = this.rpManager.GetActorList();
+    if(entry.actorId != null) {
+      return actorList[entry.actorId];
+    }
+    return { name: "", color: "#888888", id:-1, imgUrl: "" };
+  }
+
   isTalkEntry(entry: ScriptEntry): boolean {
     return entry.type === "talk";
   }
-  getTalkActorName(entry: ScriptEntry): string {
-    const actorList = this.rpManager.GetActorList();
-    let actorName = actorList[entry.actorId || 0].name;
-    let channel = (entry.channel === "main"? "": "[場外] ");
-    return `${channel}${actorName}`;
-  }
-  getTalkActorColor(entry: ScriptEntry): string {
-    const actorList = this.rpManager.GetActorList();
-    return actorList[entry.actorId || 0].color;
-  }
-  
-  // Title
   isTitleEntry(entry: ScriptEntry): boolean {
     return entry.type === "title";
   }
-
-  // Halt
   isHaltEntry(entry: ScriptEntry): boolean {
     return entry.type === "halt";
   }
-
-  // Background Image
   isBgImgEntry(entry: ScriptEntry): boolean {
     return entry.type === "setBg";
   }
 
-
-
-  showHtmlContent(content: string): string {
-    return content.replace('<br>', '\n')
-  }
 
   //=================
   OnDrop(event:CdkDragDrop<any, any, any>): void {
@@ -75,5 +102,14 @@ export class EditorScriptComponent implements OnInit {
     const elem = this.entryList.splice(prevIdx, 1)[0];
     // Append
     this.entryList.splice(currIdx, 0, elem);
+  }
+
+  EditEntry(entry:ScriptEntry): void {
+    console.log(entry);
+    this.tool.PopupSuccessfulNotify("Edit!");
+  }
+  DeleteEntry(entry:ScriptEntry): void {
+    console.log(entry);
+    this.tool.PopupSuccessfulNotify("Delete!");
   }
 }

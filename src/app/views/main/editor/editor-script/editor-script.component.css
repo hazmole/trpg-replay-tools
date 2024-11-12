@@ -23,48 +23,13 @@
     text-align: center;
 }
 
+/* Entry Structure */
 .entry-header {
     display: flex;
     align-items: center;
     gap: 3px;
 }
-
-.talk {
-    padding-left: 2rem;
-}
-.talk.main {
-    padding-left: 0;
-}
-
-.talk .entry-header {
-    background: #363638;
-}
-.talk .entry-header .talk-actor {
-    padding: 5px 0;
-}
-.talk .talk-content {
-    padding: 5px 10px 5px 23px;
-    font-size: 0.9rem;
-    background: black;
-    color: white;
-}
-.talk.main .talk-content {
-    background: #ddd;
-    color: black;
-}
-
-
-.special .entry-header {
-    background: #005fa3;
-}
-.special .title {
-    padding: 5px 0;
-    font-size: 0.8rem;
-    color: white;
-}
-
-
-.entryItem .dragable {
+.entry-header .dragable {
     cursor: grab;
     width: 20px;
     flex-grow: 0;
@@ -72,4 +37,47 @@
 
     text-align: center;
     color: #ffffff60;
+}
+.entry-header .title {
+    flex-grow: 1;
+}
+
+
+.talk .entry-header {
+    background: #363638;
+}
+.talk .entry-header .title {
+    padding: 5px 0;
+}
+.talk .content {
+    padding: 5px 10px 5px 23px;
+    font-size: 0.9rem;
+    background: black;
+    color: white;
+}
+.talk.main .content {
+    background: #ddd;
+    color: black;
+}
+
+.special .entry-header {
+    background: #005fa3;
+}
+.special .entry-header .title {
+    padding: 5px 0;
+    font-size: 0.8rem;
+    color: white;
+}
+
+
+
+
+.entryItem .func-btn-list,
+.entryItem .add-icon {
+    display: none;
+}
+.entryItem:hover .func-btn-list,
+.entryItem:hover .add-icon {
+    display: flex;
+    gap: 3px;
 }

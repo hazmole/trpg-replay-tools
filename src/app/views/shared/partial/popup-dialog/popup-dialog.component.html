@@ -1,20 +1,13 @@
-<div class="block-screen">
-    <div class="dialog" cdkDrag>
-        <!-- Header -->
-        <div class="header" cdkDragHandle>
-            <div class="title">{{ title }}</div>
-            <img class="icon" src="assets/images/cancel.png" (click)="close()">
-        </div>
+<div class="dialog" style="width:360px;">
+    <!-- Header -->
+    <app-dialog-header [title]="title" [options]="headerOptions"
+        cdkDragHandle cdkDrag cdkDragRootElement=".cdk-overlay-pane"></app-dialog-header>
 
-        <!-- Body -->
-        <div class="body">
-            {{ message }}
-        </div>
-
-        <!-- Footer -->
-        <div class="footer">
-            <button (click)="confirm()">確認</button>
-            <button (click)="close()">取消</button>
-        </div>
+    <!-- Body -->
+    <div class="body">
+        {{ message }}
     </div>
+
+    <!-- Footer -->
+    <app-dialog-footer [options]="footerOptions"></app-dialog-footer>
 </div>

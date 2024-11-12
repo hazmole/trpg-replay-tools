@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup } from '@angular/forms';
 
 import { ReplayManagerService } from 'src/app/services/replay-manager.service';
 import { ToolService } from 'src/app/services/tool.service';
-
 import { ActorInfo } from 'src/app/interfaces/replay-info.interface';
+
+import { EditorActorDeleteComponent, DeleteActorParam, DeleteActorReturn } from './editor-actor-delete/editor-actor-delete.component';
 
 @Component({
   selector: 'app-editor-actor',
@@ -115,8 +116,34 @@ export class EditorActorComponent implements OnInit {
   }
 
   RemoveActor(): void {
-    this.tool.PopupDialog("你確定要刪除這個使用者嗎？", () => {
-      this.rpManager.DeleteActorInfo(this.currentActorId);
+    let id = this.currentActorId
+    
+    if(this.outputList.scriptOwnCount == 0) {
+      this.removeRedundantActor(id);
+    } else {
+      this.removeActiveActor(id);
+    }
+  }
+
+  private removeActiveActor(actorID: number): void {
+    const param: DeleteActorParam = { actor_id: actorID };
+
+    this.tool.PopupDialog(EditorActorDeleteComponent, param, (retObj:DeleteActorReturn) => {
+      // Update Scripts
+      this.rpManager.GetScriptEntryList().forEach((entry) => {
+        if(entry.actorId === retObj.old_actor_id)
+          entry.actorId = retObj.new_actor_id;
+      })
+      // Remove
+      this.rpManager.DeleteActorInfo(actorID);
+      this.currentActorId = retObj.new_actor_id;
+      this.initList();
+    });
+  }
+
+  private removeRedundantActor(actorID: number): void {
+    this.tool.PopupMsgDialog("警告", "你確定要刪除這個使用者嗎？", () => {
+      this.rpManager.DeleteActorInfo(actorID);
       this.currentActorId = -1;
       this.initList();
     });

@@ -1,0 +1,26 @@
+.header.s-size { width: 360px; }
+.header.m-size { width: 500px; }
+.header.l-size { width: 700px; }
+
+.header {
+    background-color: var(--color-panel-navbar-bg);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding-left: .5em;
+    padding-right: 1px;
+}
+.header .title {
+    line-height: 31px;
+    font-size: 14px;
+    color: white;
+}
+.header .icon {
+    width: 27px;
+    height: 27px;
+}
+.header .icon:hover {
+    filter:brightness(1.5);
+}

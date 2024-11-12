@@ -1,0 +1,12 @@
+.btn-icon {
+    width: 16px;
+    height: 16px;
+    padding: 2px;
+
+    border: 1px solid #ffffff40;
+    background-color: #ffffff26;
+    background-size: cover;
+}
+.btn-icon:hover {
+    background-color: #ffffff80;
+}

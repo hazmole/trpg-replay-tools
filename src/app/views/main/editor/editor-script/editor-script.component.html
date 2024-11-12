@@ -8,40 +8,21 @@
         @for (entry of entryList; track entry) {
             <div class="entryItem" cdkDrag >
                 
-                <!-- Talk -->
-                <div *ngIf="isTalkEntry(entry)" class="talk" [ngClass]="entry.channel">
+                <div [ngClass]="getEntryClass(entry)">
                     <div class="entry-header">
                         <div class="dragable" cdkDragHandle>=</div>
-                        <div class="talk-actor" [ngStyle]="{'color':getTalkActorColor(entry)}">{{ getTalkActorName(entry) }}</div>
+                        <div class="title" [ngStyle]="getEntryTitleStyle(entry)">{{ getEntryTitle(entry) }}</div>
+                        <div class="func-btn-list">
+                            <app-icon-button type="edit"   (click)="EditEntry(entry)"   ></app-icon-button>
+                            <app-icon-button type="delete" (click)="DeleteEntry(entry)"></app-icon-button>
+                        </div>
                     </div>
-                    <div class="talk-content" [innerHtml]="entry.content"></div>
+                    <div *ngIf="isTalkEntry(entry)"  class="content" [innerHtml]="entry.content"></div>
+                    <div *ngIf="isBgImgEntry(entry)" class="content"></div>
                 </div>
 
-                <!-- Halt -->
-                <div *ngIf="isHaltEntry(entry)" class="special">
-                    <div class="entry-header">
-                        <div class="dragable" cdkDragHandle>=</div>
-                        <div class="title">分段符號</div>
-                    </div>
-                </div>
-
-                <!-- Title -->
-                <div *ngIf="isTitleEntry(entry)" class="special">
-                    <div class="entry-header">
-                        <div class="dragable" cdkDragHandle>=</div>
-                        <div class="title">段落標題：{{ entry.content }}</div>
-                    </div>
-                </div>
-
-                <!-- Bg Image -->
-                <div *ngIf="isBgImgEntry(entry)" class="special">
-                    <div class="entry-header">
-                        <div class="dragable" cdkDragHandle>=</div>
-                        <div class="title">顯示背景圖片</div>
-                    </div>
-                    <div class="content"></div>
-                </div>
-
+                <!-- Footer for Buttons -->
+                <!--<div class="add-icon"><hr></div>-->
             </div>
         }
     </div>

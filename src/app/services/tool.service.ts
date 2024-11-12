@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ApplicationRef } from '@angular/core';
 import { AppComponent } from '../app.component';
+import { MatDialog } from '@angular/material/dialog';
 
 import { NotifyMessageComponent } from '../views/shared/partial/notify-message/notify-message.component';
 import { PopupDialogComponent } from '../views/shared/partial/popup-dialog/popup-dialog.component';
@@ -11,20 +12,40 @@ import { PopupDialogComponent } from '../views/shared/partial/popup-dialog/popup
 })
 export class ToolService {
 
-  constructor(private appRef: ApplicationRef) { }
+  constructor(
+    private appRef: ApplicationRef,
+    private matDialog: MatDialog,
+  ) { }
 
 
 
-  // Confirm Dialog
-  public PopupDialog(message: string, callback: Function) {
-    const viewRef = (this.appRef.components[0].instance as AppComponent).viewRef;
-    const comp = viewRef.createComponent(PopupDialogComponent);
-    comp.setInput("title", "警告");
-    comp.setInput("message", message);
-    comp.setInput("comfirmCallback", callback);
+  public PopupDialog(comp: any, param:any, callback: Function) {
+    this.matDialog.open(comp, {
+      data: param,
+      disableClose: true,
+    })
+    .afterClosed()
+    .subscribe((retObj:any | null) => {
+      if(retObj==null) return ;
+      if(callback!=null) callback(retObj);
+    });
 
   }
 
+  // Confirm Dialog
+  public PopupMsgDialog(title: string, message: string, callback: Function) {
+    const dialogRef = this.matDialog.open(PopupDialogComponent, {
+      data: {
+        title: title,
+        message: message,
+      },
+      disableClose: true,
+    })
+    dialogRef.afterClosed().subscribe((isConfirm) => {
+      console.log(isConfirm);
+      if(isConfirm){ callback() }
+    });
+  }
 
 
   // Notify
