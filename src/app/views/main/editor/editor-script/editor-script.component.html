@@ -3,28 +3,37 @@
 
 
     <div class="script-edit-panel" cdkDropList (cdkDropListDropped)="OnDrop($event)">
-        <div class="script-starter">文件開頭</div>
-
-        @for (entry of entryList; track entry) {
-            <div class="entryItem" cdkDrag >
-                
-                <div [ngClass]="getEntryClass(entry)">
-                    <div class="entry-header">
-                        <div class="dragable" cdkDragHandle>=</div>
-                        <div class="title" [ngStyle]="getEntryTitleStyle(entry)">{{ getEntryTitle(entry) }}</div>
-                        <div class="func-btn-list">
-                            <app-icon-button type="edit"   (click)="EditEntry(entry)"   ></app-icon-button>
-                            <app-icon-button type="delete" (click)="DeleteEntry(entry)"></app-icon-button>
-                        </div>
-                    </div>
-                    <div *ngIf="isTalkEntry(entry)"  class="content" [innerHtml]="entry.content"></div>
-                    <div *ngIf="isBgImgEntry(entry)" class="content"></div>
-                </div>
-
-                <!-- Footer for Buttons -->
-                <!--<div class="add-icon"><hr></div>-->
+        
+        <div class="script-starter-outer">
+            <div class="script-starter">
+                文件開頭
             </div>
-        }
+            <div class="plus-btn-outer">
+                <div class="plus-btn clickable" (click)="AddEntry(-1)" title="新增段落"></div>
+            </div>
+        </div>
+
+        <div *ngFor="let entry of entryList; index as idx" class="entryItem" cdkDrag >
+            
+            <div [ngClass]="getEntryClass(entry)">
+                <div class="entry-header">
+                    <div class="dragable" cdkDragHandle>=</div>
+                    <div class="title" [ngStyle]="getEntryTitleStyle(entry)">{{ getEntryTitle(entry) }}</div>
+                    <div class="func-btn-list">
+                        <app-icon-button type="edit"   (click)="EditEntry(entry, idx)"  ></app-icon-button>
+                        <app-icon-button type="delete" (click)="DeleteEntry(entry, idx)"></app-icon-button>
+                    </div>
+                </div>
+                <div *ngIf="isTalkEntry(entry)"  class="content" [innerHtml]="entry.content"></div>
+                <div *ngIf="isBgImgEntry(entry)" class="content"></div>
+            </div>
+
+            <!-- Footer for Buttons -->
+            <div class="plus-btn-outer" >
+                <div class="plus-btn clickable" (click)="AddEntry(idx)" title="新增段落"></div>
+            </div>
+        </div>
+
     </div>
 
 </app-tab-layer>

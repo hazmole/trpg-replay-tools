@@ -1,0 +1,29 @@
+<div class="dialog" style="width:500px;">
+    <app-dialog-header [title]="dialogTitle" [options]="headerOptions"
+        cdkDragHandle cdkDrag cdkDragRootElement=".cdk-overlay-pane"></app-dialog-header>
+    <app-dialog-body>
+        <form [formGroup]="formGroup">
+            <div class="paragraph">
+                <app-input-title titleText="發言角色"></app-input-title>
+                <select formControlName="actorID" >
+                    <option *ngFor="let actorOption of actorOptionList" [value]="actorOption.id">{{ actorOption.text }}</option>
+                </select>
+            </div>
+
+            <div class="paragraph">
+                <app-input-title titleText="頻道"></app-input-title>
+                <select formControlName="channel" >
+                    <option value="main">主要</option>
+                    <option value="other">場外</option>
+                </select>
+            </div>
+
+            <div class="paragraph">
+                <app-input-title titleText="內容"></app-input-title>
+                <textarea formControlName="content"></textarea>
+            </div>
+
+        </form>
+    </app-dialog-body>
+    <app-dialog-footer [options]="footerOptions"></app-dialog-footer>
+</div>

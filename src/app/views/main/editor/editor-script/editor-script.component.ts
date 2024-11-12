@@ -4,7 +4,13 @@ import {CdkDragDrop} from '@angular/cdk/drag-drop';
 import { ReplayManagerService } from 'src/app/services/replay-manager.service';
 import { ToolService } from 'src/app/services/tool.service';
 
-import { ScriptEntry, ActorInfo } from 'src/app/interfaces/replay-info.interface';
+import { AddEditTitleComponent } from './add-edit-title/add-edit-title.component';
+import { AddEditTalkComponent } from './add-edit-talk/add-edit-talk.component';
+import { AddEditImageComponent } from './add-edit-image/add-edit-image.component';
+
+import { ScriptEntry, ActorInfo, ScriptEntryType } from 'src/app/interfaces/replay-info.interface';
+import { Mode, AddEditScriptParam, AddEditScriptReturn } from 'src/app/interfaces/add-edit-script-entry.interface';
+import { AddItemSelectComponent } from './add-item-select/add-item-select.component';
 
 @Component({
   selector: 'app-editor-script',
@@ -41,7 +47,7 @@ export class EditorScriptComponent implements OnInit {
     switch(entry.type) {
       case "talk":
         let actorInfo = this.getActor(entry);
-        let channel = (entry.channel === "main"? "": "[場外]");
+        let channel = (entry.channel === "main"? "": "[場外] ");
         return `${channel}${actorInfo.name}`;
       case "halt":
         return "分段符號";
@@ -104,12 +110,67 @@ export class EditorScriptComponent implements OnInit {
     this.entryList.splice(currIdx, 0, elem);
   }
 
-  EditEntry(entry:ScriptEntry): void {
-    console.log(entry);
-    this.tool.PopupSuccessfulNotify("Edit!");
+  AddEntry(idx:number): void {
+    this.tool.PopupDialog(AddItemSelectComponent, {}, (type:ScriptEntryType) => {
+      // Handle "halt" type
+      if(type === "halt") {
+        let entry:ScriptEntry = { type, content:"" };
+        this.entryList.splice((idx+1), 0, entry);
+        return ;
+      }
+      
+      
+      const param: AddEditScriptParam = { mode: "add" };
+      let comp:any = this._getCompByType(type);
+      if(comp == null) {
+        this.tool.PopupErrorNotify("錯誤：未知的段落類型！");
+      } else {
+        this.tool.PopupDialog(comp, param, (retObj:AddEditScriptReturn) => {
+          if(retObj.entry) {
+            this.entryList.splice((idx+1), 0, retObj.entry);
+          }
+        });
+      }
+    });
   }
-  DeleteEntry(entry:ScriptEntry): void {
-    console.log(entry);
-    this.tool.PopupSuccessfulNotify("Delete!");
+  EditEntry(entry:ScriptEntry, idx:number): void {
+    const param: AddEditScriptParam = { mode: "edit", entry:entry };
+    let comp:any = this._getCompByType(entry.type);
+
+    if(comp == null) {
+      this.tool.PopupErrorNotify("錯誤：未知的段落類型！");
+    } else {
+      this.tool.PopupDialog(comp, param, (retObj:AddEditScriptReturn) => {
+        if(retObj.entry) {
+          this.entryList[idx] = retObj.entry;
+        }
+      });
+    }
   }
+
+  private _getCompByType(type: ScriptEntryType): any {
+    switch(type) {
+      case "title": return AddEditTitleComponent;
+      case "talk":  return AddEditTalkComponent;
+      //case "setBg": return AddEditImageComponent;
+    }
+    return null;
+  }
+
+  DeleteEntry(_entry:ScriptEntry, idx:number): void {
+    this.entryList.splice(idx, 1);
+    /*let entryName = "";
+    switch(entry.type) {
+      case "talk": entryName = "這段對話"; break;
+      case "halt": entryName = "這個分段符號"; break;
+      case "setBg": entryName = "這張背景圖片"; break;
+      case "title": entryName = "這個段落標題"; break;
+    }
+    
+    this.tool.PopupMsgDialog("刪除段落", `你確定要刪除${entryName}嗎？`, () => {
+      this.entryList.splice(idx, 1);
+    });
+    */
+  }
+
 }

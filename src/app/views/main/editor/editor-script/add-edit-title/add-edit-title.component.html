@@ -1,0 +1,14 @@
+<div class="dialog" style="width:500px;">
+    <app-dialog-header [title]="dialogTitle" [options]="headerOptions"
+        cdkDragHandle cdkDrag cdkDragRootElement=".cdk-overlay-pane"></app-dialog-header>
+    <app-dialog-body>
+        <form [formGroup]="formGroup">
+            <div class="paragraph">
+                <app-input-title titleText="段落標題文字"></app-input-title>
+                <input type="text" formControlName="titleText">
+            </div>
+
+        </form>
+    </app-dialog-body>
+    <app-dialog-footer [options]="footerOptions"></app-dialog-footer>
+</div>

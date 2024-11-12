@@ -1,0 +1,16 @@
+<div class="dialog" style="width:500px;">
+    <app-dialog-header title="新增段落" [options]="headerOptions"
+        cdkDragHandle cdkDrag cdkDragRootElement=".cdk-overlay-pane"></app-dialog-header>
+    <app-dialog-body>
+        <div>請選擇要新增的段落種類：</div>
+
+        <div class="button-list">
+            <button class="type-btn" (click)="apply('talk')">對話</button>
+            <button class="type-btn" (click)="apply('title')">段落標題</button>
+            <button class="type-btn" (click)="apply('halt')">分段符號</button>
+            <button class="type-btn" (click)="apply('setBg')">背景圖片</button>
+        </div>
+
+    </app-dialog-body>
+    <app-dialog-footer [options]="footerOptions"></app-dialog-footer>
+</div>

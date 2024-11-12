@@ -1,0 +1,16 @@
+.button-list {
+    margin-top: 1em;
+    
+    display: flex;
+    gap: 5px;
+}
+
+.type-btn {
+    padding: 10px 10px;
+    background-color: var(--color-apply-btn-bg);
+    color: white;
+    cursor: pointer;
+}
+.type-btn:hover {
+    background-color: var(--color-apply-btn-bg-hover);
+}

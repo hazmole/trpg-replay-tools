@@ -16,6 +16,10 @@ import { EditorExportComponent } from './views/main/editor/editor-export/editor-
 import { EditorActorComponent } from './views/main/editor/editor-actor/editor-actor.component';
 import { EditorActorDeleteComponent } from './views/main/editor/editor-actor/editor-actor-delete/editor-actor-delete.component';
 import { EditorScriptComponent } from './views/main/editor/editor-script/editor-script.component';
+import { AddItemSelectComponent } from './views/main/editor/editor-script/add-item-select/add-item-select.component';
+import { AddEditTitleComponent } from './views/main/editor/editor-script/add-edit-title/add-edit-title.component';
+import { AddEditTalkComponent } from './views/main/editor/editor-script/add-edit-talk/add-edit-talk.component';
+import { AddEditImageComponent } from './views/main/editor/editor-script/add-edit-image/add-edit-image.component';
 import { PlayerComponent } from './views/main/player/player.component';
 
 import { BaseLayerComponent } from './views/shared/layers/base-layer/base-layer.component';
@@ -54,6 +58,10 @@ import { PopupDialogComponent } from './views/shared/partial/popup-dialog/popup-
     EditorActorComponent,
     EditorActorDeleteComponent,
     EditorScriptComponent,
+    AddItemSelectComponent,
+    AddEditTitleComponent,
+    AddEditTalkComponent,
+    AddEditImageComponent,
     InputTitleComponent,
     InputDropdownSelectComponent,
     ButtonApplyComponent,

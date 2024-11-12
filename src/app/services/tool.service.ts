@@ -40,6 +40,7 @@ export class ToolService {
         message: message,
       },
       disableClose: true,
+      autoFocus: false,
     })
     dialogRef.afterClosed().subscribe((isConfirm) => {
       console.log(isConfirm);

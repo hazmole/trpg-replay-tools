@@ -5,7 +5,7 @@
 
     display: flex;
     flex-direction: column;
-    gap: .5em;
+    gap: 3px;
 
     background-color: rgba(0, 0, 0, 0.9);
     padding: .5em;
@@ -27,7 +27,7 @@
 .entry-header {
     display: flex;
     align-items: center;
-    gap: 3px;
+    gap: .2em;
 }
 .entry-header .dragable {
     cursor: grab;
@@ -70,14 +70,40 @@
 }
 
 
-
-
-.entryItem .func-btn-list,
-.entryItem .add-icon {
+.entryItem .func-btn-list {
     display: none;
 }
-.entryItem:hover .func-btn-list,
-.entryItem:hover .add-icon {
+.entryItem:hover .func-btn-list {
     display: flex;
     gap: 3px;
 }
+
+
+
+.plus-btn-outer {
+    margin-top: 3px;
+}
+
+.plus-btn {
+    width: 100%;
+    height: 10px;
+    cursor: cell;
+}
+.plus-btn:hover { background-color: rgba(255, 255, 255, 0.25); }
+.plus-btn:active { background-color: rgba(255, 255, 255, .7); }
+
+/*
+.plus-btn .icon {
+    content: '';
+    display: inline-block;
+    background-size: cover;
+    filter: brightness(0.7);
+
+    width: 15px;
+    height: 15px;
+}
+.plus-btn:hover .icon,
+.plus-btn:active .icon {
+    filter: brightness(1);
+}
+*/

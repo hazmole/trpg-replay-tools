@@ -1,11 +1,10 @@
 import { Component, Inject, OnInit } from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { DialogHeaderOptions } from 'src/app/interfaces/dialog-options.interface';
 import { DialogFooterOptions } from 'src/app/interfaces/dialog-options.interface';
 
 import { ReplayManagerService } from 'src/app/services/replay-manager.service';
-import { ActorInfo } from 'src/app/interfaces/replay-info.interface';
-import { FormControl, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-editor-actor-delete',
