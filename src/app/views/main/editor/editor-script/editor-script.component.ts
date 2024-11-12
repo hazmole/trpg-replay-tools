@@ -28,7 +28,46 @@ export class EditorScriptComponent implements OnInit {
     this.entryList = Object.values(this.rpManager.GetScriptEntryList());
   }
 
-  drop(event:CdkDragDrop<any, any, any>): void {
+
+
+  // Talk
+  isTalkEntry(entry: ScriptEntry): boolean {
+    return entry.type === "talk";
+  }
+  getTalkActorName(entry: ScriptEntry): string {
+    const actorList = this.rpManager.GetActorList();
+    let actorName = actorList[entry.actorId || 0].name;
+    let channel = (entry.channel === "main"? "": "[場外] ");
+    return `${channel}${actorName}`;
+  }
+  getTalkActorColor(entry: ScriptEntry): string {
+    const actorList = this.rpManager.GetActorList();
+    return actorList[entry.actorId || 0].color;
+  }
+  
+  // Title
+  isTitleEntry(entry: ScriptEntry): boolean {
+    return entry.type === "title";
+  }
+
+  // Halt
+  isHaltEntry(entry: ScriptEntry): boolean {
+    return entry.type === "halt";
+  }
+
+  // Background Image
+  isBgImgEntry(entry: ScriptEntry): boolean {
+    return entry.type === "setBg";
+  }
+
+
+
+  showHtmlContent(content: string): string {
+    return content.replace('<br>', '\n')
+  }
+
+  //=================
+  OnDrop(event:CdkDragDrop<any, any, any>): void {
     let prevIdx = (event.previousIndex);
     let currIdx = (event.currentIndex);
 
@@ -36,7 +75,5 @@ export class EditorScriptComponent implements OnInit {
     const elem = this.entryList.splice(prevIdx, 1)[0];
     // Append
     this.entryList.splice(currIdx, 0, elem);
-
   }
-
 }
