@@ -1,8 +1,0 @@
-.header.s-size { width: 400px; }
-.header.m-size {  width: 500px; }
-.header.l-size { width: 700px; }
-
-.body {
-    min-height: 20px;
-    padding: 1rem;
-}

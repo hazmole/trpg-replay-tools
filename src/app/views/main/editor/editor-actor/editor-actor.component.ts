@@ -120,8 +120,10 @@ export class EditorActorComponent implements OnInit {
     
     if(this.outputList.scriptOwnCount == 0) {
       this.removeRedundantActor(id);
-    } else {
+    } else if(this.actorList.length > 1) {
       this.removeActiveActor(id);
+    } else {
+      this.tool.PopupErrorNotify("錯誤：你必須要有至少一個角色！");
     }
   }
 
@@ -136,13 +138,13 @@ export class EditorActorComponent implements OnInit {
       })
       // Remove
       this.rpManager.DeleteActorInfo(actorID);
-      this.currentActorId = retObj.new_actor_id;
+      this.currentActorId = -1;
       this.initList();
     });
   }
 
   private removeRedundantActor(actorID: number): void {
-    this.tool.PopupMsgDialog("警告", "你確定要刪除這個使用者嗎？", () => {
+    this.tool.PopupMsgDialog("刪除角色", "你確定要刪除這個角色嗎？", () => {
       this.rpManager.DeleteActorInfo(actorID);
       this.currentActorId = -1;
       this.initList();

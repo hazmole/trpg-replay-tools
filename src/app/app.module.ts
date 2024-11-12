@@ -30,6 +30,7 @@ import { NotifyMessageComponent } from './views/shared/partial/notify-message/no
 
 import { DialogHeaderComponent } from './views/shared/dialog/dialog-header/dialog-header.component';
 import { DialogFooterComponent } from './views/shared/dialog/dialog-footer/dialog-footer.component';
+import { DialogBodyComponent } from './views/shared/dialog/dialog-body/dialog-body.component';
 
 /* Services */
 import { ReplayManagerService } from './services/replay-manager.service';
@@ -71,6 +72,7 @@ import { PopupDialogComponent } from './views/shared/partial/popup-dialog/popup-
 
     DialogHeaderComponent,
     DialogFooterComponent,
+    DialogBodyComponent,
   ],
   providers: [
     ReplayManagerService,

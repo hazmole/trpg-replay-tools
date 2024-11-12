@@ -1,13 +1,7 @@
 <div class="dialog" style="width:360px;">
-    <!-- Header -->
-    <app-dialog-header [title]="title" [options]="headerOptions"
-        cdkDragHandle cdkDrag cdkDragRootElement=".cdk-overlay-pane"></app-dialog-header>
-
-    <!-- Body -->
-    <div class="body">
+    <app-dialog-header [title]="title" [options]="headerOptions" cdkDragHandle cdkDrag cdkDragRootElement=".cdk-overlay-pane"></app-dialog-header>
+    <app-dialog-body>
         {{ message }}
-    </div>
-
-    <!-- Footer -->
+    </app-dialog-body>
     <app-dialog-footer [options]="footerOptions"></app-dialog-footer>
 </div>

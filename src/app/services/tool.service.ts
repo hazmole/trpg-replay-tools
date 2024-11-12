@@ -18,7 +18,7 @@ export class ToolService {
   ) { }
 
 
-
+  // General Function for MatDialog
   public PopupDialog(comp: any, param:any, callback: Function) {
     this.matDialog.open(comp, {
       data: param,

@@ -5,7 +5,7 @@ import { DialogFooterOptions } from 'src/app/interfaces/dialog-options.interface
 
 import { ReplayManagerService } from 'src/app/services/replay-manager.service';
 import { ActorInfo } from 'src/app/interfaces/replay-info.interface';
-
+import { FormControl, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-editor-actor-delete',
@@ -27,16 +27,21 @@ export class EditorActorDeleteComponent implements OnInit {
     confirm: { click: () => { this.onConfirm() } }
   };
 
+  public formGroup = new FormGroup({
+    newActorID: new FormControl<number>(0),
+  });
+
   private oldActorID: number = -1;
-  public actorOptionList: Array<any> = [];
+  private oldActorName: string = "";
+  public actorOptionList: Array<ActorEntry> = [];
 
   ngOnInit(): void {
-    this.oldActorID = this.data.actor_id;
-    
-    let actorList = Object.values(this.rpManager.GetActorList());
+    const actorList = this.rpManager.GetActorList()
 
-    
-    this.actorOptionList = actorList
+    this.oldActorID = this.data.actor_id;
+    this.oldActorName = actorList[this.data.actor_id].name;
+        
+    this.actorOptionList = Object.values(actorList)
       .filter( actor => actor.id != this.oldActorID )
       .map( actor => {
         return {
@@ -44,10 +49,13 @@ export class EditorActorDeleteComponent implements OnInit {
           id: actor.id
         }
       });
+    this.formGroup.controls.newActorID.setValue(this.actorOptionList[0].id);
   }
 
 
-
+  getOldActorName(): string {
+    return this.oldActorName;
+  }
 
 
   onClose(): void {
@@ -56,11 +64,16 @@ export class EditorActorDeleteComponent implements OnInit {
   onConfirm(): void {
     this.dialogRef.close({
       old_actor_id: this.oldActorID,
-      new_actor_id: 2,
+      new_actor_id: this.formGroup.controls.newActorID.value,
     });
   }
 }
 
+
+interface ActorEntry {
+  text: string;
+  id: number;
+}
 
 export interface DeleteActorParam {
   actor_id: number;

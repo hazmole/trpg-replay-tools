@@ -1,17 +1,26 @@
 <div class="dialog" style="width:500px;">
     <app-dialog-header title="刪除角色" [options]="headerOptions"
         cdkDragHandle cdkDrag cdkDragRootElement=".cdk-overlay-pane"></app-dialog-header>
-    <div class="body">
-        <div>
-            這個角色在團錄中有多筆發言紀錄，無法直接刪除。<br/>
-            你是否要將這個角色的發言紀錄替換成其他角色後，再進行刪除？
-        </div>
-        <app-input-title titleText="代表色"></app-input-title>
-        <select name="newActor">
-            <option *ngFor="let actorOption of actorOptionList" [value]="actorOption.id">{{ actorOption.text }}</option>
-        </select>
+    <app-dialog-body>
+        <form [formGroup]="formGroup">
+            <div>
+                這個角色在團錄中有多筆發言紀錄，無法直接刪除。<br/>
+                你是否要將這個角色的發言紀錄替換成其他角色後，再進行刪除？
+            </div>
 
+            <div class="paragraph">
+                <app-input-title titleText="原角色"></app-input-title>
+                <div>{{ getOldActorName() }}</div>
+            </div>
 
-    </div>
+            <div class="paragraph">
+                <app-input-title titleText="替換成新角色"></app-input-title>
+                <select formControlName="newActorID" >
+                    <option *ngFor="let actorOption of actorOptionList" [value]="actorOption.id">{{ actorOption.text }}</option>
+                </select>
+            </div>
+
+        </form>
+    </app-dialog-body>
     <app-dialog-footer [options]="footerOptions"></app-dialog-footer>
 </div>

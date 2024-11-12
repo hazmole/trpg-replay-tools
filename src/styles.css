@@ -41,10 +41,18 @@ hr {
 	margin-bottom: 1rem;
 }
 
+/* Input */
 input[type=text] {
 	height: 20px;
 }
+select {
+	height: 25px;
+	min-width: 200px;
+	font-size: .9em;
+}
 
+
+/* Feature Class */
 .paragraph {
 	margin-top:    10px;
 	margin-bottom: 10px;
