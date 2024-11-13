@@ -24,8 +24,9 @@
     </div>
 
     <hr>
-    <div>
-        <app-button-apply text="匯入團錄" (click)="importFile()"></app-button-apply>
-    </div>
+    <app-button-list>
+        <app-button-apply type="normal"   text="Import-Replay" (click)="ImportFile()"></app-button-apply>
+        <app-button-apply type="critical" text="Clear-Cache" (click)="Clear()"></app-button-apply>
+    </app-button-list>
 </div>
 </app-tab-layer>

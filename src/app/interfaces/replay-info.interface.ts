@@ -8,7 +8,9 @@ export interface ReplayInfo {
 export const newReplayInfo = () => {
     return {
         filename: "",
-        config: {},
+        config: {
+            title: "未命名標題",
+        },
         actors: {},
         script: [],
         isLoaded: false,

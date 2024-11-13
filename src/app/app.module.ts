@@ -36,6 +36,7 @@ import { PopupDialogComponent } from './views/shared/partial/popup-dialog/popup-
 import { DialogHeaderComponent } from './views/shared/dialog/dialog-header/dialog-header.component';
 import { DialogFooterComponent } from './views/shared/dialog/dialog-footer/dialog-footer.component';
 import { DialogBodyComponent } from './views/shared/dialog/dialog-body/dialog-body.component';
+import { ButtonListComponent } from './views/shared/partial/button-list/button-list.component';
 
 /* Services */
 import { ReplayManagerService } from './services/replay-manager.service';
@@ -82,6 +83,7 @@ import { LanguageService } from './services/language.service';
     DialogHeaderComponent,
     DialogFooterComponent,
     DialogBodyComponent,
+    ButtonListComponent,
   ],
   providers: [
     ReplayManagerService,

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ReplayConfig, ReplayInfo, ScriptEntry } from 'src/app/interfaces/replay-info.interface';
 import { ParserService } from './parser.service';
+import { StorageManagerService } from './storage-manager.service';
 
 import { ActorInfo, newReplayInfo, ConfigKey } from 'src/app/interfaces/replay-info.interface';
 
@@ -9,7 +10,9 @@ import { ActorInfo, newReplayInfo, ConfigKey } from 'src/app/interfaces/replay-i
 })
 export class ReplayManagerService {
 
-  constructor() { }
+  constructor(
+    private storageServ: StorageManagerService,
+  ) { }
 
   private replayInfo:ReplayInfo = newReplayInfo();
 
@@ -41,14 +44,25 @@ export class ReplayManagerService {
     return (this.replayInfo.isLoaded);
   }
 
+  /* General */
   public GetInfo(): ReplayInfo {
     return this.replayInfo;
   }
   public GetInfoJSON(): Object {
     return this.replayInfo;
   }
-  public SetInfoFromJSON(info: any): void {
-    this.replayInfo = info;
+  public LoadInfoFromJSON(): void {
+    let infoObj = this.storageServ.Load();
+    if(infoObj) this.replayInfo = infoObj;
+  }
+  public Clear(): void {
+    this.replayInfo.isLoaded = false;
+    this.replayInfo.filename = "";
+    this.replayInfo.config = {};
+    this.replayInfo.actors = {};
+    this.replayInfo.script.length = 0;
+
+    this.Save();
   }
 
   /* Config */
@@ -57,6 +71,7 @@ export class ReplayManagerService {
   }
   public SetConfig(key:ConfigKey, value:string) {
     this.replayInfo.config[key] = value;
+    this.Save();
   }
 
   /* Actor */
@@ -70,10 +85,12 @@ export class ReplayManagerService {
     } else {
       actorList[id] = Object.assign({ id, name: "", color: "888888", imgUrl: "" }, newValues);
     }
+    this.Save();
   }
   public DeleteActorInfo(id: number) {
     const actorList = this.replayInfo.actors;
     delete actorList[id];
+    this.Save();
   }
 
 
@@ -83,9 +100,13 @@ export class ReplayManagerService {
   }
   public SetScriptEntryList(list: Array<ScriptEntry>): void {
     this.replayInfo.script = list;
+    this.Save();
   }
 
 
+  public Save() {
+    this.storageServ.Save(this.replayInfo);
+  }
   public Test() {
     console.log(this.replayInfo);
   }

@@ -10,7 +10,5 @@ export class TabLayerComponent {
   @Input() titleText: string = ""
   @Input() text: string = ""
 
-  constructor(
-    public lang:LanguageService,
-  ) {}
+  constructor(public lang:LanguageService) {}
 }

@@ -3,7 +3,7 @@ import { ViewContainerRef } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 
 import { environment } from 'src/environments/environment';
-import { StorageManagerService } from 'src/app/services/storage-manager.service';
+import { ReplayManagerService } from './services/replay-manager.service';
 
 @Component({
   selector: 'app-root',
@@ -15,7 +15,7 @@ export class AppComponent implements OnInit {
   constructor(
     @Inject(DOCUMENT) private document: Document,
     public viewRef: ViewContainerRef,
-    private storage: StorageManagerService,
+    private rpManager: ReplayManagerService,
   ) {}
 
   ngOnInit(): void {
@@ -25,19 +25,19 @@ export class AppComponent implements OnInit {
       }
 
       setTimeout(()=>{
-        this.storage.Load();
+        this.rpManager.LoadInfoFromJSON();
       }, 0);
   }
 
   title = '哈絲的團錄工具';
-  version = "0.01";
+  version = "2.00";
 
   navbarArr = [
-    { title: '首頁',   url: 'home' },
+    //{ title: '首頁',   url: 'home' },
     { title: '編輯器', url: 'editor' },
     { title: '播放器', url: 'player' },
   ];
-  public currentTabKey:string = "home";
+  public currentTabKey:string = "editor";
 
   public clickTab(newTab:string) {
     this.currentTabKey = newTab;

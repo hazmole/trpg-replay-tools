@@ -6,4 +6,7 @@ export const langMap:Record<string, string> = {
     "Editor-Export-Description": "將編輯後的團錄輸出成重新排版過的網頁。",
     "Editor-Actor-Description": "請點選左側的登場角色進行個別設定。",
     "Editor-Script-Description": "你可以在這邊編輯你的團錄文件。<br>記得在編輯後點擊儲存以保存你的改動。",
+
+    "Import-Replay": "匯入團錄",
+    "Clear-Cache": "清空暫存",
 }

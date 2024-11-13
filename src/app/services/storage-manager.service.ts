@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ReplayManagerService } from 'src/app/services/replay-manager.service';
 import { ToolService } from 'src/app/services/tool.service';
+import { ReplayInfo } from '../interfaces/replay-info.interface';
 
 const storageKey: string = 'hazRpInfo_v2';
 
@@ -10,28 +11,29 @@ const storageKey: string = 'hazRpInfo_v2';
 export class StorageManagerService {
 
   constructor(
-    private rpManager: ReplayManagerService,
     private tool: ToolService,
   ) { }
 
 
 
 
-  Load(): void {
+  Load(): (ReplayInfo | null) {
     try {
-      let info = localStorage.getItem(storageKey) || "";
-      this.rpManager.SetInfoFromJSON(JSON.parse(info));
+      let item = localStorage.getItem(storageKey) || "";
+      if(item === "") return null;
+      
+      let infoObj = JSON.parse(item);
       this.tool.PopupSuccessfulNotify("自動讀取成功！");
+      return infoObj;
     } catch(e) {
       this.tool.PopupErrorNotify("自動讀取失敗！");
       console.error(e);
     }
-
+    return null;
   }
 
-  Save(): void {
+  Save(infoObj: ReplayInfo): void {
     try {
-      let infoObj = this.rpManager.GetInfoJSON();
       localStorage.setItem(storageKey, JSON.stringify(infoObj));
     } catch(e) {
       this.tool.PopupErrorNotify("自動儲存失敗！");

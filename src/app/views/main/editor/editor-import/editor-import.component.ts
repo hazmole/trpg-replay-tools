@@ -25,15 +25,14 @@ export class EditorImportComponent {
     this.tempFile = event.target.files[0];
   }
 
-  public importFile() {
+  public ImportFile() {
     if(this.tempFile) {
       this.rpManager.Import(this.tempFile)
         .then(() => {
-          this.rpManager.Test();
           this.tool.PopupSuccessfulNotify("讀取成功！");
         })
         .then(() => {
-          this.storage.Save();
+          this.rpManager.Save();
         })
         .catch((err) => {
           console.error(err);
@@ -41,5 +40,10 @@ export class EditorImportComponent {
     } else {
       this.tool.PopupErrorNotify("尚未選擇匯入來源！");
     }
+  }
+
+  public Clear() {
+    this.rpManager.Clear();
+    this.tool.PopupSuccessfulNotify("清除成功！");
   }
 }
