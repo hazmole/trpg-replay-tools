@@ -68,6 +68,16 @@
     font-size: 0.8rem;
     color: white;
 }
+.special .content {
+    background: #c9ddeb;
+    padding: 5px;
+    display: flex;
+    justify-content: center;
+}
+.special .content img {
+    max-width: 100%;
+    max-height: 200px;
+}
 
 
 .entryItem .func-btn-list {

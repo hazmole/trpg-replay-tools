@@ -1,1 +1,19 @@
-<p>add-edit-image works!</p>
+<div class="dialog">
+    <app-dialog-header [title]="dialogTitle" [options]="headerOptions"
+        cdkDragHandle cdkDrag cdkDragRootElement=".cdk-overlay-pane"></app-dialog-header>
+    <app-dialog-body>
+        <form [formGroup]="formGroup">
+            <div class="paragraph">
+                <app-input-title titleText="圖片網址"></app-input-title>
+                <input type="text" formControlName="imgUrl" (change)="OnChangeImageUrl()">
+            </div>
+            <div class="img-preview">
+                <div *ngIf="getImgUrl()==''">未設定圖片</div>
+                <div *ngIf="errImgFlag">圖片無法顯示！</div>
+                <img *ngIf="getImgUrl()!='' && !errImgFlag" [src]="getImgUrl()" (error)="OnImageError()">
+            </div>
+
+        </form>
+    </app-dialog-body>
+    <app-dialog-footer [options]="footerOptions"></app-dialog-footer>
+</div>

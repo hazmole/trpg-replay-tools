@@ -55,7 +55,7 @@ export class AddEditTalkComponent implements OnInit {
       this.dialogTitle = "編輯對話";
       this.formGroup.controls.actorID.setValue(this.data.entry?.actorId || 0);
       this.formGroup.controls.channel.setValue(this.data.entry?.channel || "main");
-      this.formGroup.controls.content.setValue(this.data.entry?.content || "");
+      this.formGroup.controls.content.setValue(this.parseHtml(this.data.entry?.content || ""));
     }
 
     //=========
@@ -69,13 +69,21 @@ export class AddEditTalkComponent implements OnInit {
     });
   }
 
+  parseHtml(content: string): string {
+    return content.replace(/<br>/g, '\n');
+  }
+  restoreHtml(content: string): string {
+    return content.replace(/\n/g, '<br>');
+  }
+
+
   onClose(): void {
     this.dialogRef.close(null);
   }
   onConfirm(): void {
     this.entryObj.actorId = this.formGroup.controls.actorID.value || 0;
     this.entryObj.channel = this.formGroup.controls.channel.value || "main";
-    this.entryObj.content = this.formGroup.controls.content.value || "";
+    this.entryObj.content = this.restoreHtml(this.formGroup.controls.content.value || "");
 
     let retObj: AddEditScriptReturn = {
       mode:  this.mode,

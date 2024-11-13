@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { DialogHeaderOptions } from 'src/app/interfaces/dialog-options.interface';
 import { DialogFooterOptions } from 'src/app/interfaces/dialog-options.interface';
@@ -26,11 +26,11 @@ export class AddEditTitleComponent implements OnInit {
     close:   { click: () => { this.onClose() } },
     confirm: { 
       click: () => { this.onConfirm() },
-      disabled: () => { return this.isTitleEmpty(); }
+      disabled: () => { return this.formGroup.invalid; }
     }
   };
   formGroup = new FormGroup({
-    titleText: new FormControl<string>(""),
+    titleText: new FormControl<string>("", Validators.required),
   });
 
 
@@ -51,12 +51,6 @@ export class AddEditTitleComponent implements OnInit {
       this.formGroup.controls.titleText.setValue(this.data.entry?.content || "");
     }
   }
-
-
-  isTitleEmpty(): boolean {
-    return (this.formGroup.controls.titleText.value) === "";
-  }
-
 
   onClose(): void {
     this.dialogRef.close(null);

@@ -20,12 +20,14 @@
                     <div class="dragable" cdkDragHandle>=</div>
                     <div class="title" [ngStyle]="getEntryTitleStyle(entry)">{{ getEntryTitle(entry) }}</div>
                     <div class="func-btn-list">
-                        <app-icon-button type="edit"   (click)="EditEntry(entry, idx)"  ></app-icon-button>
+                        <app-icon-button type="edit"   (click)="EditEntry(entry, idx)"   *ngIf="isShowEdit(entry)"></app-icon-button>
                         <app-icon-button type="delete" (click)="DeleteEntry(entry, idx)"></app-icon-button>
                     </div>
                 </div>
                 <div *ngIf="isTalkEntry(entry)"  class="content" [innerHtml]="entry.content"></div>
-                <div *ngIf="isBgImgEntry(entry)" class="content"></div>
+                <div *ngIf="isBgImgEntry(entry)" class="content">
+                    <img [src]="entry.content">
+                </div>
             </div>
 
             <!-- Footer for Buttons -->

@@ -19,3 +19,8 @@
 .footer button:active {
     background-color: var(--color-panel-navbtn-bg-active);
 }
+.footer button:disabled {
+    background-color: #c2c1d1;
+    color: black;
+    cursor: not-allowed;
+}

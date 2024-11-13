@@ -66,9 +66,10 @@ export class EditorScriptComponent implements OnInit {
         return {};
     }
   }
-  isShowEntryContent(entry:ScriptEntry): boolean {
+  isShowEdit(entry:ScriptEntry): boolean {
     switch(entry.type) {
       case "talk":
+      case "title":
       case "setBg":
         return true;
       default:
@@ -152,7 +153,7 @@ export class EditorScriptComponent implements OnInit {
     switch(type) {
       case "title": return AddEditTitleComponent;
       case "talk":  return AddEditTalkComponent;
-      //case "setBg": return AddEditImageComponent;
+      case "setBg": return AddEditImageComponent;
     }
     return null;
   }
