@@ -26,19 +26,27 @@ const genBasicWeb = (opt:BasicWebOptions) => {
             body { display:flex; flex-direction:column; align-items:center; background:var(--color-bg); }
             h1{ margin: 5px 0; color:var(--color-title); }
             ._hidden { display:none; }
-            ._main { display:flex; flex-direction:column; align-items: stretch; }
-            ._subtitle { color:var(--color-subtitle); margin:5px 0 20px 0; }
+            ._main { display:flex; flex-direction:column; align-items:stretch; gap:10px; width:1080px; }
+            ._subtitle { color:var(--color-subtitle); margin-top:20px; }
             ._sctitle { background:#ddd; margin-top:30px; padding:10px;font-weight:bold;font-size:1.3rem;text-align:center; }
 
+            ._talk { display:flex; flex-direction:row; gap:2px; border:1px solid black; background:#1e1e1e; color:#eee; width:100%; border-radius:5px; }
+            ._talk ._lCol { margin:6px; margin-right:0; }
+            ._talk ._rCol { flex:1; display:flex; flex-direction: column; }
+            ._talk ._img { width:110px; height:110px; background-repeat:no-repeat; background-size:cover; background-color:#2a2a2a; }
+            ._talk ._name { margin:6px; height:20px; font-size:18px; display:flex; justify-content:space-between; }
+            ._talk ._channel { margin-left:5px; color:#888888; display:none; }
+            ._talk ._content { flex:1; margin:6px; background:#2a2a2a; font-size:1.1rem; padding:10px; border-radius:5px; }
+            ._talk._other { width:50%; margin-left:auto; }
+            ._talk._other ._lCol { display:none; }
+            ._talk._other ._name { justify-content:end; }
+            ._talk._other ._channel { display:block; }
+            ._talk._other ._content { background:black; color:white; text-align:right; }
 
-            ._talk { margin:5px 0; display:flex; border:1px solid black; background:#1e1e1e; color:#eee; width:100%; max-width:1080px; border-radius:5px; }
-            ._talk ._lCol { width:125px; }
-            ._talk ._rCol { flex-grow:1; }
-            ._talk ._name{ padding:5px 10px; height:20px; font-size:18px; }
-            ._talk ._img { margin:6px; width:110px; height:110px; background-repeat:no-repeat; background-size:cover; background-color:#2a2a2a; }
-            ._talk ._content { margin:5px; background:#2a2a2a; font-size:1.1rem; padding:10px; height:calc(100% - 60px); border-radius:5px; }
             ._halt { padding:30px 0; }
-            ._sctitle { border-radius:5px; margin-bottom:5px; }
+            ._sctitle { border-radius:5px; }
+            ._bg-img { display:flex; justify-content: center; }
+            ._bg-img img { max-width:100%; max-height:400px; }
 
             ${ opt.styleActorArr.join('\n') }
         </style>
@@ -71,19 +79,22 @@ const genScriptEntryOuter = (type:string, content:string) => {
 
 const genScriptTalkElem = (entry:ScriptEntry, actor:ActorInfo) => {
     return `
-<div class="_talk _actor_${actor.id}">
+<div class="_talk _actor_${actor.id} ${entry.channel=="main"? "_main": "_other"}" data-channel="${entry.channel}">
     <div class="_lCol">
         <div class="_img"></div>
     </div>
     <div class="_rCol">
-        <div class="_name">${actor.name}</div>
+        <div class="_name">
+            ${actor.name}
+            <div class="_channel">[${entry.channel}]</div>
+        </div>
         <div class="_content">${entry.content}</div>
     </div>
 </div>`;
 }
 
 const genScriptTitleElem = (entry:ScriptEntry) => {
-    return `<div class="_sctitle">${entry.content}"></div>`;
+    return `<div class="_sctitle">${entry.content}</div>`;
 }
 
 const genScriptHaltElem = (entry:ScriptEntry) => {

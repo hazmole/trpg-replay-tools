@@ -43,6 +43,13 @@ function parseChannel(channel:string): ChannelType {
         case "メイン":
         case "main":
             return "main";
+        case "情報":
+        case "info":
+            return "情報";
+        case "閒聊":
+        case "雑談":
+        case "other":
+            return "閒聊";
         default:
             return channel;
     }

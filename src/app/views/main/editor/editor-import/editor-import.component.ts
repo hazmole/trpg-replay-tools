@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 import { ReplayManagerService } from 'src/app/services/replay-manager.service';
 import { StorageManagerService } from 'src/app/services/storage-manager.service';
@@ -10,6 +10,7 @@ import { ToolService } from 'src/app/services/tool.service';
   styleUrls: ['./editor-import.component.css']
 })
 export class EditorImportComponent {
+  @Input() control:any = null;
 
   constructor(
     private rpManager: ReplayManagerService,
@@ -33,6 +34,9 @@ export class EditorImportComponent {
         })
         .then(() => {
           this.rpManager.Save();
+        })
+        .then(() => {
+          this.control.goto("actors");
         })
         .catch((err) => {
           console.error(err);
