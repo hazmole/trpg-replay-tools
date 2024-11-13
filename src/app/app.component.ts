@@ -24,7 +24,9 @@ export class AppComponent implements OnInit {
         bases[0].setAttribute('url', environment.baseHref);
       }
 
-      this.storage.Load();
+      setTimeout(()=>{
+        this.storage.Load();
+      }, 0);
   }
 
   title = '哈絲的團錄工具';

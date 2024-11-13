@@ -1,13 +1,17 @@
-<app-tab-layer titleText="團錄編輯" text="你可以在這邊編輯並預覽你的團錄文件。" >
-    <div class="button-bar"></div>
+<app-tab-layer titleText="Editor-Script-Title" text="Editor-Script-Description" >
+    
+    <!-- Button List -->
+    <div class="button-bar">
+        <app-icon-button type="undo" (click)="Undo()"></app-icon-button>
+        <app-icon-button type="redo" (click)="Redo()"></app-icon-button>
+        <app-icon-button type="save" (click)="Save()"></app-icon-button>
+    </div>
 
-
+    <!-- Entry List -->
     <div class="script-edit-panel" cdkDropList (cdkDropListDropped)="OnDrop($event)">
         
         <div class="script-starter-outer">
-            <div class="script-starter">
-                文件開頭
-            </div>
+            <div class="script-bookmark"> 文件開頭 </div>
             <div class="plus-btn-outer">
                 <div class="plus-btn clickable" (click)="AddEntry(-1)" title="新增段落"></div>
             </div>
@@ -36,6 +40,7 @@
             </div>
         </div>
 
+        <div class="script-bookmark"> 文件結尾 </div>
     </div>
 
 </app-tab-layer>

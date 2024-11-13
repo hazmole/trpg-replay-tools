@@ -30,7 +30,7 @@ export class EditorImportComponent {
       this.rpManager.Import(this.tempFile)
         .then(() => {
           this.rpManager.Test();
-          this.tool.PopupNotifyMsg("success", "讀取成功！");
+          this.tool.PopupSuccessfulNotify("讀取成功！");
         })
         .then(() => {
           this.storage.Save();
@@ -38,6 +38,8 @@ export class EditorImportComponent {
         .catch((err) => {
           console.error(err);
         });
+    } else {
+      this.tool.PopupErrorNotify("尚未選擇匯入來源！");
     }
   }
 }

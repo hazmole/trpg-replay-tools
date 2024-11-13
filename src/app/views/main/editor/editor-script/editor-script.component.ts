@@ -174,4 +174,16 @@ export class EditorScriptComponent implements OnInit {
     */
   }
 
+
+  Undo(): void {
+    this.tool.PopupErrorNotify("此功能尚未實裝");
+  }
+  Redo(): void {
+    this.tool.PopupErrorNotify("此功能尚未實裝");
+  }
+
+  Save(): void {
+    this.rpManager.SetScriptEntryList(this.entryList);
+    this.tool.PopupSuccessfulNotify("儲存成功！");
+  }
 }

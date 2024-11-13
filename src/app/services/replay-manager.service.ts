@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { ReplayInfo, ScriptEntry } from 'src/app/interfaces/replay-info.interface';
+import { ReplayConfig, ReplayInfo, ScriptEntry } from 'src/app/interfaces/replay-info.interface';
 import { ParserService } from './parser.service';
 
-import { ActorInfo, newReplayInfo } from 'src/app/interfaces/replay-info.interface';
+import { ActorInfo, newReplayInfo, ConfigKey } from 'src/app/interfaces/replay-info.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -41,11 +41,22 @@ export class ReplayManagerService {
     return (this.replayInfo.isLoaded);
   }
 
+  public GetInfo(): ReplayInfo {
+    return this.replayInfo;
+  }
   public GetInfoJSON(): Object {
     return this.replayInfo;
   }
   public SetInfoFromJSON(info: any): void {
     this.replayInfo = info;
+  }
+
+  /* Config */
+  public GetConfig(): ReplayConfig {
+    return this.replayInfo.config;
+  }
+  public SetConfig(key:ConfigKey, value:string) {
+    this.replayInfo.config[key] = value;
   }
 
   /* Actor */
@@ -69,6 +80,9 @@ export class ReplayManagerService {
   /* Script */
   public GetScriptEntryList(): Array<ScriptEntry> {
     return (this.replayInfo.script);
+  }
+  public SetScriptEntryList(list: Array<ScriptEntry>): void {
+    this.replayInfo.script = list;
   }
 
 

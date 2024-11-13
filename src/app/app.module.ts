@@ -31,6 +31,7 @@ import { InputDropdownSelectComponent } from './views/shared/partial/input-dropd
 import { ButtonApplyComponent } from './views/shared/partial/button-apply/button-apply.component';
 import { IconButtonComponent } from './views/shared/partial/icon-button/icon-button.component'
 import { NotifyMessageComponent } from './views/shared/partial/notify-message/notify-message.component'
+import { PopupDialogComponent } from './views/shared/partial/popup-dialog/popup-dialog.component';
 
 import { DialogHeaderComponent } from './views/shared/dialog/dialog-header/dialog-header.component';
 import { DialogFooterComponent } from './views/shared/dialog/dialog-footer/dialog-footer.component';
@@ -41,7 +42,7 @@ import { ReplayManagerService } from './services/replay-manager.service';
 import { StorageManagerService } from './services/storage-manager.service';
 import { ParserService } from './services/parser.service';
 import { ToolService } from './services/tool.service';
-import { PopupDialogComponent } from './views/shared/partial/popup-dialog/popup-dialog.component';
+import { LanguageService } from './services/language.service';
 
 
 @NgModule({
@@ -87,6 +88,7 @@ import { PopupDialogComponent } from './views/shared/partial/popup-dialog/popup-
     StorageManagerService,
     ParserService,
     ToolService,
+    LanguageService,
   ],
   bootstrap: [AppComponent]
 })

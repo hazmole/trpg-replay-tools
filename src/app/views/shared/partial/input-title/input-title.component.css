@@ -3,3 +3,7 @@ div {
     margin-bottom: 5px; 
     margin-top: 10px;
 }
+
+.redStar {
+    color: red;
+}

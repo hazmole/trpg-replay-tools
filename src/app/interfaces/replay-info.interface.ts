@@ -32,6 +32,8 @@ export interface ScriptEntry {
     content: string;
 }
 
+export type ConfigKey = keyof ReplayConfig;
+
 export type ScriptEntryType = "talk" | "title" | "halt" | "setBg";
 
 export type ChannelType = "main" | string;

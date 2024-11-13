@@ -7,6 +7,7 @@ import { Component, Input } from '@angular/core';
 })
 export class InputTitleComponent {
   @Input() titleText: string = "";
+  @Input() redStar: boolean = false;
 
 
 }

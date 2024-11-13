@@ -21,6 +21,7 @@ export class StorageManagerService {
     try {
       let info = localStorage.getItem(storageKey) || "";
       this.rpManager.SetInfoFromJSON(JSON.parse(info));
+      this.tool.PopupSuccessfulNotify("自動讀取成功！");
     } catch(e) {
       this.tool.PopupErrorNotify("自動讀取失敗！");
       console.error(e);

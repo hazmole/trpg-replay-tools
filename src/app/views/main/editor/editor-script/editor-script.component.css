@@ -1,3 +1,10 @@
+.button-bar {
+    display: flex;
+    background-color: var(--color-navbar-bg);
+    padding: 2px;
+    gap: 2px;
+}
+
 .script-edit-panel {
     flex-grow: 1;
     min-height: 0;
@@ -11,15 +18,14 @@
     padding: .5em;
 }
 
-.script-starter {
+.script-bookmark {
     border-radius: 5px;
     margin: 0 30%;
     padding: 3px 0;
-    background: #fff;
-    color: black;
+    color: white;
+    border: 1px solid white;
 
     font-size: 0.8rem;
-    text-decoration: underline;
     text-align: center;
 }
 

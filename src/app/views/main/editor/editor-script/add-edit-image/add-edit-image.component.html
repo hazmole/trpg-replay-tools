@@ -4,7 +4,7 @@
     <app-dialog-body>
         <form [formGroup]="formGroup">
             <div class="paragraph">
-                <app-input-title titleText="圖片網址"></app-input-title>
+                <app-input-title titleText="圖片網址" [redStar]="true"></app-input-title>
                 <input type="text" formControlName="imgUrl" (change)="OnChangeImageUrl()">
             </div>
             <div class="img-preview">

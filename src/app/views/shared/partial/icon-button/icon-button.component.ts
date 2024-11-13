@@ -22,6 +22,18 @@ export class IconButtonComponent implements OnInit {
         this.label = "刪除";
         this.imgUrl = 'assets/images/cross.png';
         break;
+      case "undo":
+        this.label = "復原";
+        this.imgUrl = 'assets/images/undo.png';
+        break;
+      case "redo":
+        this.label = "重作";
+        this.imgUrl = 'assets/images/redo.png';
+        break;
+      case "save":
+        this.label = "儲存";
+        this.imgUrl = 'assets/images/save.svg';
+        break;
     }
   }
 }

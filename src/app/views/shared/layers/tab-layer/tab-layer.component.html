@@ -1,5 +1,5 @@
 <div class="TabLayer">
-    <h2  *ngIf="titleText!=''">{{ titleText }}</h2>
-    <div *ngIf="text!=''" class="description">{{ text }}</div>
+    <h2  *ngIf="titleText!=''">{{ lang.FMT(titleText) }}</h2>
+    <div *ngIf="text!=''" class="description" [innerHtml]="lang.FMT(text)"></div>
     <ng-content></ng-content>
 </div>

@@ -42,9 +42,8 @@ hr {
 }
 
 /* Input */
-input[type=text] {
-	height: 20px;
-}
+input[type=text] { height: 20px; }
+input[type=date] { height: 20px; }
 select {
 	height: 25px;
 	min-width: 200px;

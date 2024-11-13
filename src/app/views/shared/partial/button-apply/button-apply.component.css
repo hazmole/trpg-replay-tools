@@ -1,23 +1,16 @@
 button {
     width: 100px;
     padding: 15px;
-    background-color: var(--color-apply-btn-bg);
     color: white;
     cursor: pointer;
 }
-button:hover {
-    background-color: var(--color-apply-btn-bg-hover);
-}
-button:active {
-    background-color: var(--color-apply-btn-bg-active)
-}
 
-button.critical {
-    background-color: #7f0505;
-}
-button.critical:hover {
-    background-color: #914545;
-}
-button.critical:active {
-    background-color: #530000;
-}
+/* Default */
+button {        background-color: var(--color-apply-btn-bg); }
+button:hover {  background-color: var(--color-apply-btn-bg-hover); }
+button:active { background-color: var(--color-apply-btn-bg-active); }
+
+/* Critical */
+button.critical {        background-color: #7f0505; }
+button.critical:hover {  background-color: #914545; }
+button.critical:active { background-color: #530000; }

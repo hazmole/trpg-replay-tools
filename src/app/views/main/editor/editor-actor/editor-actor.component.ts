@@ -97,6 +97,7 @@ export class EditorActorComponent implements OnInit {
     
     this.rpManager.SetActorInfo(id, newValues);
     this.initList();
+    this.tool.PopupSuccessfulNotify("儲存成功！");
   }
 
   AddActor(): void {
