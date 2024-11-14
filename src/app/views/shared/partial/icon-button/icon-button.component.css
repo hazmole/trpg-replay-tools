@@ -1,12 +1,23 @@
+.btn-icon-outer {
+    background-color: #ffffff26;
+    display: flex;
+    cursor: pointer;
+}
+.btn-icon-outer:hover {
+    background-color: #ffffff80;
+}
+
 .btn-icon {
     width: 16px;
     height: 16px;
     padding: 2px;
 
     border: 1px solid #ffffff40;
-    background-color: #ffffff26;
     background-size: cover;
 }
-.btn-icon:hover {
-    background-color: #ffffff80;
+.textLabel {
+    font-size: 14px;
+    color: white;
+    padding: 0 5px;
+    border: 1px solid #ffffff40;
 }

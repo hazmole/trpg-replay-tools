@@ -7,6 +7,7 @@ import { Component, Input, OnInit } from '@angular/core';
 })
 export class IconButtonComponent implements OnInit {
   @Input() type: string = "";
+  @Input() text: string = "";
 
   public imgUrl: string = "";
   public label: string = "";
@@ -35,5 +36,9 @@ export class IconButtonComponent implements OnInit {
         this.imgUrl = 'assets/images/save.svg';
         break;
     }
+  }
+
+  isShowText(): boolean {
+    return this.text.length > 0;
   }
 }

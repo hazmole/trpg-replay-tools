@@ -2,7 +2,7 @@
     display: flex;
     background-color: var(--color-navbar-bg);
     padding: 2px;
-    gap: 2px;
+    gap: 5px;
 }
 
 .script-edit-panel {
@@ -91,7 +91,7 @@
 }
 .entryItem:hover .func-btn-list {
     display: flex;
-    gap: 3px;
+    gap: 8px;
 }
 
 
@@ -105,21 +105,6 @@
     height: 10px;
     cursor: cell;
 }
+
 .plus-btn:hover { background-color: rgba(255, 255, 255, 0.25); }
 .plus-btn:active { background-color: rgba(255, 255, 255, .7); }
-
-/*
-.plus-btn .icon {
-    content: '';
-    display: inline-block;
-    background-size: cover;
-    filter: brightness(0.7);
-
-    width: 15px;
-    height: 15px;
-}
-.plus-btn:hover .icon,
-.plus-btn:active .icon {
-    filter: brightness(1);
-}
-*/

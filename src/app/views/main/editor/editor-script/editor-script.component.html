@@ -4,7 +4,7 @@
     <div class="button-bar">
         <app-icon-button type="undo" (click)="Undo()"></app-icon-button>
         <app-icon-button type="redo" (click)="Redo()"></app-icon-button>
-        <app-icon-button type="save" (click)="Save()"></app-icon-button>
+        <app-icon-button type="save" text="儲存" (click)="Save()"></app-icon-button>
     </div>
 
     <!-- Entry List -->
@@ -24,8 +24,8 @@
                     <div class="dragable" cdkDragHandle>=</div>
                     <div class="title" [ngStyle]="getEntryTitleStyle(entry)">{{ getEntryTitle(entry) }}</div>
                     <div class="func-btn-list">
-                        <app-icon-button type="edit"   (click)="EditEntry(entry, idx)"   *ngIf="isShowEdit(entry)"></app-icon-button>
-                        <app-icon-button type="delete" (click)="DeleteEntry(entry, idx)"></app-icon-button>
+                        <app-icon-button type="edit"   text="編輯" (click)="EditEntry(entry, idx)"   *ngIf="isShowEdit(entry)"></app-icon-button>
+                        <app-icon-button type="delete" text="刪除" (click)="DeleteEntry(entry, idx)"></app-icon-button>
                     </div>
                 </div>
                 <div *ngIf="isTalkEntry(entry)"  class="content" [innerHtml]="entry.content"></div>

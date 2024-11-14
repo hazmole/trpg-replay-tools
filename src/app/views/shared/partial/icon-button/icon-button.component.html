@@ -1,3 +1,6 @@
-<div class="btn-icon clickable"  
-    [ngStyle]="{'background-image': 'url('+imgUrl+')'}" 
-    [title]="label"></div>
+<div class="btn-icon-outer">
+    <div class="btn-icon clickable"  
+        [ngStyle]="{'background-image': 'url('+imgUrl+')'}" 
+        [title]="label"></div>
+    <div *ngIf="isShowText()" class="textLabel">{{ text }}</div>
+</div>
