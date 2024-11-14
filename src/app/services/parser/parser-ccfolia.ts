@@ -1,6 +1,7 @@
 import { RegExpList, RegMatchArr, RegMatchByIdx } from "./regular-expression"
 import { ReplayInfo, ActorInfo, ScriptEntry, ChannelType } from "src/app/interfaces/replay-info.interface";
 import { ParserFunc, newReplayInfo } from "src/app/interfaces/replay-info.interface";
+import { registerNewActorByName } from "./lib-parser";
 
 export const ParseCCFolia:ParserFunc = (content:string) => {
     const info:ReplayInfo = newReplayInfo();
@@ -18,7 +19,7 @@ export const ParseCCFolia:ParserFunc = (content:string) => {
         let content = matchMap[4];
 
         // Handle ActorInfo
-        let actorObj = registerActorByName(actorTable, actor, color);
+        let actorObj = registerNewActorByName(actorTable, actor, color, "");
         // Handle ScriptEntry
         let scriptEntry:ScriptEntry = {
             type: "talk",
@@ -53,17 +54,4 @@ function parseChannel(channel:string): ChannelType {
         default:
             return channel;
     }
-}
-
-function registerActorByName(table: Record<string, ActorInfo>, actorName:string, color:string): ActorInfo {
-    if(table[actorName] == null) {
-        const newActor = {
-            id: Object.keys(table).length,
-            name: actorName,
-            color: "#"+color.toUpperCase(),
-            imgUrl: "",
-        };
-        table[actorName] = newActor;
-    } 
-    return table[actorName];
 }

@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { TabControl } from 'src/app/interfaces/tab-control.interface';
 
-import { ReplayManagerService } from 'src/app/services/replay-manager.service';
+import { ReplayManagerService, ImportOptions } from 'src/app/services/replay-manager.service';
 import { StorageManagerService } from 'src/app/services/storage-manager.service';
 import { ToolService } from 'src/app/services/tool.service';
 
@@ -28,8 +28,22 @@ export class EditorImportComponent {
   }
 
   public ImportFile() {
+    if(this.isActorExisted()){
+      this._importFile({
+        isInheritActor: true,
+        isInheritTheme: true,
+      });
+    } else {
+      this._importFile({
+        isInheritActor: false,
+        isInheritTheme: false,
+      });
+    }
+  }
+
+  private _importFile(optoins: ImportOptions) {
     if(this.tempFile) {
-      this.rpManager.Import(this.tempFile)
+      this.rpManager.Import(this.tempFile, optoins)
         .then(() => {
           this.tool.PopupSuccessfulNotify("讀取成功！");
         })
@@ -45,6 +59,11 @@ export class EditorImportComponent {
     } else {
       this.tool.PopupErrorNotify("尚未選擇匯入來源！");
     }
+  }
+
+  private isActorExisted(): boolean {
+    const actorList = this.rpManager.GetActorList();
+    return Object.keys(actorList).length > 0;
   }
 
   public Clear() {

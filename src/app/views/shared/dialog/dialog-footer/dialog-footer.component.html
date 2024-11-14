@@ -1,4 +1,4 @@
 <div class="footer">
-    <button (click)="onConfirm($event)" [disabled]="isConfirmDisabled()"  *ngIf="isShowConform">確認</button>
-    <button (click)="onClose($event)"   [disabled]="isCloseDisabled()" >取消</button>
+    <button (click)="onConfirm($event)" [disabled]="isConfirmDisabled()"  *ngIf="isShowConform">{{ confirmText }}</button>
+    <button (click)="onClose($event)"   [disabled]="isCloseDisabled()" >{{ cancelText }}</button>
 </div>

@@ -135,7 +135,7 @@ export class EditorActorComponent implements OnInit {
   }
 
   private removeRedundantActor(actorID: number): void {
-    this.tool.PopupMsgDialog("刪除角色", "你確定要刪除這個角色嗎？", () => {
+    this.tool.PopupConfirmMsgDialog("刪除角色", "你確定要刪除這個角色嗎？", () => {
       this.rpManager.DeleteActorInfo(actorID);
       this.currentActorId = -1;
       this.initList();

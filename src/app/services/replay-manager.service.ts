@@ -3,7 +3,8 @@ import { ReplayConfig, ReplayInfo, ScriptEntry } from 'src/app/interfaces/replay
 import { ParserService } from './parser.service';
 import { StorageManagerService } from './storage-manager.service';
 
-import { ActorInfo, newReplayInfo, ConfigKey } from 'src/app/interfaces/replay-info.interface';
+import { ActorInfo, newReplayInfo } from 'src/app/interfaces/replay-info.interface';
+import { mergeActorTable } from './parser/lib-parser';
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +17,7 @@ export class ReplayManagerService {
 
   private replayInfo:ReplayInfo = newReplayInfo();
 
-  public Import(file: File): Promise<any> {
+  public Import(file: File, options: ImportOptions): Promise<any> {
     const parser = new ParserService();
     const fileName = file.name;
 
@@ -33,10 +34,18 @@ export class ReplayManagerService {
       let replayInfo = parser.Parse(fileName, fileData);
       if(replayInfo == null) {
         throw "unknown_file_format";
-      } else {
-        this.replayInfo = replayInfo;
       }
-      return true;
+      return replayInfo;
+    })
+    // Step 3: Inherit
+    .then((newRpInfo) => {
+      if(options.isInheritActor) {
+        newRpInfo.actors = mergeActorTable(newRpInfo.actors, this.replayInfo.actors);
+      }
+      if(options.isInheritTheme) {
+        newRpInfo.config.colorTheme = this.replayInfo.config.colorTheme;
+      }
+      this.replayInfo = newRpInfo;
     })
   };
 
@@ -111,4 +120,10 @@ export class ReplayManagerService {
     console.log(this.replayInfo);
   }
 
+}
+
+
+export interface ImportOptions {
+  isInheritActor: boolean;
+  isInheritTheme: boolean;
 }

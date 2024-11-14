@@ -33,7 +33,7 @@ export class ToolService {
   }
 
   // Confirm Dialog
-  public PopupMsgDialog(title: string, message: string, callback: Function) {
+  public PopupConfirmMsgDialog(title: string, message: string, successCB: Function, errorCB?: Function) {
     const dialogRef = this.matDialog.open(PopupDialogComponent, {
       data: {
         title: title,
@@ -43,11 +43,10 @@ export class ToolService {
       autoFocus: false,
     })
     dialogRef.afterClosed().subscribe((isConfirm) => {
-      console.log(isConfirm);
-      if(isConfirm){ callback() }
+      if(isConfirm){ successCB() }
+      else if(errorCB){ errorCB() }
     });
   }
-
 
   // Notify
   public PopupSuccessfulNotify(msg: string) {
