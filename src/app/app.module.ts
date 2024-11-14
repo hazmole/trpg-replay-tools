@@ -37,6 +37,7 @@ import { DialogHeaderComponent } from './views/shared/dialog/dialog-header/dialo
 import { DialogFooterComponent } from './views/shared/dialog/dialog-footer/dialog-footer.component';
 import { DialogBodyComponent } from './views/shared/dialog/dialog-body/dialog-body.component';
 import { ButtonListComponent } from './views/shared/partial/button-list/button-list.component';
+import { ColorPickerComponent } from './views/shared/inputs/color-picker/color-picker.component';
 
 /* Services */
 import { ReplayManagerService } from './services/replay-manager.service';
@@ -84,6 +85,7 @@ import { LanguageService } from './services/language.service';
     DialogFooterComponent,
     DialogBodyComponent,
     ButtonListComponent,
+    ColorPickerComponent,
   ],
   providers: [
     ReplayManagerService,

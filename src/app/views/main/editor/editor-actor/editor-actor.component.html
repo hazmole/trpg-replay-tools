@@ -27,10 +27,7 @@
                     <div><input type="text" formControlName="actorName"></div>
 
                     <app-input-title titleText="代表色"></app-input-title>
-                    <div class="colorPicker">
-                        <input type="text"  formControlName="colorText" class="colorPicker-text" placeholder="#RRGGBB" (change)="ChangeColorText()">
-                        <input type="color" formControlName="colorPick" class="colorPicker-button" (change)="ChangeColorPick()">
-                    </div>
+                    <app-color-picker [formCtrl]="formGroup.controls.color"></app-color-picker>
 
                     <app-input-title titleText="角色頭像預覽"></app-input-title>
                     <div class="actorImg">

@@ -1,0 +1,9 @@
+<div class="colorPicker">
+    <input type="text"  class="colorPicker-text" placeholder="#RRGGBB"
+        [value]="formCtrl.value" [formControl]="formCtrl" 
+        (change)="ChangeColorText($event)" (focus)="FocusColorText($event)">
+    
+    <input type="color" class="colorPicker-button" 
+        [value]="formCtrl.value" [formControl]="formCtrl" 
+        (change)="ChangeColorPick($event)">
+</div>

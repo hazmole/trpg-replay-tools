@@ -26,8 +26,7 @@ export class EditorActorComponent implements OnInit {
 
   public formGroup = new FormGroup({
     actorName: new FormControl<string>(''),
-    colorPick:  new FormControl<string>(''),
-    colorText:  new FormControl<string>(''),
+    color:  new FormControl<string>(''),
     imgUrl: new FormControl<string>(''),
   });
 
@@ -57,8 +56,7 @@ export class EditorActorComponent implements OnInit {
     if(this.isSelected()) {
       // update values
       this.formGroup.controls.actorName.setValue(actor.name);
-      this.formGroup.controls.colorPick.setValue(actor.color);
-      this.formGroup.controls.colorText.setValue(actor.color);
+      this.formGroup.controls.color.setValue(actor.color);
       this.formGroup.controls.imgUrl.setValue(actor.imgUrl);
       this.errImgFlag = false;
 
@@ -67,15 +65,6 @@ export class EditorActorComponent implements OnInit {
         return (script.actorId != null) && script.actorId == actor.id;
       }).length;
     }
-  }
-
-  ChangeColorPick(): void {
-    let colorCode = (this.formGroup.controls.colorPick.value || "#888888").toUpperCase();
-    this.formGroup.controls.colorText.setValue(colorCode);
-  }
-  ChangeColorText(): void {
-    let colorCode = (this.formGroup.controls.colorText.value || "#888888").toUpperCase();
-    this.formGroup.controls.colorPick.setValue(colorCode);
   }
 
   ChangeImageUrl(): void {
@@ -88,7 +77,7 @@ export class EditorActorComponent implements OnInit {
   SaveActor(): void {
     let id = this.currentActorId;
     let name = this.formGroup.controls.actorName.value || "";
-    let color = this.formGroup.controls.colorText.value || "#888888";
+    let color = this.formGroup.controls.color.value || "#888888";
     let imgUrl = this.formGroup.controls.imgUrl.value || "";
     
     const newValues = {

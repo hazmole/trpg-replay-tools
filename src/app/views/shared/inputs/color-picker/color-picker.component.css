@@ -1,0 +1,25 @@
+.colorPicker {
+    display: flex;
+
+}
+.colorPicker-button {
+    background-color: transparent;
+    appearance: none;
+
+    width: 25px;
+    height: 27px;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+}
+.colorPicker-button::-webkit-color-swatch {
+  border-radius: 50%;
+  border: 2px solid #000000;
+}
+.colorPicker-button::-moz-color-swatch {
+  border-radius: 50%;
+  border: 2px solid #000000;
+}
+.colorPicker-text {
+    width: 70px;
+}
