@@ -1,5 +1,5 @@
 import { RegExpList, RegMatchArr, RegMatchByIdx } from "./regular-expression"
-import { ReplayInfo, ActorInfo, ScriptEntry, ChannelType } from "src/app/interfaces/replay-info.interface";
+import { ReplayInfo, ActorInfo, ScriptEntry, ChannelType, ColorTheme } from "src/app/interfaces/replay-info.interface";
 import { ParserFunc, newReplayInfo } from "src/app/interfaces/replay-info.interface";
 
 
@@ -9,6 +9,16 @@ export const ParseHazWebV2:ParserFunc = (content:string) => {
     // Handle Title
     const title = RegMatchByIdx("hazv1_getDocTitle", content, 1);
     info.config.title = title;
+
+    // Handle ColorTheme
+    const colorTheme:ColorTheme = {};
+    colorTheme.pageBgColor = RegMatchByIdx("hazv2_getTheme_varBgColor", content, 1) || "#454752";
+    colorTheme.pageTitleColor = RegMatchByIdx("hazv2_getTheme_varTitleColor", content, 1) || "#FFFFFF";
+    colorTheme.scriptTalkBgColor = RegMatchByIdx("hazv2_getTheme_varTalkBgColor", content, 1) || "#1E1E1E";
+    colorTheme.scriptTalkPanelBgColor = RegMatchByIdx("hazv2_getTheme_varTalkPanelBgColor", content, 1) || "#2A2A2A";
+    colorTheme.scriptTalkPaneltextColor = RegMatchByIdx("hazv2_getTheme_varTalkPanelTextColor", content, 1) || "#EEEEEE";
+
+    info.config.colorTheme = colorTheme;
 
     // Handle Actors
     const style = RegMatchByIdx("htmlStyle", content, 1);

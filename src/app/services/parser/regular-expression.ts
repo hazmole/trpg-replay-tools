@@ -22,6 +22,12 @@ export const RegExpList = {
     hazv2_getTalk: new RegExp(/<div class="_talk _actor_(\d+) .*?">/, 'sg'),
     hazv2_getTalkChannel: new RegExp(/<div class="_channel">(.*?)<\/div>/, 'sg'),
     hazv2_getTalkContent: new RegExp(/<div class="_content">(.*?)<\/div>/, 'smg'),
+    hazv2_getTheme_varBgColor: new RegExp(/--color-bg: #([0-9a-zA-Z]+);/),
+    hazv2_getTheme_varTitleColor: new RegExp(/--color-title: #([0-9a-zA-Z]+);/),
+    hazv2_getTheme_varSubTitleColor: new RegExp(/--color-subtitle: #([0-9a-zA-Z]+);/),
+    hazv2_getTheme_varTalkBgColor: new RegExp(/--color-talk-bg: #([0-9a-zA-Z]+);/),
+    hazv2_getTheme_varTalkPanelBgColor: new RegExp(/--color-talk-panel-bg: #([0-9a-zA-Z]+);/),
+    hazv2_getTheme_varTalkPanelTextColor: new RegExp(/--color-talk-panel-text: #([0-9a-zA-Z]+);/),
 };
 
 type RegExpKey = keyof typeof RegExpList
