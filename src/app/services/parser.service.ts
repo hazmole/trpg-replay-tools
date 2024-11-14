@@ -20,8 +20,8 @@ export class ParserService {
     
     let sourceType = this.CheckMode(fileData);
     switch(sourceType) {
-      case 'ccfolia':   infoObj = ParseCCFolia(fileData); break;
-      case 'dondotof':  infoObj = ParseDondotoF(fileData); break;
+      case 'ccfolia':   infoObj = ParseCCFolia(fileData);  infoObj.config.title = fileName; break;
+      case 'dondotof':  infoObj = ParseDondotoF(fileData); infoObj.config.title = fileName; break;
       case 'hazrp':     infoObj = ParseHazRpJSON(fileData); break;
       case 'hazweb':    infoObj = ParseHazWeb(fileData); break;
       case "hazweb_v2": infoObj = ParseHazWebV2(fileData); break;

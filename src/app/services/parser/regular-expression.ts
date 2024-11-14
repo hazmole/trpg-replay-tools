@@ -16,7 +16,7 @@ export const RegExpList = {
     hazv1_getTalkContent: new RegExp(/<div class="_actorWords">(.*?)<\/div>/, 'smg'),
 
     hazV2Format: new RegExp(/<div class="_script-outer" data-type="(\w+)">(.*?)<\/div><!--EOS-->/, 'smg'),
-    hazv2_actorCss: new RegExp(/\._actor_(\d+) ._name { color:(#[\w\d]{6}); content:'(.*?)'; }.*?._actor_\d+ ._img { background-image:url\('(.*?)'\); }/, 'sg'),
+    hazv2_actorCss: new RegExp(/\._actor_(\d+) ._name { color:(#[\w\d]{6}); content:'(.*?)'; }.*?._actor_\d+ ._img { background-image:url\('(.*?)'\);/, 'sg'),
     hazv2_getSectTitle: new RegExp(/<div class="_sctitle">(.*?)<\/div>/, 's'),
     hazv2_getBgImage: new RegExp(/<img src="(.*?)">/, 's'),
     hazv2_getTalk: new RegExp(/<div class="_talk _actor_(\d+) .*?">/, 'sg'),

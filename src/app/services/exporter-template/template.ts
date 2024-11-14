@@ -30,13 +30,13 @@ const genBasicWeb = (opt:BasicWebOptions) => {
             ._subtitle { color:var(--color-subtitle); margin-top:20px; }
             ._sctitle { background:#ddd; margin-top:30px; padding:10px;font-weight:bold;font-size:1.3rem;text-align:center; }
 
-            ._talk { display:flex; flex-direction:row; gap:2px; border:1px solid black; background:#1e1e1e; color:#eee; width:100%; border-radius:5px; }
-            ._talk ._lCol { margin:6px; margin-right:0; }
+            ._talk { display:flex; flex-direction:row; gap:2px; background:var(--color-talk-bg); width:100%; border-radius:5px; }
+            ._talk ._lCol { width:110px; flex-shrink:0; margin:6px; margin-right:0; }
             ._talk ._rCol { flex:1; display:flex; flex-direction: column; }
-            ._talk ._img { width:110px; height:110px; background-repeat:no-repeat; background-size:cover; background-color:#2a2a2a; }
+            ._talk ._img { width:110px; height:110px; background-repeat:no-repeat; background-size:cover; background-color:#ffffff10; }
             ._talk ._name { margin:6px; height:20px; font-size:18px; display:flex; justify-content:space-between; }
             ._talk ._channel { margin-left:5px; color:#888888; display:none; }
-            ._talk ._content { flex:1; margin:6px; background:#2a2a2a; font-size:1.1rem; padding:10px; border-radius:5px; }
+            ._talk ._content { flex:1; margin:6px; background:var(--color-talk-panel-bg); color:var(--color-talk-panel-text); font-size:1.1rem; padding:10px; border-radius:5px; }
             ._talk._other { width:50%; margin-left:auto; }
             ._talk._other ._lCol { display:none; }
             ._talk._other ._name { justify-content:end; }
@@ -67,7 +67,7 @@ const genBasicWeb = (opt:BasicWebOptions) => {
 const genActorStyle = (actor:ActorInfo) => {
     return `
 ._actor_${actor.id} ._name { color:${actor.color}; content:'${actor.name}'; }
-._actor_${actor.id} ._img { background-image:url('${actor.imgUrl}'); }`.trim();
+._actor_${actor.id} ._img { background-image:url('${actor.imgUrl}'); display:${actor.imgUrl===""? "none": "block"}; }`.trim();
 }
 
 const genScriptEntryOuter = (type:string, content:string) => {

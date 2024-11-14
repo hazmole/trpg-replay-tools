@@ -39,10 +39,10 @@
                     <app-input-title titleText="頭像連結"></app-input-title>
                     <div><input class="img-url-input" type="text" formControlName="imgUrl" (change)="ChangeImageUrl()"></div>
 
-                    <div class="paragraph btn-list">
+                    <app-button-list>
                         <app-button-apply text="儲存" (click)="SaveActor()"></app-button-apply>
                         <app-button-apply text="刪除" (click)="RemoveActor()" type="critical"></app-button-apply>
-                    </div>
+                    </app-button-list>
 
                     <hr>
                     <div><b>角色UID：</b>{{ outputList.actorID }}</div>

@@ -58,7 +58,7 @@ export class ReplayManagerService {
   public Clear(): void {
     this.replayInfo.isLoaded = false;
     this.replayInfo.filename = "";
-    this.replayInfo.config = {};
+    this.replayInfo.config = { title: "未命名團錄" };
     this.replayInfo.actors = {};
     this.replayInfo.script.length = 0;
 
@@ -69,8 +69,8 @@ export class ReplayManagerService {
   public GetConfig(): ReplayConfig {
     return this.replayInfo.config;
   }
-  public SetConfig(key:ConfigKey, value:string) {
-    this.replayInfo.config[key] = value;
+  public SetConfig(config: ReplayConfig) {
+    this.replayInfo.config = config;
     this.Save();
   }
 

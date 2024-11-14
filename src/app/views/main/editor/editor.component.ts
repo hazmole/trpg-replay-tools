@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { TabControl, TabKey } from 'src/app/interfaces/tab-control.interface';
 
 @Component({
   selector: 'app-editor',
@@ -7,10 +8,10 @@ import { Component, OnInit } from '@angular/core';
 })
 export class EditorComponent implements OnInit {
 
-  public navbarArr:Array<string> = [ "import", "export", "actors", "scripts" ];
+  public navbarArr:Array<TabKey> = [ "import", "config", "actors", "scripts", "export" ];
   public currentTabKey:string = "";
-  public control:any = {
-    goto: (tab:string) => { this.clickTab(tab); }
+  public control:TabControl = {
+    Goto: (key:TabKey) => { this.clickTab(key); }
   };
 
   ngOnInit(): void {

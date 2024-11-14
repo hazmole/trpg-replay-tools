@@ -1,7 +1,7 @@
 import { Component, Input, ElementRef } from '@angular/core';
 import { trigger, state, style, animate, transition } from '@angular/animations';
 
-const elemHeight = 160;
+const elemHeight = 150;
 
 @Component({
   selector: 'app-notify-message',

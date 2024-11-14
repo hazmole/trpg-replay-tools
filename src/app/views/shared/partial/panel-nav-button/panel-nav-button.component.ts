@@ -22,6 +22,10 @@ export class PanelNavButtonComponent implements OnInit {
       text: "輸出",
       imgUrl: "assets/images/load.png"
     },
+    config: {
+      text: "設定",
+      imgUrl: "assets/images/cog.png"
+    },
     actors: {
       text: "角色設定",
       imgUrl: "assets/images/mona-lisa.png"

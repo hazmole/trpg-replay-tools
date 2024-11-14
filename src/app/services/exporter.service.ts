@@ -23,17 +23,20 @@ export class ExporterService {
       scriptList: []
     };
 
-    this.appendStyleVars(options.styleVarArr);
+    this.appendStyleVars(options.styleVarArr, rpInfo);
     this.appendStyleActor(options.styleActorArr, rpInfo);
     this.appendScriptEntry(options.scriptList, rpInfo);
 
     return builder.genBasicWeb(options);
   }
 
-  private appendStyleVars(ref:Array<string>) {
-    ref.push("--color-bg: #454752;");
-    ref.push("--color-title: #ffffff;");
-    ref.push("--color-subtitle: #dddddd;");
+  private appendStyleVars(ref:Array<string>, rpInfo:ReplayInfo) {
+    ref.push(`--color-bg: ${rpInfo.config.colorTheme?.pageBgColor || "#454752"};`);
+    ref.push(`--color-title: ${rpInfo.config.colorTheme?.pageTitleColor || "#FFFFFF"};`);
+    ref.push(`--color-subtitle: #dddddd;`);
+    ref.push(`--color-talk-bg: ${rpInfo.config.colorTheme?.scriptTalkBgColor || "#1E1E1E"};`);
+    ref.push(`--color-talk-panel-bg: ${rpInfo.config.colorTheme?.scriptTalkPanelBgColor || "#2A2A2A"};`);
+    ref.push(`--color-talk-panel-text: ${rpInfo.config.colorTheme?.scriptTalkPaneltextColor || "#EEEEEE"};`);
   }
 
   private appendStyleActor(ref:Array<string>, rpInfo:ReplayInfo) {

@@ -130,6 +130,7 @@ export class EditorActorComponent implements OnInit {
       this.rpManager.DeleteActorInfo(actorID);
       this.currentActorId = -1;
       this.initList();
+      this.tool.PopupSuccessfulNotify("刪除成功！");
     });
   }
 
@@ -138,6 +139,7 @@ export class EditorActorComponent implements OnInit {
       this.rpManager.DeleteActorInfo(actorID);
       this.currentActorId = -1;
       this.initList();
+      this.tool.PopupSuccessfulNotify("刪除成功！");
     });
   }
 

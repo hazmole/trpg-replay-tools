@@ -1,0 +1,34 @@
+<app-tab-layer titleText="團錄設定" text="你可以在這裡設定團錄的標題、和主題配色。">
+    <form [formGroup]="formGroup">
+        
+        <app-input-title titleText="團錄標題" [redStar]="true"></app-input-title>
+        <div><input type="text" formControlName="title"></div>
+
+        <app-input-title titleText="副標題"></app-input-title>
+        <div><input type="text" formControlName="subTitle" placeholder="(選填)"></div>
+
+        <!--
+        <app-input-title titleText="時間"></app-input-title>
+        <div><input type="date" formControlName="time"></div>
+        -->
+
+        <app-input-title titleText="團錄背景色"></app-input-title>
+        <app-color-picker [formCtrl]="formGroup.controls.pageBgColor"></app-color-picker>
+
+        <app-input-title titleText="團錄標題色"></app-input-title>
+        <app-color-picker [formCtrl]="formGroup.controls.pageTitleColor"></app-color-picker>
+
+        <app-input-title titleText="對話方塊背景色"></app-input-title>
+        <app-color-picker [formCtrl]="formGroup.controls.scriptTalkBgColor"></app-color-picker>
+
+        <app-input-title titleText="對話方塊文字背景色"></app-input-title>
+        <app-color-picker [formCtrl]="formGroup.controls.scriptTalkPanelBgColor"></app-color-picker>
+
+        <app-input-title titleText="對話方塊文字色"></app-input-title>
+        <app-color-picker [formCtrl]="formGroup.controls.scriptTalkPanelTextColor"></app-color-picker>
+    </form>
+
+    <app-button-list>
+        <app-button-apply text="儲存" (click)="Save()"></app-button-apply>
+    </app-button-list>
+</app-tab-layer>

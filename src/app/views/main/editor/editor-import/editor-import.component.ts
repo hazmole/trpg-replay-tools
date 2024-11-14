@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core';
+import { TabControl } from 'src/app/interfaces/tab-control.interface';
 
 import { ReplayManagerService } from 'src/app/services/replay-manager.service';
 import { StorageManagerService } from 'src/app/services/storage-manager.service';
@@ -10,7 +11,7 @@ import { ToolService } from 'src/app/services/tool.service';
   styleUrls: ['./editor-import.component.css']
 })
 export class EditorImportComponent {
-  @Input() control:any = null;
+  @Input({ required: true }) control!:TabControl;
 
   constructor(
     private rpManager: ReplayManagerService,
@@ -36,7 +37,7 @@ export class EditorImportComponent {
           this.rpManager.Save();
         })
         .then(() => {
-          this.control.goto("actors");
+          this.control.Goto("config");
         })
         .catch((err) => {
           console.error(err);

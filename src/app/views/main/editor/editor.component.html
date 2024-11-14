@@ -11,9 +11,9 @@
     <!-- MainPanel -->
     <div class="EditPanelBase">
         <app-editor-import  *ngIf="currentTabKey=='import'" [control]="control" ></app-editor-import>
-        <app-editor-export  *ngIf="currentTabKey=='export'"></app-editor-export>
+        <app-editor-config  *ngIf="currentTabKey=='config'"></app-editor-config>
         <app-editor-actor   *ngIf="currentTabKey=='actors'"></app-editor-actor>
         <app-editor-script  *ngIf="currentTabKey=='scripts'"></app-editor-script>
-
+        <app-editor-export  *ngIf="currentTabKey=='export'"></app-editor-export>
     </div>
 </app-base-layer>

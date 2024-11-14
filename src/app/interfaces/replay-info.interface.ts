@@ -24,9 +24,19 @@ export interface ActorInfo {
     imgUrl: string;
 };
 export interface ReplayConfig {
-    title?: string;
+    title: string;
     subtitle?: string;
+    colorTheme?: ColorTheme;
 };
+
+export interface ColorTheme {
+    pageBgColor?: string;
+    pageTitleColor?: string;
+    scriptTalkBgColor?: string;
+    scriptTalkPanelBgColor?: string;
+    scriptTalkPaneltextColor?: string;
+};
+
 export interface ScriptEntry {
     type: ScriptEntryType;
     channel?: ChannelType;

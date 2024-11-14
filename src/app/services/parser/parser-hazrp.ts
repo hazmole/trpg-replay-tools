@@ -7,7 +7,7 @@ export const ParseHazRpJSON:ParserFunc = (content:string) => {
 
     return {
         filename: "",
-        config: {},
+        config: { title: "未命名團錄" },
         actors: [],
         script: [],
         isLoaded: false

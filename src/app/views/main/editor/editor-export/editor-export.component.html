@@ -1,18 +1,4 @@
 <app-tab-layer titleText="Editor-Export-Title" text="Editor-Export-Description">
-    <form [formGroup]="formGroup">
-        <app-input-title titleText="團錄標題" [redStar]="true"></app-input-title>
-        <div><input type="text" formControlName="title" (change)="OnChangeValue('title')"></div>
-
-        <app-input-title titleText="副標題"></app-input-title>
-        <div><input type="text" formControlName="subTitle" (change)="OnChangeValue('subTitle')" placeholder="(選填)"></div>
-
-        <!--
-        <app-input-title titleText="時間"></app-input-title>
-        <div><input type="date" formControlName="time"></div>
-        -->
-    </form>
-
-    <div><hr></div>
     <app-button-list>
         <app-button-apply text="預覽" (click)="Preview()"></app-button-apply>
         <app-button-apply text="下載" (click)="Export()"></app-button-apply>

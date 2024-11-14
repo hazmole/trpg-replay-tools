@@ -6,6 +6,10 @@ import { ParserFunc, newReplayInfo } from "src/app/interfaces/replay-info.interf
 export const ParseHazWeb:ParserFunc = (content:string) => {
     const info:ReplayInfo = newReplayInfo();
     
+    // Handle Title
+    const title = RegMatchByIdx("hazv1_getDocTitle", content, 1);
+    info.config.title = title;
+
     // Handle Actors
     const style = RegMatchByIdx("htmlStyle", content, 1);
     (style.match(RegExpList.hazv1_actorCss) || []).forEach((actorData) => {

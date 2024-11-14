@@ -19,32 +19,12 @@ export class EditorExportComponent implements OnInit  {
     private tool: ToolService,
   ){ }
 
-  public formGroup = new FormGroup({
-    title: new FormControl<string>('', Validators.required),
-    subTitle:  new FormControl<string>(''),
-    //time:  new FormControl<string>(''),
-  });
-
   ngOnInit(): void {
-    //let today = new Date().toISOString().slice(0, 10);
 
-    const rpCfg = this.rpManager.GetConfig();
-    if(!rpCfg.title) this.rpManager.SetConfig("title", "未命名標題")
-
-    this.formGroup.controls.title.setValue(rpCfg.title || "");
-    //this.formGroup.controls.time.setValue(today);
   }
 
 
   OnChangeValue(key:string): void {
-    switch(key) {
-      case "title":
-        this.rpManager.SetConfig("title", (this.formGroup.controls["title"].value || ""));
-        break;
-      case "subTitle":
-        this.rpManager.SetConfig("subtitle", (this.formGroup.controls["subTitle"].value || ""));
-        break;
-    }
   }
 
 
@@ -69,7 +49,7 @@ export class EditorExportComponent implements OnInit  {
 
   private getFileName(): string {
     let timestamp = new Date().toISOString().slice(0,10).replace(/[-:]/g, '');
-    let text = (this.formGroup.controls.title.value || "未命名標題");
+    let text = this.rpManager.GetConfig().title;
 
     return `${timestamp}-${text}.html`;
   }

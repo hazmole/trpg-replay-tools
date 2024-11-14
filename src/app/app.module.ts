@@ -13,6 +13,7 @@ import { WelcomeComponent } from './views/main/welcome/welcome.component';
 import { EditorComponent } from './views/main/editor/editor.component';
 import { EditorImportComponent } from './views/main/editor/editor-import/editor-import.component';
 import { EditorExportComponent } from './views/main/editor/editor-export/editor-export.component';
+import { EditorConfigComponent } from './views/main/editor/editor-config/editor-config.component';
 import { EditorActorComponent } from './views/main/editor/editor-actor/editor-actor.component';
 import { EditorActorDeleteComponent } from './views/main/editor/editor-actor/editor-actor-delete/editor-actor-delete.component';
 import { EditorScriptComponent } from './views/main/editor/editor-script/editor-script.component';
@@ -58,6 +59,7 @@ import { LanguageService } from './services/language.service';
     PanelNavBarComponent,
     EditorImportComponent,
     EditorExportComponent,
+    EditorConfigComponent,
     EditorActorComponent,
     EditorActorDeleteComponent,
     EditorScriptComponent,
