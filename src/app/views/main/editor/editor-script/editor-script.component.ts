@@ -170,35 +170,31 @@ export class EditorScriptComponent implements OnInit {
   }
 
 
-  private _moveEntry(fromIdx:number, toIdx:number, notRecord?:boolean): void {
+  private _moveEntry(fromIdx:number, toIdx:number, recordMode?:number): void {
     // Execute
     const elem = this.entryList.splice(fromIdx, 1)[0];
     this.entryList.splice(toIdx, 0, elem);
     // Record
-    if(notRecord) return ;
-    this.appendScriptAction({ type: "move", param: { toIdx, fromIdx } });
+    this.appendScriptAction({ type: "move", param: { toIdx, fromIdx } }, recordMode);
   }
-  private _addEntry(idx:number, newEntry:ScriptEntry, notRecord?:boolean) {
+  private _addEntry(idx:number, newEntry:ScriptEntry, recordMode?:number) {
     // Execute
     this.entryList.splice(idx, 0, newEntry);
     // Record
-    if(notRecord) return ;
-    this.appendScriptAction({ type: "add", param: { idx, newEntry } });
+    this.appendScriptAction({ type: "add", param: { idx, newEntry } }, recordMode);
   }
-  private _editEntry(idx:number, newEntry:ScriptEntry, notRecord?:boolean) {
+  private _editEntry(idx:number, newEntry:ScriptEntry, recordMode?:number) {
     // Execute
     let originEntry = Object.assign({}, this.entryList[idx]);
     this.entryList[idx] = newEntry;
     // Record
-    if(notRecord) return ;
-    this.appendScriptAction({ type: "edit", param: { idx, originEntry, newEntry } });
+    this.appendScriptAction({ type: "edit", param: { idx, originEntry, newEntry } }, recordMode);
   }
-  private _deleteEntry(idx:number, originEntry:ScriptEntry, notRecord?:boolean) {
+  private _deleteEntry(idx:number, originEntry:ScriptEntry, recordMode?:number) {
     // Execute
     this.entryList.splice(idx, 1);
     // Record
-    if(notRecord) return ;
-    this.appendScriptAction({ type: "delete", param: { idx, originEntry } });
+    this.appendScriptAction({ type: "delete", param: { idx, originEntry } }, recordMode);
   }
 
   //========================
@@ -219,30 +215,28 @@ export class EditorScriptComponent implements OnInit {
     switch(action.type){
       case "move": {
         let param = <ActionParamMove> action.param;
-        this._moveEntry(param.toIdx, param.fromIdx, true);
+        this._moveEntry(param.toIdx, param.fromIdx, 1);
         break;
       }
       case "add": {
         let param = <ActionParamAdd> action.param;
-        this._deleteEntry(param.idx, param.newEntry, true);
+        this._deleteEntry(param.idx, param.newEntry, 1);
         break;
       }
       case "edit": {
         let param = <ActionParamEdit> action.param;
-        this._editEntry(param.idx, param.originEntry, true);
+        this._editEntry(param.idx, param.originEntry, 1);
         break;
       }
       case "delete": {
         let param = <ActionParamDel> action.param;
-        this._addEntry(param.idx, param.originEntry, true);
+        this._addEntry(param.idx, param.originEntry, 1);
         break;
       }
       default:
         this.tool.PopupErrorNotify("此功能尚未實裝");
         return ;
     }
-
-    this.redoStack.push(action);
   }
   Redo(): void {
     if(!this.canRedo()) return ;
@@ -251,22 +245,22 @@ export class EditorScriptComponent implements OnInit {
     switch(action.type){
       case "move": {
         let param = <ActionParamMove> action.param;
-        this._moveEntry(param.fromIdx, param.toIdx);
+        this._moveEntry(param.fromIdx, param.toIdx, 2);
         break;
       }
       case "add": {
         let param = <ActionParamAdd> action.param;
-        this._addEntry(param.idx, param.newEntry);
+        this._addEntry(param.idx, param.newEntry, 2);
         break;
       }
       case "edit": {
         let param = <ActionParamEdit> action.param;
-        this._editEntry(param.idx, param.newEntry);
+        this._editEntry(param.idx, param.newEntry, 2);
         break;
       }
       case "delete": {
         let param = <ActionParamDel> action.param;
-        this._deleteEntry(param.idx, param.originEntry);
+        this._deleteEntry(param.idx, param.originEntry, 2);
         break;
       }
       default:
@@ -275,12 +269,31 @@ export class EditorScriptComponent implements OnInit {
     }
   }
 
-  private appendScriptAction(action:ScriptAction): void {
-    this.undoStack.push(action);
-    this.redoStack.length = 0;
-
+  private appendScriptAction(action:ScriptAction, recordMode?:number): void {
+    // [recordMode]
+    //  0: user action
+    //  1: trigger by undo
+    //  2: trigger by redo
+    
+    recordMode = recordMode || 0;
+    switch(recordMode) {
+      case 0:
+        this.undoStack.push(action);
+        this.redoStack.length = 0;
+        break;
+      case 1:
+        this.redoStack.push(action);
+        break;
+      case 2:
+        this.undoStack.push(action);
+        break;
+    }
+    
     if(this.undoStack.length > this.STACK_MAX_SIZE){
       this.undoStack.shift();
+    }
+    if(this.redoStack.length > this.STACK_MAX_SIZE){
+      this.redoStack.shift();
     }
   }
 }
