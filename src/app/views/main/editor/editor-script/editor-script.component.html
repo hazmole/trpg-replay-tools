@@ -2,8 +2,8 @@
     
     <!-- Button List -->
     <div class="button-bar">
-        <app-icon-button type="undo" text="復原" (click)="Undo()"></app-icon-button>
-        <app-icon-button type="redo" text="重做" (click)="Redo()"></app-icon-button>
+        <app-icon-button type="undo" text="復原" (click)="Undo()" [isDisabled]="!canUndo()"></app-icon-button>
+        <app-icon-button type="redo" text="重做" (click)="Redo()" [isDisabled]="!canRedo()"></app-icon-button>
         <app-icon-button type="save" text="儲存" (click)="Save()"></app-icon-button>
     </div>
 

@@ -6,6 +6,11 @@
 .btn-icon-outer:hover {
     background-color: #ffffff80;
 }
+.btn-icon-outer.disabled {
+    background-color: #0000003b !important;
+    cursor: no-drop;
+}
+
 
 .btn-icon {
     width: 16px;

@@ -11,6 +11,7 @@ import { AddEditImageComponent } from './add-edit-image/add-edit-image.component
 import { ScriptEntry, ActorInfo, ScriptEntryType } from 'src/app/interfaces/replay-info.interface';
 import { Mode, AddEditScriptParam, AddEditScriptReturn } from 'src/app/interfaces/add-edit-script-entry.interface';
 import { AddItemSelectComponent } from './add-item-select/add-item-select.component';
+import { ActionParamMove, ActionParamAdd, ActionParamEdit, ActionParamDel, ScriptAction } from 'src/app/interfaces/script-action.interface';
 
 @Component({
   selector: 'app-editor-script',
@@ -25,6 +26,8 @@ export class EditorScriptComponent implements OnInit {
   ){ }
 
   public entryList: Array<ScriptEntry> = [];
+  public undoStack: Array<ScriptAction> = [];
+  public redoStack: Array<ScriptAction> = [];
 
   ngOnInit(): void {
     this.initList();
@@ -100,15 +103,20 @@ export class EditorScriptComponent implements OnInit {
   }
 
 
+  Save(): void {
+    this.rpManager.SetScriptEntryList(this.entryList);
+    this.tool.PopupSuccessfulNotify("儲存成功！");
+  }
+
   //=================
   OnDrop(event:CdkDragDrop<any, any, any>): void {
     let prevIdx = (event.previousIndex);
-    let currIdx = (event.currentIndex);
+    let nextIdx = (event.currentIndex);
 
-    // Remove
-    const elem = this.entryList.splice(prevIdx, 1)[0];
-    // Append
-    this.entryList.splice(currIdx, 0, elem);
+    // Move
+    this._moveEntry(prevIdx, nextIdx);
+    // Record
+    
   }
 
   AddEntry(idx:number): void {
@@ -116,24 +124,23 @@ export class EditorScriptComponent implements OnInit {
       // Handle "halt" type
       if(type === "halt") {
         let entry:ScriptEntry = { type, content:"" };
-        this.entryList.splice((idx+1), 0, entry);
+        this._addEntry(idx+1, entry);
         return ;
       }
-      
-      
-      const param: AddEditScriptParam = { mode: "add" };
+      // Handle others
       let comp:any = this._getCompByType(type);
       if(comp == null) {
         this.tool.PopupErrorNotify("錯誤：未知的段落類型！");
       } else {
-        this.tool.PopupDialog(comp, param, (retObj:AddEditScriptReturn) => {
+        this.tool.PopupDialog(comp, { mode: "add" }, (retObj:AddEditScriptReturn) => {
           if(retObj.entry) {
-            this.entryList.splice((idx+1), 0, retObj.entry);
+            this._addEntry(idx+1, retObj.entry);
           }
         });
       }
     });
   }
+
   EditEntry(entry:ScriptEntry, idx:number): void {
     const param: AddEditScriptParam = { mode: "edit", entry:entry };
     let comp:any = this._getCompByType(entry.type);
@@ -143,7 +150,7 @@ export class EditorScriptComponent implements OnInit {
     } else {
       this.tool.PopupDialog(comp, param, (retObj:AddEditScriptReturn) => {
         if(retObj.entry) {
-          this.entryList[idx] = retObj.entry;
+          this._editEntry(idx, retObj.entry);
         }
       });
     }
@@ -158,32 +165,122 @@ export class EditorScriptComponent implements OnInit {
     return null;
   }
 
-  DeleteEntry(_entry:ScriptEntry, idx:number): void {
-    this.entryList.splice(idx, 1);
-    /*let entryName = "";
-    switch(entry.type) {
-      case "talk": entryName = "這段對話"; break;
-      case "halt": entryName = "這個分段符號"; break;
-      case "setBg": entryName = "這張背景圖片"; break;
-      case "title": entryName = "這個段落標題"; break;
-    }
-    
-    this.tool.PopupMsgDialog("刪除段落", `你確定要刪除${entryName}嗎？`, () => {
-      this.entryList.splice(idx, 1);
-    });
-    */
+  DeleteEntry(entry:ScriptEntry, idx:number): void {
+    this._deleteEntry(idx, entry);
   }
 
 
+  private _moveEntry(fromIdx:number, toIdx:number, notRecord?:boolean): void {
+    // Execute
+    const elem = this.entryList.splice(fromIdx, 1)[0];
+    this.entryList.splice(toIdx, 0, elem);
+    // Record
+    if(notRecord) return ;
+    this.appendScriptAction({ type: "move", param: { toIdx, fromIdx } });
+  }
+  private _addEntry(idx:number, newEntry:ScriptEntry, notRecord?:boolean) {
+    // Execute
+    this.entryList.splice(idx, 0, newEntry);
+    // Record
+    if(notRecord) return ;
+    this.appendScriptAction({ type: "add", param: { idx, newEntry } });
+  }
+  private _editEntry(idx:number, newEntry:ScriptEntry, notRecord?:boolean) {
+    // Execute
+    let originEntry = Object.assign({}, this.entryList[idx]);
+    this.entryList[idx] = newEntry;
+    // Record
+    if(notRecord) return ;
+    this.appendScriptAction({ type: "edit", param: { idx, originEntry, newEntry } });
+  }
+  private _deleteEntry(idx:number, originEntry:ScriptEntry, notRecord?:boolean) {
+    // Execute
+    this.entryList.splice(idx, 1);
+    // Record
+    if(notRecord) return ;
+    this.appendScriptAction({ type: "delete", param: { idx, originEntry } });
+  }
+
+  //========================
+  // Undo/Redo function
+  //========================
+  private STACK_MAX_SIZE = 10;
+
+  canUndo(): boolean {
+    return this.undoStack.length > 0;
+  }
+  canRedo(): boolean {
+    return this.redoStack.length > 0;
+  }
   Undo(): void {
-    this.tool.PopupErrorNotify("此功能尚未實裝");
+    if(!this.canUndo()) return ;
+    
+    const action = <ScriptAction> this.undoStack.pop();
+    switch(action.type){
+      case "move": {
+        let param = <ActionParamMove> action.param;
+        this._moveEntry(param.toIdx, param.fromIdx, true);
+        break;
+      }
+      case "add": {
+        let param = <ActionParamAdd> action.param;
+        this._deleteEntry(param.idx, param.newEntry, true);
+        break;
+      }
+      case "edit": {
+        let param = <ActionParamEdit> action.param;
+        this._editEntry(param.idx, param.originEntry, true);
+        break;
+      }
+      case "delete": {
+        let param = <ActionParamDel> action.param;
+        this._addEntry(param.idx, param.originEntry, true);
+        break;
+      }
+      default:
+        this.tool.PopupErrorNotify("此功能尚未實裝");
+        return ;
+    }
+
+    this.redoStack.push(action);
   }
   Redo(): void {
-    this.tool.PopupErrorNotify("此功能尚未實裝");
+    if(!this.canRedo()) return ;
+
+    const action = <ScriptAction> this.redoStack.pop();
+    switch(action.type){
+      case "move": {
+        let param = <ActionParamMove> action.param;
+        this._moveEntry(param.fromIdx, param.toIdx);
+        break;
+      }
+      case "add": {
+        let param = <ActionParamAdd> action.param;
+        this._addEntry(param.idx, param.newEntry);
+        break;
+      }
+      case "edit": {
+        let param = <ActionParamEdit> action.param;
+        this._editEntry(param.idx, param.newEntry);
+        break;
+      }
+      case "delete": {
+        let param = <ActionParamDel> action.param;
+        this._deleteEntry(param.idx, param.originEntry);
+        break;
+      }
+      default:
+        this.tool.PopupErrorNotify("此功能尚未實裝");
+        return ;
+    }
   }
 
-  Save(): void {
-    this.rpManager.SetScriptEntryList(this.entryList);
-    this.tool.PopupSuccessfulNotify("儲存成功！");
+  private appendScriptAction(action:ScriptAction): void {
+    this.undoStack.push(action);
+    this.redoStack.length = 0;
+
+    if(this.undoStack.length > this.STACK_MAX_SIZE){
+      this.undoStack.shift();
+    }
   }
 }

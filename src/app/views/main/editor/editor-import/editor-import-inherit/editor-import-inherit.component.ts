@@ -30,8 +30,8 @@ export class EditorImportInheritComponent implements OnInit {
   };
 
   formGroup = new FormGroup({
-    isInheritActor: new FormControl<boolean>(true),
-    isInheritTheme: new FormControl<boolean>(true),
+    isInheritActor: new FormControl<boolean>(false),
+    isInheritTheme: new FormControl<boolean>(false),
   });
 
   ngOnInit(): void {

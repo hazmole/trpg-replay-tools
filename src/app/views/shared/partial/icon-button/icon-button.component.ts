@@ -8,6 +8,7 @@ import { Component, Input, OnInit } from '@angular/core';
 export class IconButtonComponent implements OnInit {
   @Input() type: string = "";
   @Input() text: string = "";
+  @Input() isDisabled: boolean = false;
 
   public imgUrl: string = "";
   public label: string = "";
