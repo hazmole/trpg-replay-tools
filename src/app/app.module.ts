@@ -12,6 +12,7 @@ import { AppComponent } from './app.component';
 import { WelcomeComponent } from './views/main/welcome/welcome.component';
 import { EditorComponent } from './views/main/editor/editor.component';
 import { EditorImportComponent } from './views/main/editor/editor-import/editor-import.component';
+import { EditorImportInheritComponent } from './views/main/editor/editor-import/editor-import-inherit/editor-import-inherit.component';
 import { EditorExportComponent } from './views/main/editor/editor-export/editor-export.component';
 import { EditorConfigComponent } from './views/main/editor/editor-config/editor-config.component';
 import { EditorActorComponent } from './views/main/editor/editor-actor/editor-actor.component';
@@ -58,6 +59,7 @@ import { LanguageService } from './services/language.service';
     PanelNavButtonComponent,
     PanelNavBarComponent,
     EditorImportComponent,
+    EditorImportInheritComponent,
     EditorExportComponent,
     EditorConfigComponent,
     EditorActorComponent,

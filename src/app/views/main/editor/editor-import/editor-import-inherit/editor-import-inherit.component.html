@@ -1,0 +1,26 @@
+<div class="dialog">
+    <app-dialog-header title="繼承團錄設定" [options]="headerOptions"
+        cdkDragHandle cdkDrag cdkDragRootElement=".cdk-overlay-pane"></app-dialog-header>
+    <app-dialog-body>
+        <div class="description">
+            你是否要沿用目前的團錄設定？<br>
+            這會優先使用你在此工具上儲存的角色／排版設定，而非匯入團錄的格式。
+        </div>
+
+        <form [formGroup]="formGroup">
+            
+            <app-input-title titleText="繼承設定"></app-input-title>
+            <label>
+                <input type="checkbox" formControlName="isInheritActor">
+                沿用角色設定
+            </label>
+
+            <label>
+                <input type="checkbox" formControlName="isInheritTheme">
+                沿用主題排版設定
+            </label>
+
+        </form>
+    </app-dialog-body>
+    <app-dialog-footer [options]="footerOptions"></app-dialog-footer>
+</div>

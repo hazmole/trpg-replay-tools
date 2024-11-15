@@ -4,6 +4,7 @@ import { TabControl } from 'src/app/interfaces/tab-control.interface';
 import { ReplayManagerService, ImportOptions } from 'src/app/services/replay-manager.service';
 import { StorageManagerService } from 'src/app/services/storage-manager.service';
 import { ToolService } from 'src/app/services/tool.service';
+import { EditorImportInheritComponent, ImportInheritReturn } from './editor-import-inherit/editor-import-inherit.component';
 
 @Component({
   selector: 'app-editor-import',
@@ -29,9 +30,13 @@ export class EditorImportComponent {
 
   public ImportFile() {
     if(this.isActorExisted()){
-      this._importFile({
-        isInheritActor: true,
-        isInheritTheme: true,
+      this.tool.PopupDialog(EditorImportInheritComponent, {}, (retObj:ImportInheritReturn|null) => {
+        if( retObj!=null ) {
+          this._importFile({
+            isInheritActor: retObj.isInheritActor,
+            isInheritTheme: retObj.isInheritTheme,
+          });
+        }
       });
     } else {
       this._importFile({

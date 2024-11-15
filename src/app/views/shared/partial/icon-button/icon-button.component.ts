@@ -28,7 +28,7 @@ export class IconButtonComponent implements OnInit {
         this.imgUrl = 'assets/images/undo.png';
         break;
       case "redo":
-        this.label = "重作";
+        this.label = "重做";
         this.imgUrl = 'assets/images/redo.png';
         break;
       case "save":
