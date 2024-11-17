@@ -12,9 +12,8 @@
 
             <div class="paragraph">
                 <app-input-title titleText="頻道"></app-input-title>
-                <select formControlName="channel" >
-                    <option value="main">主要</option>
-                    <option value="other">場外</option>
+                <select formControlName="channelID" >
+                    <option *ngFor="let chOption of channelOptionList" [value]="chOption.id">{{ chOption.text }}</option>
                 </select>
             </div>
 

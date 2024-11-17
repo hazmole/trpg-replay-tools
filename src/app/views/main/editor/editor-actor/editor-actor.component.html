@@ -1,60 +1,38 @@
 <app-tab-layer titleText="Editor-Actor-Title" text="Editor-Actor-Description">
 
-    <div class="flexContainer">
-        <div class="leftCol">
+    <app-two-column-frame text="新增登場角色"
+        [itemList]="itemList" 
+        [(model)]="itemSelecteID" 
+        [behavior]="itemBehavior">
 
-            <!-- Actor List -->
-            <div *ngFor="let actor of actorList" class="actorBtn clickable" 
-                [ngClass]="{'active': currentActorId==actor.id}"
-                (click)="SelectActor(actor)">
-                <div class="hidden">{{ actor.id }}</div>
-                <div class="name">{{ actor.name }}</div>
+        <!-- Actor Setting Panel -->
+        <form [formGroup]="formGroup">
+            <app-input-title titleText="名稱"></app-input-title>
+            <div><input type="text" formControlName="actorName"></div>
+
+            <app-input-title titleText="代表色"></app-input-title>
+            <app-color-picker [formCtrl]="formGroup.controls.color"></app-color-picker>
+
+            <app-input-title titleText="角色頭像預覽"></app-input-title>
+            <div class="actorImg">
+                <div *ngIf="getImgUrl()==''">未設定頭像</div>
+                <div *ngIf="errImgFlag">圖片無法顯示！</div>
+                <img *ngIf="getImgUrl()!='' && !errImgFlag" [src]="getImgUrl()" (error)="OnImageError()">
             </div>
 
-            <!-- Add Button -->
-            <div class="plusBtn clickable" (click)="AddActor()">
-                <div class="icon" style="background-image: url('assets/images/plus.png');"></div>
-                新增登場角色
-            </div>
+            <app-input-title titleText="頭像連結"></app-input-title>
+            <div><input class="img-url-input" type="text" formControlName="imgUrl" (change)="OnChangeImageUrl()"></div>
 
-        </div>
-        <div class="rightCol">
+            <app-button-list>
+                <app-button-apply text="儲存" (click)="Save()"></app-button-apply>
+                <app-button-apply text="刪除" (click)="Remove()" type="critical"></app-button-apply>
+            </app-button-list>
 
-            <!-- Actor Setting Panel -->
-            <form [formGroup]="formGroup">
-                <div *ngIf="isSelected()" >
-                    <app-input-title titleText="名稱"></app-input-title>
-                    <div><input type="text" formControlName="actorName"></div>
+            <hr>
+            <div><b>角色UID：</b>{{ outputList.actorID }}</div>
+            <div><b>發言次數：</b>{{ outputList.scriptOwnCount }}</div>
+        </form>
 
-                    <app-input-title titleText="代表色"></app-input-title>
-                    <app-color-picker [formCtrl]="formGroup.controls.color"></app-color-picker>
-
-                    <app-input-title titleText="角色頭像預覽"></app-input-title>
-                    <div class="actorImg">
-                        <div *ngIf="getImgUrl()==''">未設定頭像</div>
-                        <div *ngIf="errImgFlag">圖片無法顯示！</div>
-                        <img *ngIf="getImgUrl()!='' && !errImgFlag" [src]="getImgUrl()" (error)="OnImageError()">
-                    </div>
-
-                    <app-input-title titleText="頭像連結"></app-input-title>
-                    <div><input class="img-url-input" type="text" formControlName="imgUrl" (change)="ChangeImageUrl()"></div>
-
-                    <app-button-list>
-                        <app-button-apply text="儲存" (click)="SaveActor()"></app-button-apply>
-                        <app-button-apply text="刪除" (click)="RemoveActor()" type="critical"></app-button-apply>
-                    </app-button-list>
-
-                    <hr>
-                    <div><b>角色UID：</b>{{ outputList.actorID }}</div>
-                    <div><b>發言次數：</b>{{ outputList.scriptOwnCount }}</div>
-
-                </div>
-            </form>
-
-            
-        </div>
-    </div>
-
-
+    </app-two-column-frame>
 
 </app-tab-layer>

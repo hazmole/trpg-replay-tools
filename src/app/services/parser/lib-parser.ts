@@ -1,8 +1,21 @@
-import { ActorInfo } from "src/app/interfaces/replay-info.interface";
+import { ActorInfo, ChannelInfo } from "src/app/interfaces/replay-info.interface";
+
+export const registerNewChannelByName = (table: Record<string, ChannelInfo>, chName:string, mainChNameArr:Array<string>):ChannelInfo => {
+    if(table[chName] == null) {
+        const newChannel:ChannelInfo = {
+            id: Object.keys(table).length,
+            name: chName,
+            isMain: mainChNameArr.some((ch) => (ch == chName)),
+        };
+        table[chName] = newChannel;
+    } 
+    return table[chName];
+}
+
 
 export const registerNewActorByName = (table: Record<string, ActorInfo>, actorName:string, color:string, imgUrl:string): ActorInfo => {
     if(table[actorName] == null) {
-        const newActor = {
+        const newActor:ActorInfo = {
             id: Object.keys(table).length,
             name: actorName,
             color: color.toUpperCase(),
@@ -12,7 +25,6 @@ export const registerNewActorByName = (table: Record<string, ActorInfo>, actorNa
     } 
     return table[actorName];
 }
-
 
 export const mergeActorTable = (originTable: Record<number, ActorInfo>, inheritTable: Record<number, ActorInfo>): Record<number, ActorInfo> => {
     const mergedTable = Object.assign({}, originTable);

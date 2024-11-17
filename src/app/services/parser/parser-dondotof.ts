@@ -1,7 +1,7 @@
 import { RegExpList, RegMatchArr, RegMatchByIdx } from "./regular-expression"
-import { ReplayInfo, ActorInfo, ScriptEntry, ChannelType } from "src/app/interfaces/replay-info.interface";
+import { ReplayInfo, ActorInfo, ScriptEntry, ChannelType, ChannelInfo } from "src/app/interfaces/replay-info.interface";
 import { ParserFunc, newReplayInfo } from "src/app/interfaces/replay-info.interface";
-import { registerNewActorByName } from "./lib-parser";
+import { registerNewActorByName, registerNewChannelByName } from "./lib-parser";
 
 export const ParseDondotoF:ParserFunc = (content:string) => {
     const info:ReplayInfo = newReplayInfo();
@@ -10,20 +10,23 @@ export const ParseDondotoF:ParserFunc = (content:string) => {
     const sectionArr = RegMatchArr("ddfFotmat", body);
     
     const actorTable: Record<string, ActorInfo> = {};
+    const channelTable: Record<string, ChannelInfo> = {};
     sectionArr.forEach((data:string) => {
         // Content Match
         let matchMap = [...data.matchAll(RegExpList.ddfFotmat)][0];
-        let channel = (matchMap[2] || "");
+        let channel = autoTranslate(matchMap[2] || "");
         let color = matchMap[3];
         let actor = matchMap[4];
         let content = matchMap[5];
 
         // Handle ActorInfo
         let actorObj = registerNewActorByName(actorTable, actor, color, "");
+        // Handle ChannelInfo
+        let chObj = registerNewChannelByName(channelTable, channel, mainChannelName);
         // Handle ScriptEntry
         let scriptEntry:ScriptEntry = {
             type: "talk",
-            channel: parseChannel(channel),
+            channelId: chObj.id,
             actorId: actorObj.id,
             content: content.trim(),
         }
@@ -34,18 +37,19 @@ export const ParseDondotoF:ParserFunc = (content:string) => {
     Object.values(actorTable).forEach((actor) => {
         info.actors[actor.id] = (actor);
     });
+    // Add Channel
+    Object.values(channelTable).forEach((ch) => {
+        info.channels[ch.id] = (ch);
+    });
 
     return info;
 };
 
-function parseChannel(channel:string): ChannelType {
-    switch(channel.toLowerCase()) {
-        case "主要":
-        case "メイン":
-        case "main":
-        case "":
-            return "main";
-        default:
-            return channel;
-    }
+const mainChannelName = ["主要", "主頻道", "メイン", "Main", "main"];
+const chatChannelName = ["閒聊", "雑談", "other"];
+
+function autoTranslate(chName: string): string {
+    if(mainChannelName.includes(chName)) return "主要";
+    if(chatChannelName.includes(chName)) return "閒聊";
+    return chName;
 }

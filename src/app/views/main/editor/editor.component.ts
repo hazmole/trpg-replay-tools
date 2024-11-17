@@ -8,7 +8,7 @@ import { TabControl, TabKey } from 'src/app/interfaces/tab-control.interface';
 })
 export class EditorComponent implements OnInit {
 
-  public navbarArr:Array<TabKey> = [ "import", "config", "actors", "scripts", "export" ];
+  public navbarArr:Array<TabKey> = [ "import", "config", "actors", "channel", "scripts", "export" ];
   public currentTabKey:string = "";
   public control:TabControl = {
     Goto: (key:TabKey) => { this.clickTab(key); }

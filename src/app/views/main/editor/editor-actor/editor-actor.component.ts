@@ -6,6 +6,7 @@ import { ToolService } from 'src/app/services/tool.service';
 import { ActorInfo } from 'src/app/interfaces/replay-info.interface';
 
 import { EditorActorDeleteComponent, DeleteActorParam, DeleteActorReturn } from './editor-actor-delete/editor-actor-delete.component';
+import { TwoColumnButtonEntry, TwoColumnClickBehavior } from 'src/app/views/shared/two-column/two-column-frame/two-column-frame.component';
 
 @Component({
   selector: 'app-editor-actor',
@@ -19,42 +20,54 @@ export class EditorActorComponent implements OnInit {
     private tool: ToolService,
   ){ }
 
-  public currentActorId: number = -1;
-  public actorList: Array<ActorInfo> = [];
-  
-  public errImgFlag: boolean = false;
-
   public formGroup = new FormGroup({
     actorName: new FormControl<string>(''),
     color:  new FormControl<string>(''),
     imgUrl: new FormControl<string>(''),
   });
 
+  // Two-Colume Selection Frame
+  public itemList: Array<TwoColumnButtonEntry> = [];
+  public itemBehavior: TwoColumnClickBehavior;
+  public itemSelecteID: number = -1;
 
+  private actorMap: Record<number, ActorInfo> = {};
+  public errImgFlag: boolean = false;
   public outputList = {
     actorID: -1,
     scriptOwnCount: 0,
   };
 
+  
+
   ngOnInit(): void {
+    this.itemBehavior = {
+      add: () => { this.Add() },
+      select: () => { this.Select() },
+    };
     this.initList();
   }
   
   initList(): void {
-    this.actorList = Object.values(this.rpManager.GetActorList());
+    this.actorMap = this.rpManager.GetActorList();
+    this.itemList = Object.values(this.actorMap).map(this.parseItem);
   }
 
-  isSelected(): boolean {
-    return this.currentActorId !== -1;
-  }
-  getImgUrl(): string {
-    return this.formGroup.controls.imgUrl.value || "";
-  }
 
-  SelectActor(actor:ActorInfo): void {
-    this.currentActorId = (this.currentActorId == actor.id)? -1: actor.id;
-    if(this.isSelected()) {
+  Save(): void {
+    const newValues = { 
+      name:   <string> this.formGroup.controls.actorName.value,
+      color:  <string> this.formGroup.controls.color.value,
+      imgUrl: <string> this.formGroup.controls.imgUrl.value,
+    };
+    this.rpManager.SetActorInfo(this.itemSelecteID, newValues);
+    this.initList();
+    this.tool.PopupSuccessfulNotify("儲存成功！");
+  }
+  Select(): void {
+    if(this.itemSelecteID !== -1) {
       // update values
+      let actor = this.actorMap[this.itemSelecteID];
       this.formGroup.controls.actorName.setValue(actor.name);
       this.formGroup.controls.color.setValue(actor.color);
       this.formGroup.controls.imgUrl.setValue(actor.imgUrl);
@@ -66,32 +79,9 @@ export class EditorActorComponent implements OnInit {
       }).length;
     }
   }
-
-  ChangeImageUrl(): void {
-    this.errImgFlag = false;
-  }
-  OnImageError(): void {
-    this.errImgFlag = true;
-  }
-
-  SaveActor(): void {
-    let id = this.currentActorId;
-    let name = this.formGroup.controls.actorName.value || "";
-    let color = this.formGroup.controls.color.value || "#888888";
-    let imgUrl = this.formGroup.controls.imgUrl.value || "";
-    
-    const newValues = {
-      name, color, imgUrl
-    };
-    
-    this.rpManager.SetActorInfo(id, newValues);
-    this.initList();
-    this.tool.PopupSuccessfulNotify("儲存成功！");
-  }
-
-  AddActor(): void {
+  Add(): void {
     let maxId = -1;
-    this.actorList.forEach(actor => {
+    Object.values(this.actorMap).forEach(actor => {
       if(maxId < actor.id) maxId = actor.id;
     });
     const newActor = {
@@ -104,13 +94,12 @@ export class EditorActorComponent implements OnInit {
     this.rpManager.SetActorInfo(newActor.id, newActor);
     this.initList();
   }
-
-  RemoveActor(): void {
-    let id = this.currentActorId
+  Remove(): void {
+    let id = this.itemSelecteID;
     
     if(this.outputList.scriptOwnCount == 0) {
       this.removeRedundantActor(id);
-    } else if(this.actorList.length > 1) {
+    } else if(this.itemList.length > 1) {
       this.removeActiveActor(id);
     } else {
       this.tool.PopupErrorNotify("錯誤：你必須要有至少一個角色！");
@@ -127,20 +116,34 @@ export class EditorActorComponent implements OnInit {
           entry.actorId = retObj.new_actor_id;
       })
       // Remove
-      this.rpManager.DeleteActorInfo(actorID);
-      this.currentActorId = -1;
-      this.initList();
-      this.tool.PopupSuccessfulNotify("刪除成功！");
+      this._removeActor(actorID);
     });
   }
-
   private removeRedundantActor(actorID: number): void {
     this.tool.PopupConfirmMsgDialog("刪除角色", "你確定要刪除這個角色嗎？", () => {
-      this.rpManager.DeleteActorInfo(actorID);
-      this.currentActorId = -1;
-      this.initList();
-      this.tool.PopupSuccessfulNotify("刪除成功！");
+      this._removeActor(actorID);
     });
   }
+  private _removeActor(actorID: number): void {
+    this.tool.PopupSuccessfulNotify("刪除成功！");
+    this.rpManager.DeleteActorInfo(actorID);
+    this.itemSelecteID = -1;
+    this.initList();
+  }
 
+
+  OnChangeImageUrl(): void {
+    this.errImgFlag = false;
+  }
+  OnImageError(): void {
+    this.errImgFlag = true;
+  }
+
+  getImgUrl(): string {
+    return this.formGroup.controls.imgUrl.value || "";
+  }
+
+  parseItem(item:ActorInfo): TwoColumnButtonEntry {
+    return { id:item.id, text:item.name };
+  }
 }

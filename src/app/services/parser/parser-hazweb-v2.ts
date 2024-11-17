@@ -1,6 +1,7 @@
 import { RegExpList, RegMatchArr, RegMatchByIdx } from "./regular-expression"
-import { ReplayInfo, ActorInfo, ScriptEntry, ChannelType, ColorTheme } from "src/app/interfaces/replay-info.interface";
+import { ReplayInfo, ActorInfo, ScriptEntry, ColorTheme, ChannelInfo } from "src/app/interfaces/replay-info.interface";
 import { ParserFunc, newReplayInfo } from "src/app/interfaces/replay-info.interface";
+import { registerNewChannelByName } from "./lib-parser";
 
 
 export const ParseHazWebV2:ParserFunc = (content:string) => {
@@ -32,6 +33,10 @@ export const ParseHazWebV2:ParserFunc = (content:string) => {
         info.actors[id] = { id, name, color, imgUrl };
     });
 
+    // Handle Channels
+    const channelNameTable: Record<string, ChannelInfo> = {};
+    const hasChannelInfo: boolean = Object.keys(channelNameTable).length > 0;
+
     // Handle ScriptEntry
     const body  = RegMatchByIdx("htmlBody", content, 1);
     const sectionArr = RegMatchArr("hazV2Format", body);
@@ -52,10 +57,20 @@ export const ParseHazWebV2:ParserFunc = (content:string) => {
                 info.script.push(genSetBgEntry(innerData));
                 break;
             case "talk":
-                info.script.push(genTalkEntry(innerData));
+                let getChFunc = null;
+                if(hasChannelInfo) getChFunc = findChannelFromTable;
+                else               getChFunc = registerNewChannelByName;
+                info.script.push(genTalkEntry(innerData, channelNameTable, getChFunc))
                 break;
         }
     });
+
+    // Append Channel (if needed)
+    if(!hasChannelInfo) {
+        Object.values(channelNameTable).forEach((ch) => {
+            info.channels[ch.id] = (ch);
+        });
+    }
 
     return info;
 };
@@ -71,7 +86,8 @@ function genSetBgEntry(data:string): ScriptEntry {
     let imgUrl = (data.match(RegExpList.hazv2_getBgImage)||[])[1];
     return { type: "setBg", content: imgUrl };
 }
-function genTalkEntry(data:string): ScriptEntry {
+
+function genTalkEntry(data:string, chTable:ChannelTable, getChannelObjFunc:GetChObjFunc): ScriptEntry {
     let matchMap;
 
     matchMap = [...data.matchAll(RegExpList.hazv2_getTalk)][0];
@@ -80,13 +96,23 @@ function genTalkEntry(data:string): ScriptEntry {
     matchMap = [...data.matchAll(RegExpList.hazv2_getTalkChannel)][0];
     let channel = matchMap[1];
 
+    let chObj = getChannelObjFunc(chTable, channel, ["main"]);
+
     matchMap = [...data.matchAll(RegExpList.hazv2_getTalkContent)][0];
     let content = matchMap[1];
 
     return { 
         type: "talk",
-        channel: channel,
+        channelId: chObj.id,
         actorId: parseInt(actorId),
         content: content.trim()
     };
+}
+
+type ChannelTable = Record<string, ChannelInfo>;
+type GetChObjFunc = (table:ChannelTable, chName:string, mainArr:Array<string>) => ChannelInfo
+
+
+function findChannelFromTable(chTable:ChannelTable, chName:string, _mainArr:Array<string>): ChannelInfo {
+    return <ChannelInfo> Object.values(chTable).find((ch) => ch.name == chName);
 }

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ReplayConfig, ReplayInfo, ScriptEntry } from 'src/app/interfaces/replay-info.interface';
+import { ChannelInfo, ReplayConfig, ReplayInfo, ScriptEntry } from 'src/app/interfaces/replay-info.interface';
 import { ParserService } from './parser.service';
 import { StorageManagerService } from './storage-manager.service';
 
@@ -99,6 +99,25 @@ export class ReplayManagerService {
   public DeleteActorInfo(id: number) {
     const actorList = this.replayInfo.actors;
     delete actorList[id];
+    this.Save();
+  }
+
+  /* Channel */
+  public GetChannelList(): Record<number, ChannelInfo> {
+    return (this.replayInfo.channels);
+  }
+  public SetChannelInfo(id: number, newValues: Partial<ChannelInfo>) {
+    const channelList = this.replayInfo.channels;
+    if(channelList[id] != undefined) {
+      Object.assign(channelList[id], newValues);
+    } else {
+      channelList[id] = Object.assign({ id, name: "", isMain:false }, newValues);
+    }
+    this.Save();
+  }
+  public DeleteChannel(id: number) {
+    const chList = this.replayInfo.channels;
+    delete chList[id];
     this.Save();
   }
 

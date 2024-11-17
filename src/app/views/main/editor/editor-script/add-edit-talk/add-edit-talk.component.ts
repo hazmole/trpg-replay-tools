@@ -33,7 +33,7 @@ export class AddEditTalkComponent implements OnInit {
   };
   formGroup = new FormGroup({
     actorID: new FormControl<number>(0),
-    channel: new FormControl<string>("main"),
+    channelID: new FormControl<number>(0),
     content: new FormControl<string>(""),
   });
 
@@ -45,6 +45,7 @@ export class AddEditTalkComponent implements OnInit {
   };
 
   actorOptionList:Array<ActorEntry> = [];
+  channelOptionList:Array<ChannelEntry> = [];
 
   ngOnInit(): void {
     this.mode = this.data.mode;
@@ -54,19 +55,26 @@ export class AddEditTalkComponent implements OnInit {
     } else {
       this.dialogTitle = "編輯對話";
       this.formGroup.controls.actorID.setValue(this.data.entry?.actorId || 0);
-      this.formGroup.controls.channel.setValue(this.data.entry?.channel || "main");
+      this.formGroup.controls.channelID.setValue(this.data.entry?.channelId || 0);
       this.formGroup.controls.content.setValue(this.parseHtml(this.data.entry?.content || ""));
     }
 
     //=========
     const actorList = this.rpManager.GetActorList();
     this.actorOptionList = Object.values(actorList)
-    .map( actor => {
-      return {
-        text: `(ID:${actor.id}) ${actor.name}`,
-        id: actor.id
-      }
-    });
+      .map( actor => {
+        return {
+          text: `(ID:${actor.id}) ${actor.name}`,
+          id: actor.id
+        }
+      });
+    this.channelOptionList = Object.values(this.rpManager.GetChannelList())
+      .map( channel => {
+        return {
+          text: channel.name,
+          id: channel.id
+        }
+      });
   }
 
   parseHtml(content: string): string {
@@ -82,7 +90,7 @@ export class AddEditTalkComponent implements OnInit {
   }
   onConfirm(): void {
     this.entryObj.actorId = this.formGroup.controls.actorID.value || 0;
-    this.entryObj.channel = this.formGroup.controls.channel.value || "main";
+    this.entryObj.channelId = this.formGroup.controls.channelID.value || 0;
     this.entryObj.content = this.restoreHtml(this.formGroup.controls.content.value || "");
 
     let retObj: AddEditScriptReturn = {
@@ -95,6 +103,10 @@ export class AddEditTalkComponent implements OnInit {
 
 
 interface ActorEntry {
+  text: string;
+  id: number;
+}
+interface ChannelEntry {
   text: string;
   id: number;
 }

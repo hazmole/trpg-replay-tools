@@ -2,6 +2,7 @@ export interface ReplayInfo {
     filename: string;
     config: ReplayConfig;
     actors: Record<number, ActorInfo>;
+    channels: Record<number, ChannelInfo>;
     script: Array<ScriptEntry>;
     isLoaded: boolean;
 }
@@ -12,6 +13,7 @@ export const newReplayInfo = () => {
             title: "未命名標題",
         },
         actors: {},
+        channels: {},
         script: [],
         isLoaded: false,
     }
@@ -23,6 +25,11 @@ export interface ActorInfo {
     color: string;
     imgUrl: string;
 };
+export interface ChannelInfo {
+    id: number;
+    name: string;
+    isMain: boolean;
+}
 export interface ReplayConfig {
     title: string;
     subtitle?: string;
@@ -39,7 +46,7 @@ export interface ColorTheme {
 
 export interface ScriptEntry {
     type: ScriptEntryType;
-    channel?: ChannelType;
+    channelId?: number;
     actorId?: number;
     content: string;
 }

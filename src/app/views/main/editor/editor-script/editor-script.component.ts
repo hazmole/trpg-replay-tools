@@ -8,7 +8,7 @@ import { AddEditTitleComponent } from './add-edit-title/add-edit-title.component
 import { AddEditTalkComponent } from './add-edit-talk/add-edit-talk.component';
 import { AddEditImageComponent } from './add-edit-image/add-edit-image.component';
 
-import { ScriptEntry, ActorInfo, ScriptEntryType } from 'src/app/interfaces/replay-info.interface';
+import { ScriptEntry, ActorInfo, ScriptEntryType, ChannelInfo } from 'src/app/interfaces/replay-info.interface';
 import { Mode, AddEditScriptParam, AddEditScriptReturn } from 'src/app/interfaces/add-edit-script-entry.interface';
 import { AddItemSelectComponent } from './add-item-select/add-item-select.component';
 import { ActionParamMove, ActionParamAdd, ActionParamEdit, ActionParamDel, ScriptAction } from 'src/app/interfaces/script-action.interface';
@@ -41,7 +41,8 @@ export class EditorScriptComponent implements OnInit {
   getEntryClass(entry:ScriptEntry): string {
     switch(entry.type) {
       case "talk":
-        return `talk ${entry.channel}`;
+        let chInfo = this.getChannel(entry);
+        return `talk ${chInfo.isMain? "main": "other"}`;
       default:
         return "special";
     }
@@ -50,8 +51,8 @@ export class EditorScriptComponent implements OnInit {
     switch(entry.type) {
       case "talk":
         let actorInfo = this.getActor(entry);
-        let channel = (entry.channel === "main"? "": "[場外] ");
-        return `${channel}${actorInfo.name}`;
+        let chInfo = this.getChannel(entry);
+        return `[${chInfo.name}] ${actorInfo.name}`;
       case "halt":
         return "分段符號";
       case "title":
@@ -87,6 +88,13 @@ export class EditorScriptComponent implements OnInit {
       return actorList[entry.actorId];
     }
     return { name: "", color: "#888888", id:-1, imgUrl: "" };
+  }
+  getChannel(entry: ScriptEntry): (ChannelInfo) {
+    const channelList = this.rpManager.GetChannelList();
+    if(entry.channelId != null) {
+      return channelList[entry.channelId];
+    }
+    return { id:0, name: "main", isMain:true };
   }
 
   isTalkEntry(entry: ScriptEntry): boolean {

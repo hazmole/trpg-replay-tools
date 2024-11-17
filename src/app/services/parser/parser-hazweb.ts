@@ -1,10 +1,12 @@
 import { RegExpList, RegMatchArr, RegMatchByIdx } from "./regular-expression"
-import { ReplayInfo, ActorInfo, ScriptEntry, ChannelType } from "src/app/interfaces/replay-info.interface";
+import { ReplayInfo, ActorInfo, ScriptEntry, ChannelType, ChannelInfo } from "src/app/interfaces/replay-info.interface";
 import { ParserFunc, newReplayInfo } from "src/app/interfaces/replay-info.interface";
+import { registerNewChannelByName } from "./lib-parser";
 
 
 export const ParseHazWeb:ParserFunc = (content:string) => {
     const info:ReplayInfo = newReplayInfo();
+    const channelTable: Record<string, ChannelInfo> = {};
     
     // Handle Title
     const title = RegMatchByIdx("hazv1_getDocTitle", content, 1);
@@ -42,9 +44,14 @@ export const ParseHazWeb:ParserFunc = (content:string) => {
                 info.script.push(genSetBgEntry(innerData));
                 break;
             case "talk":
-                info.script.push(genTalkEntry(innerData));
+                info.script.push(genTalkEntry(innerData, channelTable));
                 break;
         }
+    });
+
+    // Append Channel (if needed)
+    Object.values(channelTable).forEach((ch) => {
+        info.channels[ch.id] = (ch);
     });
 
     return info;
@@ -61,19 +68,22 @@ function genSetBgEntry(data:string): ScriptEntry {
     let imgUrl = (data.match(RegExpList.hazv1_getBgImage)||[])[1];
     return { type: "setBg", content: imgUrl };
 }
-function genTalkEntry(data:string): ScriptEntry {
+function genTalkEntry(data:string, channelTable:Record<string, ChannelInfo>): ScriptEntry {
     let matchMap;
 
     matchMap = [...data.matchAll(RegExpList.hazv1_getTalk)][0];
     let channel = matchMap[1];
     let actorId = matchMap[2];
 
+    channel = (channel=="mainCh")? "主要": channel;
+    let chObj = registerNewChannelByName(channelTable, channel, ["主要"]);
+
     matchMap = [...data.matchAll(RegExpList.hazv1_getTalkContent)][0];
     let content = matchMap[1]
 
     return { 
         type: "talk",
-        channel: (channel=="mainCh")? "main": "other",
+        channelId: chObj.id,
         actorId: parseInt(actorId),
         content: content.trim()
     };

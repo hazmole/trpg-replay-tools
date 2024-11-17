@@ -17,6 +17,7 @@ import { EditorExportComponent } from './views/main/editor/editor-export/editor-
 import { EditorConfigComponent } from './views/main/editor/editor-config/editor-config.component';
 import { EditorActorComponent } from './views/main/editor/editor-actor/editor-actor.component';
 import { EditorActorDeleteComponent } from './views/main/editor/editor-actor/editor-actor-delete/editor-actor-delete.component';
+import { EditorChannelComponent } from './views/main/editor/editor-channel/editor-channel.component';
 import { EditorScriptComponent } from './views/main/editor/editor-script/editor-script.component';
 import { AddItemSelectComponent } from './views/main/editor/editor-script/add-item-select/add-item-select.component';
 import { AddEditTitleComponent } from './views/main/editor/editor-script/add-edit-title/add-edit-title.component';
@@ -29,7 +30,6 @@ import { TabLayerComponent } from './views/shared/layers/tab-layer/tab-layer.com
 import { PanelNavButtonComponent } from './views/shared/partial/panel-nav-button/panel-nav-button.component';
 import { PanelNavBarComponent } from './views/shared/partial/panel-nav-bar/panel-nav-bar.component';
 import { InputTitleComponent } from './views/shared/partial/input-title/input-title.component';
-import { InputDropdownSelectComponent } from './views/shared/partial/input-dropdown-select/input-dropdown-select.component';
 import { ButtonApplyComponent } from './views/shared/partial/button-apply/button-apply.component';
 import { IconButtonComponent } from './views/shared/partial/icon-button/icon-button.component'
 import { NotifyMessageComponent } from './views/shared/partial/notify-message/notify-message.component'
@@ -40,6 +40,7 @@ import { DialogFooterComponent } from './views/shared/dialog/dialog-footer/dialo
 import { DialogBodyComponent } from './views/shared/dialog/dialog-body/dialog-body.component';
 import { ButtonListComponent } from './views/shared/partial/button-list/button-list.component';
 import { ColorPickerComponent } from './views/shared/inputs/color-picker/color-picker.component';
+import { TwoColumnFrameComponent } from './views/shared/two-column/two-column-frame/two-column-frame.component';
 
 /* Services */
 import { ReplayManagerService } from './services/replay-manager.service';
@@ -64,13 +65,13 @@ import { LanguageService } from './services/language.service';
     EditorConfigComponent,
     EditorActorComponent,
     EditorActorDeleteComponent,
+    EditorChannelComponent,
     EditorScriptComponent,
     AddItemSelectComponent,
     AddEditTitleComponent,
     AddEditTalkComponent,
     AddEditImageComponent,
     InputTitleComponent,
-    InputDropdownSelectComponent,
     ButtonApplyComponent,
     IconButtonComponent,
     NotifyMessageComponent,
@@ -90,6 +91,7 @@ import { LanguageService } from './services/language.service';
     DialogBodyComponent,
     ButtonListComponent,
     ColorPickerComponent,
+    TwoColumnFrameComponent,
   ],
   providers: [
     ReplayManagerService,

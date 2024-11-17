@@ -1,0 +1,35 @@
+<app-tab-layer titleText="頻道設定" text="你可以在這邊改變頻道的顯示名稱，以及它是否屬於主要頻道。">
+
+    <app-two-column-frame text="新增頻道"
+        [itemList]="itemList" 
+        [(model)]="itemSelecteID" 
+        [behavior]="itemBehavior">
+
+        <!-- Setting Panel -->
+        <form [formGroup]="formGroup">
+
+            <div class="paragraph"><b>頻道ID：</b>{{ getChID() }}</div>
+
+            <app-input-title titleText="名稱"></app-input-title>
+            <div><input type="text" formControlName="chName"></div>
+
+            <app-input-title titleText="頻道類型"></app-input-title>
+            <div class="app-radio-group">
+                <label class="app-radio-member">
+                    <input type="radio" formControlName="isMain" value="main">
+                    屬於主要頻道
+                </label>
+                <label class="app-radio-member">
+                    <input type="radio" formControlName="isMain" value="other">
+                    屬於場外頻道
+                </label>
+            </div>
+
+            <app-button-list>
+                <app-button-apply text="儲存" (click)="Save()"></app-button-apply>
+                <app-button-apply text="刪除" (click)="Remove()" type="critical"></app-button-apply>
+            </app-button-list>
+        </form>
+    </app-two-column-frame>
+
+</app-tab-layer>

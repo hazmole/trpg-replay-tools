@@ -1,4 +1,4 @@
-import { ActorInfo, ScriptEntry } from "src/app/interfaces/replay-info.interface";
+import { ActorInfo, ChannelInfo, ScriptEntry } from "src/app/interfaces/replay-info.interface";
 
 export interface BasicWebOptions {
     version: string;
@@ -77,16 +77,16 @@ const genScriptEntryOuter = (type:string, content:string) => {
 </div><!--EOS-->`.trim();
 };
 
-const genScriptTalkElem = (entry:ScriptEntry, actor:ActorInfo) => {
+const genScriptTalkElem = (entry:ScriptEntry, actor:ActorInfo, channel:ChannelInfo) => {
     return `
-<div class="_talk _actor_${actor.id} ${entry.channel=="main"? "_main": "_other"}" data-channel="${entry.channel}">
+<div class="_talk _actor_${actor.id} ${channel.isMain? "_main": "_other"}">
     <div class="_lCol">
         <div class="_img"></div>
     </div>
     <div class="_rCol">
         <div class="_name">
             ${actor.name}
-            <div class="_channel">[${entry.channel}]</div>
+            <div class="_channel">[${channel.name}]</div>
         </div>
         <div class="_content">${entry.content}</div>
     </div>

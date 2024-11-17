@@ -29,6 +29,11 @@ export class EditorImportComponent {
   }
 
   public ImportFile() {
+    if(!this.tempFile) {
+      this.tool.PopupErrorNotify("尚未選擇匯入來源！");
+      return ;
+    }
+
     if(this.isActorExisted()){
       this.tool.PopupDialog(EditorImportInheritComponent, {}, (retObj:ImportInheritReturn|null) => {
         if( retObj!=null ) {
@@ -47,23 +52,21 @@ export class EditorImportComponent {
   }
 
   private _importFile(optoins: ImportOptions) {
-    if(this.tempFile) {
-      this.rpManager.Import(this.tempFile, optoins)
-        .then(() => {
-          this.tool.PopupSuccessfulNotify("讀取成功！");
-        })
-        .then(() => {
-          this.rpManager.Save();
-        })
-        .then(() => {
-          this.control.Goto("config");
-        })
-        .catch((err) => {
-          console.error(err);
-        });
-    } else {
-      this.tool.PopupErrorNotify("尚未選擇匯入來源！");
-    }
+    let file = <File> this.tempFile;
+    this.rpManager.Import(file, optoins)
+      .then(() => {
+        this.tool.PopupSuccessfulNotify("讀取成功！");
+      })
+      .then(() => {
+        this.rpManager.Save();
+      })
+      .then(() => {
+        this.control.Goto("config");
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+
   }
 
   private isActorExisted(): boolean {

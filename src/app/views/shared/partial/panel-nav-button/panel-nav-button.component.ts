@@ -42,6 +42,10 @@ export class PanelNavButtonComponent implements OnInit {
       text: "設定",
       imgUrl: "assets/images/cog.png"
     },
+    channel: {
+      text: "頻道編輯",
+      imgUrl: "assets/images/tv.svg"
+    },
   };
 
 

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ActorInfo, ReplayInfo, ScriptEntry } from '../interfaces/replay-info.interface';
+import { ActorInfo, ChannelInfo, ReplayInfo, ScriptEntry } from '../interfaces/replay-info.interface';
 import { templateBuilder as builder, BasicWebOptions } from './exporter-template/template';
 
 const VERSION = "hazmole_v2.0";
@@ -50,17 +50,18 @@ export class ExporterService {
   private appendScriptEntry(ref:Array<string>, rpInfo:ReplayInfo) {
     const actorMap = rpInfo.actors;
     const scriptList = rpInfo.script;
+    const channelMap = rpInfo.channels;
 
     scriptList.forEach(entry => {
-      let innerElem = this.getScriptInnerElem(entry, actorMap);
+      let innerElem = this.getScriptInnerElem(entry, actorMap, channelMap);
       ref.push(builder.genScriptEntryOuter(entry.type, innerElem))
     });
   }
 
-  private getScriptInnerElem(entry:ScriptEntry, actorMap:Record<string, ActorInfo>): string {
+  private getScriptInnerElem(entry:ScriptEntry, actorMap:Record<string, ActorInfo>, channelMap:Record<string, ChannelInfo>): string {
     switch(entry.type){
       case "talk": 
-        return builder.genScriptTalkElem(entry, actorMap[entry.actorId||0]);
+        return builder.genScriptTalkElem(entry, actorMap[entry.actorId||0], channelMap[entry.channelId||0]);
       case "title": 
         return builder.genScriptTitleElem(entry);
       case "halt":

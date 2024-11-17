@@ -50,6 +50,12 @@ select {
 	font-size: .9em;
 }
 
+.app-radio-group .app-radio-member {
+	display: block;
+	padding: 3px 0;
+}
+
+
 
 /* Feature Class */
 .paragraph {

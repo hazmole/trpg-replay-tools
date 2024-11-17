@@ -8,7 +8,8 @@ export const ParseHazRpJSON:ParserFunc = (content:string) => {
     return {
         filename: "",
         config: { title: "未命名團錄" },
-        actors: [],
+        actors: {},
+        channels: {},
         script: [],
         isLoaded: false
     };

@@ -1,0 +1,66 @@
+/* Basic Frame */
+.two-col-frame {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    height: 100%;
+}
+.left-col {
+    width: 240px;
+    overflow: auto;
+}
+.right-col {
+    flex-grow: 1;
+    background-color: rgba(0, 0, 0, 0.2);
+    padding-left: 1em;
+}
+
+
+/* Item Button */
+.item-btn {
+    background: #f0f4ff;
+    padding: 10px 10px;
+    border: 2px solid #1f2650;
+    margin-bottom: 2px;
+}
+.item-btn:hover {
+    background-color: #acb5cf;
+}
+.item-btn:active,
+.item-btn.active {
+    background-color: var(--color-panel-navbtn-bg-active);
+    color: white;
+}
+
+.item-btn .name {
+    width: 180px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+/* Plus Button */
+.plus-btn {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+}
+.plus-btn:hover  { background-color: rgba(0, 0, 0, 0.2); }
+.plus-btn:active { background-color: rgba(0, 0, 0, 0.5); }
+
+.plus-btn .icon {
+    content: '';
+    display: inline-block;
+    background-size: cover;
+    filter: brightness(0.4);
+
+    width: 20px;
+    height: 20px;
+    margin-right: .5em;
+}
+.plus-btn:active .icon {
+    filter: brightness(0.8);
+}
+
+
+
