@@ -1,7 +1,8 @@
 
 export const RegExpList = {
-    htmlBody: new RegExp(/<body.*?>(.*)<\/body>/, 's'),
-    htmlStyle: new RegExp(/<style>(.*)<\/style>/, 's'),
+    htmlBody:   new RegExp(/<body.*?>(.*)<\/body>/, 's'),
+    htmlHeader: new RegExp(/<head>(.*)<\/head>/, 's'),
+    htmlStyle:  new RegExp(/<style>(.*)<\/style>/, 's'),
 
     hazWebVersion: new RegExp(/<version>hazmole_v(.*?)<\/version>/),
     ccfFotmat: new RegExp(/<p style="color:(#[\w\d]{6});">.*?<span> \[(.*?)\].*?<span>(.*?)<\/span>.*?<span>(.*?)<\/span>/, 'smg'),
@@ -17,16 +18,18 @@ export const RegExpList = {
 
     hazV2Format: new RegExp(/<div class="_script-outer.*?" data-type="(\w+)">(.*?)<\/div><!--EOS-->/, 'smg'),
     hazv2_actorCss: new RegExp(/\._actor_(\d+) ._name { color:(#[\w\d]{6}); content:'(.*?)'; }.*?._actor_\d+ ._img { background-image:url\('(.*?)'\);/, 'sg'),
+    hazv2_chInfo: new RegExp(/_ch_(\d+): \{ name:"(.*?)"; main:(true|false); hide:(true|false); \}/, 'sg'),
     hazv2_getSectTitle: new RegExp(/<div class="_sctitle">(.*?)<\/div>/, 's'),
     hazv2_getBgImage: new RegExp(/<img src="(.*?)">/, 's'),
-    hazv2_getTalk: new RegExp(/<div class="_talk _actor_(\d+) .*?">/, 'sg'),
-    hazv2_getTalkChannel: new RegExp(/<div class="_channel">\[(.*?)\]<\/div>/, 'sg'),
-    hazv2_getTalkContent: new RegExp(/<div class="_content">(.*?)<\/div>/, 'smg'),
-    hazv2_getTheme_varBgColor: new RegExp(/--color-bg: (#[0-9a-zA-Z]+);/),
-    hazv2_getTheme_varTitleColor: new RegExp(/--color-title: (#[0-9a-zA-Z]+);/),
-    hazv2_getTheme_varSubTitleColor: new RegExp(/--color-subtitle: (#[0-9a-zA-Z]+);/),
-    hazv2_getTheme_varTalkBgColor: new RegExp(/--color-talk-bg: (#[0-9a-zA-Z]+);/),
-    hazv2_getTheme_varTalkPanelBgColor: new RegExp(/--color-talk-panel-bg: (#[0-9a-zA-Z]+);/),
+    hazv2_getTalk:          new RegExp(/<div class="_talk _actor_(\d+) .*?">/, 'sg'),
+    hazv2_getTalkChannel:   new RegExp(/<div class="_channel">\[(.*?)\]<\/div>/, 'sg'),
+    hazv2_getTalkChannelID: new RegExp(/<channel class="_hidden">(\d+)<\/channel>/, 'sg'),
+    hazv2_getTalkContent:   new RegExp(/<div class="_content">(.*?)<\/div>/, 'smg'),
+    hazv2_getTheme_varBgColor:            new RegExp(/--color-bg: (#[0-9a-zA-Z]+);/),
+    hazv2_getTheme_varTitleColor:         new RegExp(/--color-title: (#[0-9a-zA-Z]+);/),
+    hazv2_getTheme_varSubTitleColor:      new RegExp(/--color-subtitle: (#[0-9a-zA-Z]+);/),
+    hazv2_getTheme_varTalkBgColor:        new RegExp(/--color-talk-bg: (#[0-9a-zA-Z]+);/),
+    hazv2_getTheme_varTalkPanelBgColor:   new RegExp(/--color-talk-panel-bg: (#[0-9a-zA-Z]+);/),
     hazv2_getTheme_varTalkPanelTextColor: new RegExp(/--color-talk-panel-text: (#[0-9a-zA-Z]+);/),
 };
 

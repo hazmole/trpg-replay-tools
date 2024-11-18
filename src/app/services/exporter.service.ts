@@ -20,11 +20,13 @@ export class ExporterService {
       description: "",
       styleVarArr: [],
       styleActorArr: [],
+      channelArr: [],
       scriptList: []
     };
 
     this.appendStyleVars(options.styleVarArr, rpInfo);
     this.appendStyleActor(options.styleActorArr, rpInfo);
+    this.appendChannelInfo(options.channelArr, rpInfo);
     this.appendScriptEntry(options.scriptList, rpInfo);
 
     return builder.genBasicWeb(options);
@@ -44,6 +46,14 @@ export class ExporterService {
 
     actorList.forEach(actor => {
       ref.push(builder.genActorStyle(actor));
+    });
+  }
+
+  private appendChannelInfo(ref:Array<string>, rpInfo:ReplayInfo) {
+    const channelList = Object.values(rpInfo.channels);
+
+    channelList.forEach(channel => {
+      ref.push(builder.genChannelInfo(channel));
     });
   }
 

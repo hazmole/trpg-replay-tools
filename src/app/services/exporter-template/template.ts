@@ -7,6 +7,7 @@ export interface BasicWebOptions {
     description: string;
     styleVarArr: Array<string>;
     styleActorArr: Array<string>;
+    channelArr: Array<string>;
     scriptList: Array<string>;
 }
 
@@ -50,6 +51,11 @@ const genBasicWeb = (opt:BasicWebOptions) => {
 
             ${ opt.styleActorArr.join('\n') }
         </style>
+        <meta-data class="_hidden">
+            <channel>
+                ${ opt.channelArr.join('\n') }
+            </channel>
+        </meta-data>
     </head>
     <body>
         <div class="_hidden"><version>${opt.version}</version></div>
@@ -70,6 +76,10 @@ const genActorStyle = (actor:ActorInfo) => {
 ._actor_${actor.id} ._img { background-image:url('${actor.imgUrl}'); display:${actor.imgUrl===""? "none": "block"}; }`.trim();
 }
 
+const genChannelInfo = (channel:ChannelInfo) => {
+    return `_ch_${channel.id}: { name:"${channel.name}"; main:${channel.isMain}; hide:${channel.isHidden}; }`;
+}
+
 const genScriptEntryOuter = (type:string, content:string, isHidden:boolean) => {
     return `
 <div class="_script-outer ${isHidden? "_hidden": ""}" data-type="${type}">
@@ -87,6 +97,7 @@ const genScriptTalkElem = (entry:ScriptEntry, actor:ActorInfo, channel:ChannelIn
         <div class="_name">
             ${actor.name}
             <div class="_channel">[${channel.name}]</div>
+            <channel class="_hidden">${channel.id}</channel>
         </div>
         <div class="_content">${entry.content}</div>
     </div>
@@ -109,6 +120,7 @@ const genScriptBgImageElem = (entry:ScriptEntry) => {
 export const templateBuilder = {
     genBasicWeb,
     genActorStyle,
+    genChannelInfo,
     genScriptEntryOuter,
     genScriptTalkElem,
     genScriptTitleElem,
