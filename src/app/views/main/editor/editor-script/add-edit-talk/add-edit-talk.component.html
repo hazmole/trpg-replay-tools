@@ -6,14 +6,14 @@
             <div class="paragraph">
                 <app-input-title titleText="發言角色"></app-input-title>
                 <select formControlName="actorID" >
-                    <option *ngFor="let actorOption of actorOptionList" [value]="actorOption.id">{{ actorOption.text }}</option>
+                    <option *ngFor="let actorOption of actorOptionList" [ngValue]="actorOption.id">{{ actorOption.text }}</option>
                 </select>
             </div>
 
             <div class="paragraph">
                 <app-input-title titleText="頻道"></app-input-title>
                 <select formControlName="channelID" >
-                    <option *ngFor="let chOption of channelOptionList" [value]="chOption.id">{{ chOption.text }}</option>
+                    <option *ngFor="let chOption of channelOptionList" [ngValue]="chOption.id">{{ chOption.text }}</option>
                 </select>
             </div>
 

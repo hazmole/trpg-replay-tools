@@ -66,8 +66,8 @@ export class EditorChannelDeleteComponent implements OnInit {
   }
   onConfirm(): void {
     this.dialogRef.close({
-      old_actor_id: this.oldChannelID,
-      new_actor_id: this.formGroup.controls.newChannelID.value,
+      old_channel_id: this.oldChannelID,
+      new_channel_id: this.formGroup.controls.newChannelID.value,
     });
   }
 }
