@@ -53,8 +53,12 @@ export class ExporterService {
     const channelMap = rpInfo.channels;
 
     scriptList.forEach(entry => {
+      let isHidden = false;
+      if(entry.channelId != null && channelMap[entry.channelId].isHidden) {
+        isHidden = true;
+      }
       let innerElem = this.getScriptInnerElem(entry, actorMap, channelMap);
-      ref.push(builder.genScriptEntryOuter(entry.type, innerElem))
+      ref.push(builder.genScriptEntryOuter(entry.type, innerElem, isHidden))
     });
   }
 

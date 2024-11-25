@@ -29,6 +29,7 @@ export interface ChannelInfo {
     id: number;
     name: string;
     isMain: boolean;
+    isHidden: boolean;
 }
 export interface ReplayConfig {
     title: string;

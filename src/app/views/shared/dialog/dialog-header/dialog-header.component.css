@@ -4,7 +4,7 @@
 
 .header {
     background-color: var(--color-panel-navbar-bg);
-    cursor: pointer;
+    cursor: grab;
     display: flex;
     align-items: center;
     justify-content: space-between;

@@ -94,7 +94,7 @@ export class EditorScriptComponent implements OnInit {
     if(entry.channelId != null) {
       return channelList[entry.channelId];
     }
-    return { id:0, name: "main", isMain:true };
+    return { id:0, name: "main", isMain:true, isHidden:false };
   }
 
   isTalkEntry(entry: ScriptEntry): boolean {

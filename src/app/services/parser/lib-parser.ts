@@ -6,6 +6,7 @@ export const registerNewChannelByName = (table: Record<string, ChannelInfo>, chN
             id: Object.keys(table).length,
             name: chName,
             isMain: mainChNameArr.some((ch) => (ch == chName)),
+            isHidden: false,
         };
         table[chName] = newChannel;
     } 

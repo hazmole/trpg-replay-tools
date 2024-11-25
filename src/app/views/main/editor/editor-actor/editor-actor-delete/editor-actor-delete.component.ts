@@ -27,6 +27,7 @@ export class EditorActorDeleteComponent implements OnInit {
   };
 
   public formGroup = new FormGroup({
+    isDeleteRelatedScript: new FormControl<boolean>(true),
     newActorID: new FormControl<number>(0),
   });
 
@@ -52,6 +53,9 @@ export class EditorActorDeleteComponent implements OnInit {
   }
 
 
+  isActorReplaced(): boolean {
+    return this.formGroup.controls.isDeleteRelatedScript.value == false;
+  }
   getOldActorName(): string {
     return this.oldActorName;
   }
@@ -78,6 +82,7 @@ export interface DeleteActorParam {
   actor_id: number;
 }
 export interface DeleteActorReturn {
+  is_delete_related: boolean;
   old_actor_id: number;
   new_actor_id: number;
 }

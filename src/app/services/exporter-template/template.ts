@@ -25,7 +25,7 @@ const genBasicWeb = (opt:BasicWebOptions) => {
             }
             body { display:flex; flex-direction:column; align-items:center; background:var(--color-bg); }
             h1{ margin: 5px 0; color:var(--color-title); }
-            ._hidden { display:none; }
+            ._hidden { display:none !important; }
             ._main { display:flex; flex-direction:column; align-items:stretch; gap:10px; width:1080px; }
             ._subtitle { color:var(--color-subtitle); margin-top:20px; }
             ._sctitle { background:#ddd; margin-top:30px; padding:10px;font-weight:bold;font-size:1.3rem;text-align:center; }
@@ -70,16 +70,16 @@ const genActorStyle = (actor:ActorInfo) => {
 ._actor_${actor.id} ._img { background-image:url('${actor.imgUrl}'); display:${actor.imgUrl===""? "none": "block"}; }`.trim();
 }
 
-const genScriptEntryOuter = (type:string, content:string) => {
+const genScriptEntryOuter = (type:string, content:string, isHidden:boolean) => {
     return `
-<div class="_script-outer" data-type="${type}">
+<div class="_script-outer ${isHidden? "_hidden": ""}" data-type="${type}">
     ${content}
 </div><!--EOS-->`.trim();
 };
 
 const genScriptTalkElem = (entry:ScriptEntry, actor:ActorInfo, channel:ChannelInfo) => {
     return `
-<div class="_talk _actor_${actor.id} ${channel.isMain? "_main": "_other"}">
+<div class="_talk _actor_${actor.id} ${channel.isMain? "_main": "_other"} ${channel.isHidden? "_hidden": ""}">
     <div class="_lCol">
         <div class="_img"></div>
     </div>

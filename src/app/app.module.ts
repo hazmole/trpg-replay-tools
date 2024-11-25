@@ -18,6 +18,7 @@ import { EditorConfigComponent } from './views/main/editor/editor-config/editor-
 import { EditorActorComponent } from './views/main/editor/editor-actor/editor-actor.component';
 import { EditorActorDeleteComponent } from './views/main/editor/editor-actor/editor-actor-delete/editor-actor-delete.component';
 import { EditorChannelComponent } from './views/main/editor/editor-channel/editor-channel.component';
+import { EditorChannelDeleteComponent } from './views/main/editor/editor-channel/editor-channel-delete/editor-channel-delete.component';
 import { EditorScriptComponent } from './views/main/editor/editor-script/editor-script.component';
 import { AddItemSelectComponent } from './views/main/editor/editor-script/add-item-select/add-item-select.component';
 import { AddEditTitleComponent } from './views/main/editor/editor-script/add-edit-title/add-edit-title.component';
@@ -66,6 +67,7 @@ import { LanguageService } from './services/language.service';
     EditorActorComponent,
     EditorActorDeleteComponent,
     EditorChannelComponent,
+    EditorChannelDeleteComponent,
     EditorScriptComponent,
     AddItemSelectComponent,
     AddEditTitleComponent,

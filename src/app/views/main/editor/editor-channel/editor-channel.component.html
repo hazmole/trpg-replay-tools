@@ -25,6 +25,12 @@
                 </label>
             </div>
 
+            <app-input-title titleText="顯示設定"></app-input-title>
+            <label>
+                <input type="checkbox" formControlName="isHidden">
+                隱藏這個頻道（這個頻道的內容仍會保留）
+            </label>
+
             <app-button-list>
                 <app-button-apply text="儲存" (click)="Save()"></app-button-apply>
                 <app-button-apply text="刪除" (click)="Remove()" type="critical"></app-button-apply>

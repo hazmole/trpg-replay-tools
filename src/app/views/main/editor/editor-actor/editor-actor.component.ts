@@ -111,10 +111,15 @@ export class EditorActorComponent implements OnInit {
 
     this.tool.PopupDialog(EditorActorDeleteComponent, param, (retObj:DeleteActorReturn) => {
       // Update Scripts
-      this.rpManager.GetScriptEntryList().forEach((entry) => {
-        if(entry.actorId === retObj.old_actor_id)
-          entry.actorId = retObj.new_actor_id;
-      })
+      if(retObj.is_delete_related) {
+        this.rpManager.DeleteScriptByActor(retObj.old_actor_id);
+      } else {
+        this.rpManager.GetScriptEntryList().forEach((entry) => {
+          if(entry.actorId === retObj.old_actor_id) {
+            entry.actorId = retObj.new_actor_id;
+          }
+        })
+      }
       // Remove
       this._removeActor(actorID);
     });

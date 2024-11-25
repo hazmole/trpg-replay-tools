@@ -111,7 +111,7 @@ export class ReplayManagerService {
     if(channelList[id] != undefined) {
       Object.assign(channelList[id], newValues);
     } else {
-      channelList[id] = Object.assign({ id, name: "", isMain:false }, newValues);
+      channelList[id] = Object.assign({ id, name: "", isMain:false, isHidden:false }, newValues);
     }
     this.Save();
   }
@@ -129,6 +129,12 @@ export class ReplayManagerService {
   public SetScriptEntryList(list: Array<ScriptEntry>): void {
     this.replayInfo.script = list;
     this.Save();
+  }
+  public DeleteScriptByActor(actorID: number): void {
+    this.replayInfo.script = this.replayInfo.script.filter(script => script.actorId !== actorID);
+  }
+  public DeleteScriptByChannel(chID: number): void {
+    this.replayInfo.script = this.replayInfo.script.filter(script => script.channelId !== chID);
   }
 
 

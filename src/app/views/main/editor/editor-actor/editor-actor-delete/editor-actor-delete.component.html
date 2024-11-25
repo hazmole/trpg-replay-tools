@@ -5,15 +5,23 @@
         <form [formGroup]="formGroup">
             <div>
                 這個角色在團錄中有多筆發言紀錄，無法直接刪除。<br/>
-                你是否要將這個角色的發言紀錄替換成其他角色後，再進行刪除？
+                你可以選擇將這個角色的發言紀錄替換成其他角色，或是乾脆把他的所有發言一併刪除。
             </div>
 
             <div class="paragraph">
-                <app-input-title titleText="原角色"></app-input-title>
+                <app-input-title titleText="角色"></app-input-title>
                 <div>{{ getOldActorName() }}</div>
             </div>
 
             <div class="paragraph">
+                <app-input-title titleText="繼承設定"></app-input-title>
+                <label>
+                    <input type="checkbox" formControlName="isDeleteRelatedScript">
+                    刪除該角色和該角色的所有發言。
+                </label>
+            </div>
+
+            <div class="paragraph" *ngIf="isActorReplaced()">
                 <app-input-title titleText="替換成新角色"></app-input-title>
                 <select formControlName="newActorID" >
                     <option *ngFor="let actorOption of actorOptionList" [value]="actorOption.id">{{ actorOption.text }}</option>
