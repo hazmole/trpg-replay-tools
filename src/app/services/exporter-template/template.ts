@@ -22,7 +22,7 @@ const genBasicWeb = (opt:BasicWebOptions) => {
         <title>${opt.title}</title>
         <style>
             :root{
-                ${ opt.styleVarArr.join('\n') }
+                ${ opt.styleVarArr.join('\n                ') }
             }
             body { display:flex; flex-direction:column; align-items:center; background:var(--color-bg); }
             h1{ margin: 5px 0; color:var(--color-title); }
@@ -49,11 +49,11 @@ const genBasicWeb = (opt:BasicWebOptions) => {
             ._bg-img { display:flex; justify-content: center; }
             ._bg-img img { max-width:100%; max-height:400px; }
 
-            ${ opt.styleActorArr.join('\n') }
+            ${ opt.styleActorArr.join('\n            ') }
         </style>
         <meta-data class="_hidden">
             <channel>
-                ${ opt.channelArr.join('\n') }
+                ${ opt.channelArr.join('\n                ') }
             </channel>
         </meta-data>
     </head>
@@ -63,17 +63,18 @@ const genBasicWeb = (opt:BasicWebOptions) => {
         <div class="_subtitle">${opt.subtitle}</div>
 
         <div class="_main">
-            ${opt.scriptList.join('\n')}
+${opt.scriptList.join('\n')}
         </div>
     </body>
 </html>`.trim();
 };
 
 
-const genActorStyle = (actor:ActorInfo) => {
-    return `
-._actor_${actor.id} ._name { color:${actor.color}; content:'${actor.name}'; }
-._actor_${actor.id} ._img { background-image:url('${actor.imgUrl}'); display:${actor.imgUrl===""? "none": "block"}; }`.trim();
+const genActorStyle = (actor:ActorInfo): Array<string> =>  {
+    return [
+        `._actor_${actor.id} ._name { color:${actor.color}; content:'${actor.name}'; }`,
+        `._actor_${actor.id} ._img { background-image:url('${actor.imgUrl}'); display:${actor.imgUrl===""? "none": "block"}; }`
+    ];
 }
 
 const genChannelInfo = (channel:ChannelInfo) => {

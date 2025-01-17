@@ -45,7 +45,7 @@ export class ExporterService {
     const actorList = Object.values(rpInfo.actors);
 
     actorList.forEach(actor => {
-      ref.push(builder.genActorStyle(actor));
+      ref.push(...builder.genActorStyle(actor));
     });
   }
 

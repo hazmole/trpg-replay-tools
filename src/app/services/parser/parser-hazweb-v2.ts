@@ -2,6 +2,7 @@ import { RegExpList, RegMatchArr, RegMatchByIdx } from "./regular-expression"
 import { ReplayInfo, ActorInfo, ScriptEntry, ColorTheme, ChannelInfo } from "src/app/interfaces/replay-info.interface";
 import { ParserFunc, newReplayInfo } from "src/app/interfaces/replay-info.interface";
 import { registerNewChannelByName } from "./lib-parser";
+import { getStyleMap } from "./css-parser";
 
 
 export const ParseHazWebV2:ParserFunc = (html:string) => {
@@ -9,29 +10,37 @@ export const ParseHazWebV2:ParserFunc = (html:string) => {
 
     const body   = RegMatchByIdx("htmlBody",   html, 1);
     const header = RegMatchByIdx("htmlHeader", html, 1);
-    
+    const style = RegMatchByIdx("htmlStyle", header, 1);
+    const styleMap = getStyleMap(style);
+
     // Handle Title
     const title = RegMatchByIdx("hazv1_getDocTitle", header, 1);
     info.config.title = title;
 
     // Handle ColorTheme
     const colorTheme:ColorTheme = {};
-    colorTheme.pageBgColor = RegMatchByIdx("hazv2_getTheme_varBgColor", header, 1) || "#454752";
-    colorTheme.pageTitleColor = RegMatchByIdx("hazv2_getTheme_varTitleColor", header, 1) || "#FFFFFF";
-    colorTheme.scriptTalkBgColor = RegMatchByIdx("hazv2_getTheme_varTalkBgColor", header, 1) || "#1E1E1E";
-    colorTheme.scriptTalkPanelBgColor = RegMatchByIdx("hazv2_getTheme_varTalkPanelBgColor", header, 1) || "#2A2A2A";
-    colorTheme.scriptTalkPaneltextColor = RegMatchByIdx("hazv2_getTheme_varTalkPanelTextColor", header, 1) || "#EEEEEE";
-
+    const rootStyle = (styleMap[":root"].style as any);
+    colorTheme.pageBgColor = rootStyle["--color-bg"] || "#454752";
+    colorTheme.pageTitleColor = rootStyle["--color-title"] || "#FFFFFF";
+    colorTheme.scriptTalkBgColor = rootStyle["--color-talk-bg"] || "#1E1E1E";
+    colorTheme.scriptTalkPanelBgColor = rootStyle["--color-talk-panel-bg"] || "#2A2A2A";
+    colorTheme.scriptTalkPaneltextColor = rootStyle["--color-talk-panel-text"] || "#EEEEEE";
     info.config.colorTheme = colorTheme;
 
     // Handle Actors
-    const style = RegMatchByIdx("htmlStyle", header, 1);
-    (style.match(RegExpList.hazv2_actorCss) || []).forEach((actorData) => {
-        let matchMap = [...actorData.matchAll(RegExpList.hazv2_actorCss)][0];
-        let id     = parseInt(matchMap[1]);
-        let color  = (matchMap[2] || "#888888").toUpperCase();
-        let name   = (matchMap[3] || "");
-        let imgUrl = (matchMap[4] || "");
+    const actorList = (Object.keys(styleMap) as Array<string>)
+        .filter(s => s.includes("._actor_"))
+        .map(s => { return RegMatchByIdx("hazv2_actorID", s, 1) })
+        .filter((item,pos,self) => self.indexOf(item) == pos)
+
+    actorList.forEach((sid) => {
+        const actorNameStyle = styleMap[`._actor_${sid} ._name`];
+        const actorImgStyle = styleMap[`._actor_${sid} ._img`];
+
+        let id = parseInt(sid);
+        let color  = (actorNameStyle.style["color"] || "#888888").toUpperCase();
+        let name   = (actorNameStyle.style["content"] || "");
+        let imgUrl = ((actorImgStyle.style as any)["background-image"] || "");
 
         let actorObj = { id, name, color, imgUrl };
         info.actors[id] = actorObj;
