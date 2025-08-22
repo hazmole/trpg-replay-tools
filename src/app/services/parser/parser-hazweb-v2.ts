@@ -2,7 +2,7 @@ import { RegExpList, RegMatchArr, RegMatchByIdx } from "./regular-expression"
 import { ReplayInfo, ActorInfo, ScriptEntry, ColorTheme, ChannelInfo } from "src/app/interfaces/replay-info.interface";
 import { ParserFunc, newReplayInfo } from "src/app/interfaces/replay-info.interface";
 import { registerNewChannelByName } from "./lib-parser";
-import { getStyleMap } from "./css-parser";
+import { CssParser } from "./css-parser";
 
 
 export const ParseHazWebV2:ParserFunc = (html:string) => {
@@ -11,7 +11,7 @@ export const ParseHazWebV2:ParserFunc = (html:string) => {
     const body   = RegMatchByIdx("htmlBody",   html, 1);
     const header = RegMatchByIdx("htmlHeader", html, 1);
     const style = RegMatchByIdx("htmlStyle", header, 1);
-    const styleMap = getStyleMap(style);
+    const cssParser = new CssParser(style);
 
     // Handle Title
     const title = RegMatchByIdx("hazv1_getDocTitle", header, 1);
@@ -19,15 +19,16 @@ export const ParseHazWebV2:ParserFunc = (html:string) => {
 
     // Handle ColorTheme
     const colorTheme:ColorTheme = {};
-    const rootStyle = (styleMap[":root"].style as any);
-    colorTheme.pageBgColor = rootStyle["--color-bg"] || "#454752";
-    colorTheme.pageTitleColor = rootStyle["--color-title"] || "#FFFFFF";
-    colorTheme.scriptTalkBgColor = rootStyle["--color-talk-bg"] || "#1E1E1E";
-    colorTheme.scriptTalkPanelBgColor = rootStyle["--color-talk-panel-bg"] || "#2A2A2A";
-    colorTheme.scriptTalkPaneltextColor = rootStyle["--color-talk-panel-text"] || "#EEEEEE";
+    const rootStyle = cssParser.getRule(":root");
+    colorTheme.pageBgColor = rootStyle.getValue("--color-bg", "#454752");
+    colorTheme.pageTitleColor = rootStyle.getValue("--color-title", "#FFFFFF");
+    colorTheme.scriptTalkBgColor = rootStyle.getValue("--color-talk-bg", "#1E1E1E");
+    colorTheme.scriptTalkPanelBgColor = rootStyle.getValue("--color-talk-panel-bg", "#2A2A2A");
+    colorTheme.scriptTalkPaneltextColor = rootStyle.getValue("--color-talk-panel-text", "#EEEEEE");
     info.config.colorTheme = colorTheme;
 
     // Handle Actors
+    const styleMap = cssParser.getMap();
     const actorList = (Object.keys(styleMap) as Array<string>)
         .filter(s => s.includes("._actor_"))
         .map(s => { return RegMatchByIdx("hazv2_actorID", s, 1) })
@@ -38,9 +39,9 @@ export const ParseHazWebV2:ParserFunc = (html:string) => {
         const actorImgStyle = styleMap[`._actor_${sid} ._img`];
 
         let id = parseInt(sid);
-        let color  = (actorNameStyle.style["color"] || "#888888").toUpperCase();
-        let name   = (actorNameStyle.style["content"] || "");
-        let imgUrl = ((actorImgStyle.style as any)["background-image"] || "");
+        let color  = (actorNameStyle.getValue('color', '#888888')).toUpperCase();
+        let name   = (actorNameStyle.getValue('content'));
+        let imgUrl = (actorImgStyle.getValue("background-image"));
 
         let actorObj = { id, name, color, imgUrl };
         info.actors[id] = actorObj;
@@ -94,7 +95,6 @@ export const ParseHazWebV2:ParserFunc = (html:string) => {
             info.channels[ch.id] = (ch);
         });
     }
-
     return info;
 };
 

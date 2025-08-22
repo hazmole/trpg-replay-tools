@@ -18,6 +18,8 @@ export const RegExpList = {
 
     hazV2Format: new RegExp(/<div class="_script-outer.*?" data-type="(\w+)">(.*?)<\/div><!--EOS-->/, 'smg'),
     hazv2_actorID: new RegExp(/\._actor_(\d+)/, 's'),
+    //hazv2_chInfo: new RegExp(/<channel>(.*?)<\/channel>/, 's'),
+    //hazv2_chEntryKey: new RegExp(/_ch_(\d+)/, 's'),
     hazv2_chInfo: new RegExp(/_ch_(\d+): \{ name:"(.*?)"; main:(true|false); hide:(true|false); \}/, 'sg'),
     hazv2_getSectTitle: new RegExp(/<div class="_sctitle">(.*?)<\/div>/, 's'),
     hazv2_getBgImage: new RegExp(/<img src="(.*?)">/, 's'),
