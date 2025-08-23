@@ -2,7 +2,7 @@
     <div class="left-col">
 
         <div *ngFor="let item of itemList" class="item-btn clickable"
-            [ngClass]="{'active': model==item.id}"
+            [ngClass]="{'active': model == item.id}"
             (click)="SelectItem(item)">
             <div class="name">{{ item.text }}</div>
         </div>
@@ -14,7 +14,7 @@
 
     </div>
     <div class="right-col">
-        <div *ngIf="model!=-1">
+        <div *ngIf="isModelSelected()">
             <ng-content></ng-content>
         </div>
     </div>

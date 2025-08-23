@@ -1,4 +1,4 @@
-import { ScriptEntry } from "./replay-info.interface";
+import { ScriptEntry } from "../classes/script-entry";
 
 export type Mode = "add" | "edit";
 

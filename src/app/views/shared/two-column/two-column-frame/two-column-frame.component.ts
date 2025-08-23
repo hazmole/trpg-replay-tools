@@ -15,22 +15,26 @@ export class TwoColumnFrameComponent implements OnInit {
   @Input({ required: true }) behavior: TwoColumnClickBehavior;
   
   // two-way binding
-  public selectIdValue: number = -1;
-  @Output() modelChange = new EventEmitter<number>();
+  public selectIdValue: string = "";
+  @Output() modelChange = new EventEmitter<string>();
   @Input({ required: true }) 
-  get model(): number { return this.selectIdValue }
-  set model(val:number) { 
+  get model(): string { return this.selectIdValue }
+  set model(val:string) { 
     this.selectIdValue = val;
     this.modelChange.emit(this.selectIdValue);
   }
   
   ngOnInit(): void {
   }
+  public isModelSelected(): boolean {
+    return !!this.model;
+  }
   public SelectItem(item:TwoColumnButtonEntry): void {
+    console.log(this.model, this.selectIdValue);
     if(this.model != item.id){
       this.model = item.id;
     } else {
-      this.model = -1;
+      this.model = "";
     }
     this.behavior.select();
   }
@@ -41,7 +45,7 @@ export class TwoColumnFrameComponent implements OnInit {
 
 
 export interface TwoColumnButtonEntry {
-  id: number;
+  id: string;
   text: string;
 }
 export interface TwoColumnClickBehavior {

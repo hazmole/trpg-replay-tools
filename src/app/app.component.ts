@@ -25,7 +25,7 @@ export class AppComponent implements OnInit {
       }
 
       setTimeout(()=>{
-        this.rpManager.LoadInfoFromJSON();
+        this.rpManager.Load();
       }, 0);
   }
 

@@ -15,6 +15,8 @@ export class CssParser {
     const AST = CssParse(sheetText);
     for (const rule of (Object.values(AST.cssRules) as Array<CSSStyleRule>)) {
       const selector = rule.selectorText;
+      if (selector === undefined) continue;
+
       this.cssMap[selector] = new CssRule(rule);
     }
   }

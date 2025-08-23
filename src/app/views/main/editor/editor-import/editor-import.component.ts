@@ -1,10 +1,10 @@
 import { Component, Input } from '@angular/core';
 import { TabControl } from 'src/app/interfaces/tab-control.interface';
 
-import { ReplayManagerService, ImportOptions } from 'src/app/services/replay-manager.service';
-import { StorageManagerService } from 'src/app/services/storage-manager.service';
+import { ReplayManagerService } from 'src/app/services/replay-manager.service';
 import { ToolService } from 'src/app/services/tool.service';
 import { EditorImportInheritComponent, ImportInheritReturn } from './editor-import-inherit/editor-import-inherit.component';
+import { InheritParams } from 'src/app/classes/replay-config';
 
 @Component({
   selector: 'app-editor-import',
@@ -16,7 +16,6 @@ export class EditorImportComponent {
 
   constructor(
     private rpManager: ReplayManagerService,
-    private storage: StorageManagerService,
     private tool: ToolService,
   ){ }
 
@@ -34,7 +33,7 @@ export class EditorImportComponent {
       return ;
     }
 
-    if(this.isActorExisted()){
+    if(this.rpManager.isReplayLoaded()){
       this.tool.PopupDialog(EditorImportInheritComponent, {}, (retObj:ImportInheritReturn|null) => {
         if( retObj!=null ) {
           this._importFile({
@@ -51,7 +50,7 @@ export class EditorImportComponent {
     }
   }
 
-  private _importFile(optoins: ImportOptions) {
+  private _importFile(optoins: InheritParams) {
     let file = <File> this.tempFile;
     this.rpManager.Import(file, optoins)
       .then(() => {
@@ -67,11 +66,6 @@ export class EditorImportComponent {
         console.error(err);
       });
 
-  }
-
-  private isActorExisted(): boolean {
-    const actorList = this.rpManager.GetActorList();
-    return Object.keys(actorList).length > 0;
   }
 
   public Clear() {

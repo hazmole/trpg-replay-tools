@@ -49,6 +49,7 @@ import { StorageManagerService } from './services/storage-manager.service';
 import { ParserService } from './services/parser.service';
 import { ToolService } from './services/tool.service';
 import { LanguageService } from './services/language.service';
+import { RegexpService } from './services/regexp.service';
 
 
 @NgModule({
@@ -101,6 +102,7 @@ import { LanguageService } from './services/language.service';
     ParserService,
     ToolService,
     LanguageService,
+    RegexpService,
   ],
   bootstrap: [AppComponent]
 })

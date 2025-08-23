@@ -4,7 +4,6 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ReplayManagerService } from 'src/app/services/replay-manager.service';
 import { ExporterService } from 'src/app/services/exporter.service';
 import { ToolService } from 'src/app/services/tool.service';
-import { ConfigKey } from 'src/app/interfaces/replay-info.interface';
 
 @Component({
   selector: 'app-editor-export',
@@ -16,16 +15,11 @@ export class EditorExportComponent implements OnInit  {
   constructor(
     private rpManager: ReplayManagerService,
     private exporter: ExporterService,
-    private tool: ToolService,
   ){ }
 
-  ngOnInit(): void {
+  ngOnInit(): void {}
 
-  }
-
-
-  OnChangeValue(key:string): void {
-  }
+  OnChangeValue(key:string): void {}
 
 
   Preview(): void {
@@ -49,12 +43,12 @@ export class EditorExportComponent implements OnInit  {
 
   private getFileName(): string {
     let timestamp = new Date().toISOString().slice(0,10).replace(/[-:]/g, '');
-    let text = this.rpManager.GetConfig().title;
+    let filename = this.rpManager.GetReplayConfig().filename;
 
-    return `${timestamp}-${text}.html`;
+    return `${filename}_${timestamp}.html`;
   }
   private getFileData(): string {
-    let rpInfo = this.rpManager.GetInfo();
-    return this.exporter.GenerateFile(rpInfo);
+    let rpCfg = this.rpManager.GetReplayConfig();
+    return this.exporter.GenerateFile(rpCfg);
   }
 }

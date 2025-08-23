@@ -1,4 +1,7 @@
-import { ActorInfo, ChannelInfo, ScriptEntry } from "src/app/interfaces/replay-info.interface";
+import { Actor } from "src/app/classes/actor-collection";
+import { Channel } from "src/app/classes/channel-collection";
+import { ScriptEntry } from "src/app/classes/script-entry";
+
 
 export interface BasicWebOptions {
     version: string;
@@ -70,14 +73,14 @@ ${opt.scriptList.join('\n')}
 };
 
 
-const genActorStyle = (actor:ActorInfo): Array<string> =>  {
+const genActorStyle = (actor:Actor): Array<string> =>  {
     return [
         `._actor_${actor.id} ._name { color:${actor.color}; content:'${actor.name}'; }`,
         `._actor_${actor.id} ._img { background-image:url('${actor.imgUrl}'); display:${actor.imgUrl===""? "none": "block"}; }`
     ];
 }
 
-const genChannelInfo = (channel:ChannelInfo) => {
+const genChannelInfo = (channel:Channel) => {
     return `_ch_${channel.id}: { name:"${channel.name}"; main:${channel.isMain}; hide:${channel.isHidden}; }`;
 }
 
@@ -88,7 +91,7 @@ const genScriptEntryOuter = (type:string, content:string, isHidden:boolean) => {
 </div><!--EOS-->`.trim();
 };
 
-const genScriptTalkElem = (entry:ScriptEntry, actor:ActorInfo, channel:ChannelInfo) => {
+const genScriptTalkElem = (entry:ScriptEntry, actor:Actor, channel:Channel) => {
     return `
 <div class="_talk _actor_${actor.id} ${channel.isMain? "_main": "_other"} ${channel.isHidden? "_hidden": ""}">
     <div class="_lCol">

@@ -27,21 +27,22 @@ export class EditorChannelDeleteComponent implements OnInit {
   };
 
   public formGroup = new FormGroup({
-    isDeleteRelatedScript: new FormControl<boolean>(true),
-    newChannelID: new FormControl<number>(0),
+    isDeleteRelatedScript: new FormControl<boolean>(false),
+    newChannelID: new FormControl<string>(""),
   });
 
-  private oldChannelID: number = -1;
-  private oldChannelName: string = "";
+  private oldChannelID: string;
+  private oldChannelName: string;
   public optionList: Array<ChannelEntry> = [];
 
   ngOnInit(): void {
-    const chList = this.rpManager.GetChannelList()
+    const channelID = this.data.channel_id;
+    const chColle = this.rpManager.GetChannelColle()
 
     this.oldChannelID = this.data.channel_id;
-    this.oldChannelName = chList[this.data.channel_id].name;
-        
-    this.optionList = Object.values(chList)
+    this.oldChannelName = chColle.GetByID(channelID).name;
+
+    this.optionList = chColle.GetList()
       .filter( ch => ch.id != this.oldChannelID )
       .map( ch => {
         return {
@@ -74,13 +75,13 @@ export class EditorChannelDeleteComponent implements OnInit {
 
 interface ChannelEntry {
   text: string;
-  id: number;
+  id: string;
 }
 export interface DeleteChannelParam {
-  channel_id: number;
+  channel_id: string;
 }
 export interface DeleteChannelReturn {
   is_delete_related: boolean;
-  old_channel_id: number;
-  new_channel_id: number;
+  old_channel_id: string;
+  new_channel_id: string;
 }

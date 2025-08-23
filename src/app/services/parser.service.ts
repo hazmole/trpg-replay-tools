@@ -1,12 +1,10 @@
 import { Injectable } from '@angular/core';
-import { RegExpList } from './parser/regular-expression';
-import { ReplayInfo } from 'src/app/interfaces/replay-info.interface';
-
-import { ParseCCFolia } from './parser/parser-ccfolia';
-import { ParseDondotoF } from './parser/parser-dondotof';
-import { ParseHazRpJSON } from './parser/parser-hazrp';
-import { ParseHazWeb } from './parser/parser-hazweb';
-import { ParseHazWebV2 } from './parser/parser-hazweb-v2';
+import { ReplayConfig } from '../classes/replay-config';
+import { RegexpService } from './regexp.service';
+import { DondotofParser } from './parser/parser-dondotof';
+import { HazWebParser } from './parser/parser-hazweb';
+import { HazWebV2Parser } from './parser/parser-hazweb-v2';
+import { CCFoliaParser } from './parser/parser-ccfolia';
 
 @Injectable({
   providedIn: 'root'
@@ -15,24 +13,21 @@ export class ParserService {
 
   constructor() { }
 
-  Parse(fileName:string, fileData:string): (ReplayInfo | null) {
-    let infoObj:(ReplayInfo|null) = null;
+  Parse(fileData:string): ReplayConfig {
+    var config: ReplayConfig;
     
     let sourceType = this.CheckMode(fileData);
     switch(sourceType) {
-      case 'ccfolia':   infoObj = ParseCCFolia(fileData);  infoObj.config.title = fileName; break;
-      case 'dondotof':  infoObj = ParseDondotoF(fileData); infoObj.config.title = fileName; break;
-      case 'hazrp':     infoObj = ParseHazRpJSON(fileData); break;
-      case 'hazweb':    infoObj = ParseHazWeb(fileData); break;
-      case "hazweb_v2": infoObj = ParseHazWebV2(fileData); break;
+      case 'ccfolia':   config = CCFoliaParser.Parse(fileData); break;
+      case 'dondotof':  config = DondotofParser.Parse(fileData); break;
+      // case 'hazrp':     infoObj = ParseHazRpJSON(fileData); break;
+      case 'hazweb':    config = HazWebParser.Parse(fileData); break;
+      case "hazweb_v2": config = HazWebV2Parser.Parse(fileData); break;
+      default:
+        throw "unknown source type."
     }
     
-    if(infoObj != null) {
-      infoObj.filename = fileName;
-      infoObj.isLoaded = true;
-    }
-    
-    return infoObj;
+    return config;
   }
 
   CheckMode(fileData: string): SourceType {
@@ -59,19 +54,19 @@ export class ParserService {
     return true;
   }
   private isHtmlFile(content: string): boolean {
-    return (content.match(RegExpList.htmlBody) != null);
+    return RegexpService.isMatchByKey("htmlBody", content);
   }
   private isCCFFile(content: string): boolean {
-    return (content.match(RegExpList.ccfFotmat) != null);
+    return RegexpService.isMatch(CCFoliaParser.regexp.chat, content);
   }
   private isDDFFile(content: string): boolean {
-    return (content.match(RegExpList.ddfFotmat) != null);
+    return RegexpService.isMatch(DondotofParser.regexp.chat, content);
   }
   private isHazWebFile(content: string): boolean {
-    return (content.match(RegExpList.hazWebVersion) != null);
+    return RegexpService.isMatchByKey("hazWebVersion", content);
   }
   private getHazWebVersion(content: string): string {
-    return (content.match(RegExpList.hazWebVersion) || [])[1];
+    return RegexpService.getByKey("hazWebVersion", content);
   }
 }
 

@@ -27,21 +27,22 @@ export class EditorActorDeleteComponent implements OnInit {
   };
 
   public formGroup = new FormGroup({
-    isDeleteRelatedScript: new FormControl<boolean>(true),
-    newActorID: new FormControl<number>(0),
+    isDeleteRelatedScript: new FormControl<boolean>(false),
+    newActorID: new FormControl<string>(""),
   });
 
-  private oldActorID: number = -1;
-  private oldActorName: string = "";
-  public actorOptionList: Array<ActorEntry> = [];
+  private oldActorID: string;
+  private oldActorName: string;
+  public optionList: Array<ActorEntry> = [];
 
   ngOnInit(): void {
-    const actorList = this.rpManager.GetActorList()
+    const actorID = this.data.actor_id;
+    const actorColle = this.rpManager.GetActorColle()
 
-    this.oldActorID = this.data.actor_id;
-    this.oldActorName = actorList[this.data.actor_id].name;
-        
-    this.actorOptionList = Object.values(actorList)
+    this.oldActorID = actorID;
+    this.oldActorName = actorColle.GetByID(actorID).name;
+
+    this.optionList = actorColle.GetList()
       .filter( actor => actor.id != this.oldActorID )
       .map( actor => {
         return {
@@ -49,7 +50,7 @@ export class EditorActorDeleteComponent implements OnInit {
           id: actor.id
         }
       });
-    this.formGroup.controls.newActorID.setValue(this.actorOptionList[0].id);
+    this.formGroup.controls.newActorID.setValue(this.optionList[0].id);
   }
 
 
@@ -75,14 +76,14 @@ export class EditorActorDeleteComponent implements OnInit {
 
 interface ActorEntry {
   text: string;
-  id: number;
+  id: string;
 }
 
 export interface DeleteActorParam {
-  actor_id: number;
+  actor_id: string;
 }
 export interface DeleteActorReturn {
   is_delete_related: boolean;
-  old_actor_id: number;
-  new_actor_id: number;
+  old_actor_id: string;
+  new_actor_id: string;
 }
