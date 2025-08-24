@@ -5,8 +5,7 @@ import { Actor } from '../classes/actor-collection';
 import { LayoutConfig } from '../classes/layout-config';
 import { Channel } from '../classes/channel-collection';
 import { ScriptEntry } from '../classes/script-entry';
-
-const VERSION = "hazmole_v2.0";
+import { APP_VERSION } from '../version';
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +17,7 @@ export class ExporterService {
   GenerateFile(rpCfg: ReplayConfig): string {
     // Declare Param
     const options:BasicWebOptions = {
-      version: VERSION,
+      version: `hazmole_v${APP_VERSION}`,
       title:    rpCfg.layoutCfg.title || "",
       subtitle: rpCfg.layoutCfg.subtitle || "",
       description: "",
