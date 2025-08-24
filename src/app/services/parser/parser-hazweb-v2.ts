@@ -1,141 +1,146 @@
-import { RegExpList, RegMatchArr, RegMatchByIdx } from "./regular-expression"
-import { ReplayInfo, ActorInfo, ScriptEntry, ColorTheme, ChannelInfo } from "src/app/interfaces/replay-info.interface";
-import { ParserFunc, newReplayInfo } from "src/app/interfaces/replay-info.interface";
-import { registerNewChannelByName } from "./lib-parser";
-import { CssParser } from "./css-parser";
+import { ReplayConfig } from "src/app/classes/replay-config";
+import { RegexpService } from "../regexp.service";
+import { CssParser } from "./internal/css-parser";
+import { ScriptEntry } from "src/app/classes/script-entry";
+import { Channel } from "src/app/classes/channel-collection";
 
+export class HazWebV2Parser {
 
-export const ParseHazWebV2:ParserFunc = (html:string) => {
-    const info:ReplayInfo = newReplayInfo();
+  static regexp = {
+    cssActorSelector: new RegExp(/\._actor_(\d+) ._name/, 's'),
+    channelInfo: new RegExp(/_ch_(\d+): \{ name:"(.*?)"; main:(true|false); hide:(true|false); \}/, 'sg'),
+    scriptBlock: new RegExp(/<div class="_script-outer.*?" data-type="(\w+)">(.*?)<\/div><!--EOS-->/, 'smg'),
+    scriptTitleText: new RegExp(/<div class="_sctitle">(.*?)<\/div>/, 's'),
+    scriptBgImgUrl: new RegExp(/<img src="(.*?)">/, 's'),
+    scriptChatActor: new RegExp(/<div class="_talk _actor_(\d+) .*?">/, 's'),
+    scriptChatContent: new RegExp(/<div class="_content">(.*?)<\/div>/, 'sm'),
+    scriptChatChannelID: new RegExp(/<channel class="_hidden">(\d+)<\/channel>/, 's'),
+    scriptChatChannelName: new RegExp(/<div class="_channel">\[(.*?)\]<\/div>/, 's'),
+  }
 
-    const body   = RegMatchByIdx("htmlBody",   html, 1);
-    const header = RegMatchByIdx("htmlHeader", html, 1);
-    const style = RegMatchByIdx("htmlStyle", header, 1);
-    const cssParser = new CssParser(style);
+  static Parse(rawHTML: string): ReplayConfig {
+    const replayConfig: ReplayConfig = new ReplayConfig();
 
-    // Handle Title
-    const title = RegMatchByIdx("hazv1_getDocTitle", header, 1);
-    info.config.title = title;
+    // fetch html head/body
+    const rawHead = RegexpService.getByKey("htmlHead", rawHTML);
+    const rawBody = RegexpService.getByKey("htmlBody", rawHTML);
+    const rawStyle = RegexpService.getByKey("htmlStyle", rawHead);
+    // ready CSS parser
+    const cssParser = new CssParser(rawStyle);
+    const styleMap = cssParser.getMap();
+
+    // ==================
+    // Handle DocTitle
+    const docTitle = RegexpService.getByKey("htmlTitle", rawHead);
+    replayConfig.layoutCfg.title = docTitle;
 
     // Handle ColorTheme
-    const colorTheme:ColorTheme = {};
-    const rootStyle = cssParser.getRule(":root");
-    colorTheme.pageBgColor = rootStyle.getValue("--color-bg", "#454752");
-    colorTheme.pageTitleColor = rootStyle.getValue("--color-title", "#FFFFFF");
-    colorTheme.scriptTalkBgColor = rootStyle.getValue("--color-talk-bg", "#1E1E1E");
-    colorTheme.scriptTalkPanelBgColor = rootStyle.getValue("--color-talk-panel-bg", "#2A2A2A");
-    colorTheme.scriptTalkPaneltextColor = rootStyle.getValue("--color-talk-panel-text", "#EEEEEE");
-    info.config.colorTheme = colorTheme;
+    /*
+      const colorTheme:ColorTheme = {};
+      const rootStyle = cssParser.getRule(":root");
+      colorTheme.pageBgColor = rootStyle.getValue("--color-bg", "#454752");
+      colorTheme.pageTitleColor = rootStyle.getValue("--color-title", "#FFFFFF");
+      colorTheme.scriptTalkBgColor = rootStyle.getValue("--color-talk-bg", "#1E1E1E");
+      colorTheme.scriptTalkPanelBgColor = rootStyle.getValue("--color-talk-panel-bg", "#2A2A2A");
+      colorTheme.scriptTalkPaneltextColor = rootStyle.getValue("--color-talk-panel-text", "#EEEEEE");
+      info.config.colorTheme = colorTheme;
+    */
 
-    // Handle Actors
-    const styleMap = cssParser.getMap();
-    const actorList = (Object.keys(styleMap) as Array<string>)
-        .filter(s => s.includes("._actor_"))
-        .map(s => { return RegMatchByIdx("hazv2_actorID", s, 1) })
-        .filter((item,pos,self) => self.indexOf(item) == pos)
-
-    actorList.forEach((sid) => {
-        const actorNameStyle = styleMap[`._actor_${sid} ._name`];
-        const actorImgStyle = styleMap[`._actor_${sid} ._img`];
-
-        let id = parseInt(sid);
-        let color  = (actorNameStyle.getValue('color', '#888888')).toUpperCase();
-        let name   = (actorNameStyle.getValue('content'));
-        let imgUrl = (actorImgStyle.getValue("background-image"));
-
-        let actorObj = { id, name, color, imgUrl };
-        info.actors[id] = actorObj;
-    });
-
-    // Handle Channels
-    const channelNameTable: Record<string, ChannelInfo> = {};
-    (header.match(RegExpList.hazv2_chInfo) || []).forEach((chData) => {
-        let matchMap = [...chData.matchAll(RegExpList.hazv2_chInfo)][0];
-        let id = parseInt(matchMap[1]);
-        let name = matchMap[2];
-        let isMain = (matchMap[3] === "true");
-        let isHidden = (matchMap[4] === "true");
+    // Handle Actor
+    (Object.keys(styleMap) as Array<string>)
+      .filter(selector => RegexpService.isMatch(this.regexp.cssActorSelector, selector))
+      .forEach(selector => {
+        const NID = RegexpService.get(this.regexp.cssActorSelector, selector);
+        //  ._actor_(\d+) ._name { color:#000000; content:'example'; }
+        //  ._actor_(\d+) ._img { background-image:url('example'); display:block; }
+        const infoStyle = styleMap[`._actor_${NID} ._name`];
+        const color = infoStyle.getValue("color", "#888888");
+        const name  = infoStyle.getValue("content", "");
+        const imgVal  = styleMap[`._actor_${NID} ._img`].getValue("background-image", "url()");
         
-        let chObj = { id, name, isMain, isHidden };
-        info.channels[id] = chObj;
-        channelNameTable[name] = chObj;
-    });
-    const hasChannelInfo: boolean = Object.keys(channelNameTable).length > 0;
-
-    // Handle ScriptEntry
-    const sectionArr = RegMatchArr("hazV2Format", body);
-    sectionArr.forEach((data:string) => {
-        // Content Match
-        let matchMap = [...data.matchAll(RegExpList.hazV2Format)][0];
-        let type = matchMap[1];
-        let innerData = matchMap[2];
-
-        switch(type) {
-            case "halt":
-                info.script.push(genHaltEntry());
-                break;
-            case "sect_title":
-                info.script.push(genTitleEntry(innerData));
-                break;
-            case "changeBg":
-                info.script.push(genSetBgEntry(innerData));
-                break;
-            case "talk":
-                let getChFunc = null;
-                if(hasChannelInfo) getChFunc = findChannelByID.bind(this, innerData, info.channels);
-                else               getChFunc = findChannelByName.bind(this, innerData, channelNameTable);
-                info.script.push(genTalkEntry(innerData, getChFunc))
-                break;
-        }
-    });
-
-    // Append Channel (if needed)
-    if(!hasChannelInfo) {
-        Object.values(channelNameTable).forEach((ch) => {
-            info.channels[ch.id] = (ch);
+        replayConfig.actorColle.Add(`${NID}`, {
+          id: `${NID}`,
+          name: this.removeQuote(name),
+          color,
+          imgUrl: this.removeQuote(RegexpService.getByKey("cssUrl", imgVal)),
         });
-    }
-    return info;
-};
+      });
 
-function genHaltEntry(): ScriptEntry {
-    return { type: "halt", content: "" };
-}
-function genTitleEntry(data:string): ScriptEntry {
-    let titleText = (data.match(RegExpList.hazv2_getSectTitle)||[])[1];
-    return { type: "title", content: titleText };
-}
-function genSetBgEntry(data:string): ScriptEntry {
-    let imgUrl = (data.match(RegExpList.hazv2_getBgImage)||[])[1];
-    return { type: "setBg", content: imgUrl };
-}
+    // Handle Channel
+    const channelList = RegexpService.getArr(this.regexp.channelInfo, rawHead);
+    channelList.forEach((chText) => {
+      const fields = RegexpService.getfields(this.regexp.channelInfo, chText, ["ID", "name", "isMain", "isHidden"]);
+      replayConfig.channelColle.Add(fields["ID"], {
+        id: fields["ID"],
+        name: fields["name"],
+        isMain: (fields["isMain"] === "true"),
+        isHidden: (fields["isHidden"] === "true"),
+      });
+    });
+    const hasChannelInfo = (channelList.length === 0);
 
-function genTalkEntry(data:string, getChannelObjFunc:Function): ScriptEntry {
-    let matchMap;
+    // Handle Script
+    const scriptBlockArr = RegexpService.getArr(this.regexp.scriptBlock, rawBody);
+    scriptBlockArr.forEach((blockText) => {
+      const fields = RegexpService.getfields(this.regexp.scriptBlock, blockText, ["type", "innerData"]);
+      switch (fields["type"]) {
+        case "halt":
+          replayConfig.scriptArray.push(this.genHaltEntry());
+          break;
+        case "title":
+          replayConfig.scriptArray.push(this.genTitleEntry(fields["innerData"]));
+          break;
+        case "setBg":
+          replayConfig.scriptArray.push(this.genBackgroundEntry(fields["innerData"]));
+          break;
+        case "talk":
+          let chID = "";
+          if (hasChannelInfo) {
+            chID = RegexpService.get(this.regexp.scriptChatChannelID, fields["innerData"]);
+          } else {
+            const channelName = RegexpService.get(this.regexp.scriptChatChannelName, fields["innerData"]);
+            chID = replayConfig.channelColle.GetByName(channelName)?.id || "--unknown--";
+          }
+          replayConfig.scriptArray.push(this.genChatEntry(chID, fields["innerData"]));
+          break;
+      }
+    });
 
-    matchMap = [...data.matchAll(RegExpList.hazv2_getTalk)][0];
-    let actorId = matchMap[1];
+    return replayConfig;
+  }
 
-    let chObj = getChannelObjFunc();
-
-    matchMap = [...data.matchAll(RegExpList.hazv2_getTalkContent)][0];
-    let content = matchMap[1];
-
-    return { 
-        type: "talk",
-        channelId: chObj.id,
-        actorId: parseInt(actorId),
-        content: content.trim()
+  static genHaltEntry(): ScriptEntry {
+    return {
+      type: "halt",
+      content: "",
     };
-}
+  }
+  static genTitleEntry(innerData: string): ScriptEntry {
+    const titleText = RegexpService.get(this.regexp.scriptTitleText, innerData);
+    return {
+      type: "title",
+      content: titleText,
+    };
+  }
+  static genBackgroundEntry(innerData: string): ScriptEntry {
+    const imageUrl = RegexpService.get(this.regexp.scriptBgImgUrl, innerData);
+    return {
+      type: "setBg",
+      content: imageUrl,
+    };
+  }
+  static genChatEntry(chID: string, innerData: string): ScriptEntry {
+    const actorID = RegexpService.get(this.regexp.scriptChatActor, innerData);
+    const content = RegexpService.get(this.regexp.scriptChatContent, innerData);
+    return {
+      type: "chat",
+      channelId: chID,
+      actorId: actorID,
+      content: content,
+    };
+  }
 
-function findChannelByID(data:string, chList:Record<number, ChannelInfo>): ChannelInfo {
-    let matchMap = [...data.matchAll(RegExpList.hazv2_getTalkChannelID)][0];
-    let chID = parseInt(matchMap[1]);
-    return chList[chID];
-}
-function findChannelByName(data:string, chNameTable:Record<string, ChannelInfo>): ChannelInfo {
-    let matchMap = [...data.matchAll(RegExpList.hazv2_getTalkChannel)][0];
-    let chName = (matchMap[1]);
-    return registerNewChannelByName(chNameTable, chName, ["main"]);
+  static removeQuote(text: string): string {
+    return RegexpService.get(new RegExp(/^["']?(.*?)["']?$/, 's'), text);
+  }
 }

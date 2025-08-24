@@ -1,12 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-
 import { ReplayManagerService } from 'src/app/services/replay-manager.service';
 import { ToolService } from 'src/app/services/tool.service';
-import { ActorInfo } from 'src/app/interfaces/replay-info.interface';
 
 import { TwoColumnButtonEntry, TwoColumnClickBehavior } from 'src/app/views/shared/two-column/two-column-frame/two-column-frame.component';
 import { EditorActorDeleteComponent, DeleteActorParam, DeleteActorReturn } from './editor-actor-delete/editor-actor-delete.component';
+import { Actor } from 'src/app/classes/actor-collection';
 
 @Component({
   selector: 'app-editor-actor',
@@ -29,12 +28,11 @@ export class EditorActorComponent implements OnInit {
   // Two-Colume Selection Frame
   public itemList: Array<TwoColumnButtonEntry> = [];
   public itemBehavior: TwoColumnClickBehavior;
-  public itemSelecteID: number = -1;
+  public itemSelecteID: string;
 
-  private actorMap: Record<number, ActorInfo> = {};
   public errImgFlag: boolean = false;
   public outputList = {
-    actorID: -1,
+    actorID: "",
     scriptOwnCount: 0,
   };
 
@@ -49,49 +47,44 @@ export class EditorActorComponent implements OnInit {
   }
   
   initList(): void {
-    this.actorMap = this.rpManager.GetActorList();
-    this.itemList = Object.values(this.actorMap).map(this.parseItem);
+    const actorColle = this.rpManager.GetActorColle();
+    this.itemList = actorColle.GetList().map((actor) => {
+      return this.parseItem(actor);
+    });
   }
 
 
   Save(): void {
-    const newValues = { 
+    this.rpManager.GetActorColle().Update(this.itemSelecteID, {
       name:   <string> this.formGroup.controls.actorName.value,
       color:  <string> this.formGroup.controls.color.value,
       imgUrl: <string> this.formGroup.controls.imgUrl.value,
-    };
-    this.rpManager.SetActorInfo(this.itemSelecteID, newValues);
+    });
     this.initList();
+    this.rpManager.Save();
     this.tool.PopupSuccessfulNotify("儲存成功！");
   }
   Select(): void {
-    if(this.itemSelecteID !== -1) {
+    if(this.itemSelecteID !== "") {
       // update values
-      let actor = this.actorMap[this.itemSelecteID];
+      const actor = this.rpManager.GetActorColle().GetByID(this.itemSelecteID);
       this.formGroup.controls.actorName.setValue(actor.name);
       this.formGroup.controls.color.setValue(actor.color);
       this.formGroup.controls.imgUrl.setValue(actor.imgUrl);
       this.errImgFlag = false;
 
       this.outputList.actorID = actor.id;
-      this.outputList.scriptOwnCount = Object.values(this.rpManager.GetScriptEntryList()).filter((script)=>{
-        return (script.actorId != null) && script.actorId == actor.id;
+      this.outputList.scriptOwnCount = this.rpManager.GetScriptArray().filter((script) => {
+        return script.actorId === actor.id;
       }).length;
     }
   }
   Add(): void {
-    let maxId = -1;
-    Object.values(this.actorMap).forEach(actor => {
-      if(maxId < actor.id) maxId = actor.id;
-    });
-    const newActor = {
-      id: (maxId+1),
+    this.rpManager.GetActorColle().Add("", {
       name: "新創角色",
       color: "#888888",
-      imgUrl: "",
-    };
-
-    this.rpManager.SetActorInfo(newActor.id, newActor);
+      id: "", imgUrl: "",
+    }, true);
     this.initList();
   }
   Remove(): void {
@@ -105,7 +98,8 @@ export class EditorActorComponent implements OnInit {
       const param: DeleteActorParam = { actor_id: id };
       this.tool.PopupDialog(EditorActorDeleteComponent, param, (retObj:DeleteActorReturn) => {
         if(retObj.is_delete_related) {
-          this.rpManager.DeleteScriptByActor(retObj.old_actor_id);
+          this._deleteAllChatOfActor(retObj.old_actor_id);
+          this._removeActor(id);
         } else {
           this._replaceActorOfScripts(retObj.old_actor_id, retObj.new_actor_id);
           this._removeActor(id);
@@ -116,16 +110,20 @@ export class EditorActorComponent implements OnInit {
     }
   }
 
-  private _replaceActorOfScripts(oldID: number, newID: number): void {
-    this.rpManager.GetScriptEntryList().forEach((entry) => {
-      if(entry.actorId === oldID)
-        entry.actorId = newID;
-    })
+  private _deleteAllChatOfActor(actorID: string): void {
+    const newArr = this.rpManager.GetScriptArray().filter((script) => (script.actorId !== actorID));
+    this.rpManager.SetScriptArray(newArr);
   }
-  private _removeActor(actorID: number): void {
+  private _replaceActorOfScripts(oldID: string, newID: string): void {
+    this.rpManager.GetScriptArray().forEach((script) => {
+      if(script.actorId === oldID)
+        script.actorId = newID;
+    });
+  }
+  private _removeActor(actorID: string): void {
     this.tool.PopupSuccessfulNotify("刪除成功！");
-    this.rpManager.DeleteActorInfo(actorID);
-    this.itemSelecteID = -1;
+    this.rpManager.GetActorColle().Remove(actorID);
+    this.itemSelecteID = "";
     this.initList();
   }
 
@@ -141,7 +139,7 @@ export class EditorActorComponent implements OnInit {
     return this.formGroup.controls.imgUrl.value || "";
   }
 
-  parseItem(item:ActorInfo): TwoColumnButtonEntry {
+  parseItem(item: Actor): TwoColumnButtonEntry {
     return { id:item.id, text:item.name };
   }
 }

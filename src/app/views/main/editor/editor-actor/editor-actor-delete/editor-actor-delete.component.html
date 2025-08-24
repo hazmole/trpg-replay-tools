@@ -24,7 +24,7 @@
             <div class="paragraph" *ngIf="isActorReplaced()">
                 <app-input-title titleText="替換成新角色"></app-input-title>
                 <select formControlName="newActorID" >
-                    <option *ngFor="let actorOption of actorOptionList" [ngValue]="actorOption.id">{{ actorOption.text }}</option>
+                    <option *ngFor="let option of optionList" [ngValue]="option.id">{{ option.text }}</option>
                 </select>
             </div>
 

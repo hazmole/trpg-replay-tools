@@ -8,10 +8,12 @@ import { AddEditTitleComponent } from './add-edit-title/add-edit-title.component
 import { AddEditTalkComponent } from './add-edit-talk/add-edit-talk.component';
 import { AddEditImageComponent } from './add-edit-image/add-edit-image.component';
 
-import { ScriptEntry, ActorInfo, ScriptEntryType, ChannelInfo } from 'src/app/interfaces/replay-info.interface';
 import { Mode, AddEditScriptParam, AddEditScriptReturn } from 'src/app/interfaces/add-edit-script-entry.interface';
 import { AddItemSelectComponent } from './add-item-select/add-item-select.component';
 import { ActionParamMove, ActionParamAdd, ActionParamEdit, ActionParamDel, ScriptAction } from 'src/app/interfaces/script-action.interface';
+import { ScriptEntry, ScriptEntryType } from 'src/app/classes/script-entry';
+import { Channel } from 'src/app/classes/channel-collection';
+import { Actor } from 'src/app/classes/actor-collection';
 
 @Component({
   selector: 'app-editor-script',
@@ -34,13 +36,13 @@ export class EditorScriptComponent implements OnInit {
   }
 
   initList(): void {
-    this.entryList = Object.values(this.rpManager.GetScriptEntryList());
+    this.entryList = this.rpManager.GetScriptArray();
   }
 
 
   getEntryClass(entry:ScriptEntry): string {
     switch(entry.type) {
-      case "talk":
+      case "chat":
         let chInfo = this.getChannel(entry);
         return `talk ${chInfo.isMain? "main": "other"}`;
       default:
@@ -49,7 +51,7 @@ export class EditorScriptComponent implements OnInit {
   }
   getEntryTitle(entry:ScriptEntry): string {
     switch(entry.type) {
-      case "talk":
+      case "chat":
         let actorInfo = this.getActor(entry);
         let chInfo = this.getChannel(entry);
         return `[${chInfo.name}] ${actorInfo.name}`;
@@ -63,7 +65,7 @@ export class EditorScriptComponent implements OnInit {
   }
   getEntryTitleStyle(entry:ScriptEntry): Object {
     switch(entry.type) {
-      case "talk":
+      case "chat":
         let actorInfo = this.getActor(entry);
         return { color: actorInfo.color };
       default:
@@ -72,7 +74,7 @@ export class EditorScriptComponent implements OnInit {
   }
   isShowEdit(entry:ScriptEntry): boolean {
     switch(entry.type) {
-      case "talk":
+      case "chat":
       case "title":
       case "setBg":
         return true;
@@ -82,23 +84,21 @@ export class EditorScriptComponent implements OnInit {
   }
 
 
-  getActor(entry: ScriptEntry): (ActorInfo) {
-    const actorList = this.rpManager.GetActorList();
+  getActor(entry: ScriptEntry): Actor {
     if(entry.actorId != null) {
-      return actorList[entry.actorId];
+      return this.rpManager.GetActorColle().GetByID(entry.actorId);
     }
-    return { name: "", color: "#888888", id:-1, imgUrl: "" };
+    return { name: "--unknown--", color: "#888888", imgUrl: "", id: "" };
   }
-  getChannel(entry: ScriptEntry): (ChannelInfo) {
-    const channelList = this.rpManager.GetChannelList();
+  getChannel(entry: ScriptEntry): (Channel) {
     if(entry.channelId != null) {
-      return channelList[entry.channelId];
+      return this.rpManager.GetChannelColle().GetByID(entry.channelId);
     }
-    return { id:0, name: "main", isMain:true, isHidden:false };
+    return { name: "--unknown--", isMain:true, isHidden:false, id: "" };
   }
 
   isTalkEntry(entry: ScriptEntry): boolean {
-    return entry.type === "talk";
+    return entry.type === "chat";
   }
   isTitleEntry(entry: ScriptEntry): boolean {
     return entry.type === "title";
@@ -112,7 +112,7 @@ export class EditorScriptComponent implements OnInit {
 
 
   Save(): void {
-    this.rpManager.SetScriptEntryList(this.entryList);
+    this.rpManager.SetScriptArray(this.entryList);
     this.tool.PopupSuccessfulNotify("儲存成功！");
   }
 
@@ -167,7 +167,7 @@ export class EditorScriptComponent implements OnInit {
   private _getCompByType(type: ScriptEntryType): any {
     switch(type) {
       case "title": return AddEditTitleComponent;
-      case "talk":  return AddEditTalkComponent;
+      case "chat":  return AddEditTalkComponent;
       case "setBg": return AddEditImageComponent;
     }
     return null;

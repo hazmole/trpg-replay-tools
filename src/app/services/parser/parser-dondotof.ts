@@ -1,55 +1,66 @@
-import { RegExpList, RegMatchArr, RegMatchByIdx } from "./regular-expression"
-import { ReplayInfo, ActorInfo, ScriptEntry, ChannelType, ChannelInfo } from "src/app/interfaces/replay-info.interface";
-import { ParserFunc, newReplayInfo } from "src/app/interfaces/replay-info.interface";
-import { registerNewActorByName, registerNewChannelByName } from "./lib-parser";
+import { ScriptEntry } from "src/app/classes/script-entry";
+import { RegexpService } from "../regexp.service";
+import { ReplayConfig } from "src/app/classes/replay-config";
+import { Actor } from "src/app/classes/actor-collection";
+import { Channel } from "src/app/classes/channel-collection";
 
-export const ParseDondotoF:ParserFunc = (content:string) => {
-    const info:ReplayInfo = newReplayInfo();
+export class DondotofParser {
 
-    const body = RegMatchByIdx("htmlBody", content, 1);
-    const sectionArr = RegMatchArr("ddfFotmat", body);
-    
-    const actorTable: Record<string, ActorInfo> = {};
-    const channelTable: Record<string, ChannelInfo> = {};
-    sectionArr.forEach((data:string) => {
-        // Content Match
-        let matchMap = [...data.matchAll(RegExpList.ddfFotmat)][0];
-        let channel = autoTranslate(matchMap[2] || "");
-        let color = matchMap[3];
-        let actor = matchMap[4];
-        let content = matchMap[5];
+  static regexp = {
+    chat: new RegExp(/(^\[(.*?)\])?<font color='(#[\w\d]{6})'><b>(.*?)<\/b>：(.*?)<\/font>/, 'smg')
+  }
 
-        // Handle ActorInfo
-        let actorObj = registerNewActorByName(actorTable, actor, color, "");
-        // Handle ChannelInfo
-        let chObj = registerNewChannelByName(channelTable, channel, mainChannelName);
-        // Handle ScriptEntry
-        let scriptEntry:ScriptEntry = {
-            type: "talk",
-            channelId: chObj.id,
-            actorId: actorObj.id,
-            content: content.trim(),
-        }
-        info.script.push(scriptEntry);
+  static Parse(rawHTML: string): ReplayConfig {
+    const replayConfig: ReplayConfig = new ReplayConfig();
+
+    // fetch html body
+    const rawBody = RegexpService.getByKey("htmlBody", rawHTML);
+    const chatArr = RegexpService.getArr(this.regexp.chat, rawBody);
+
+    // iterate html body
+    chatArr.forEach((chatText:string) => {
+      // Content Match
+      const fields = RegexpService.getfields(this.regexp.chat, chatText, [null, "channel", "color", "name", "content"]);
+
+      // Handle Actor
+      const actor: Actor = replayConfig.actorColle.Add("", {
+        id: "",
+        name: fields['name'],
+        color: fields['color'],
+        imgUrl: "",
+      });
+
+      // Handle ChannelInfo
+      const channel: Channel = replayConfig.channelColle.Add("", {
+        id: "",
+        name: this.translateChName(fields['channel'] || "主要"),
+        isMain: this.isMainChannel(fields['channel'] || "主要"),
+        isHidden: false,
+      });
+
+      // Handle ScriptEntry
+      let scriptEntry:ScriptEntry = {
+        type: "chat",
+        channelId: channel.id,
+        actorId: actor.id,
+        content: fields['content'].trim(),
+      }
+      replayConfig.scriptArray.push(scriptEntry);
     });
 
-    // Add Actor
-    Object.values(actorTable).forEach((actor) => {
-        info.actors[actor.id] = (actor);
-    });
-    // Add Channel
-    Object.values(channelTable).forEach((ch) => {
-        info.channels[ch.id] = (ch);
-    });
+    return replayConfig;
+  }
 
-    return info;
-};
+  static mainChannelName = ["主要", "主頻道", "メイン", "Main", "main"];
+  static chatChannelName = ["閒聊", "雑談", "other"];
 
-const mainChannelName = ["主要", "主頻道", "メイン", "Main", "main"];
-const chatChannelName = ["閒聊", "雑談", "other"];
-
-function autoTranslate(chName: string): string {
-    if(mainChannelName.includes(chName)) return "主要";
-    if(chatChannelName.includes(chName)) return "閒聊";
+  static translateChName(chName: string): string {
+    if(this.mainChannelName.includes(chName)) return "主要";
+    if(this.chatChannelName.includes(chName)) return "閒聊";
     return chName;
+  }
+  static isMainChannel(chName: string): boolean {
+    return this.mainChannelName.includes(chName);
+  }
+
 }

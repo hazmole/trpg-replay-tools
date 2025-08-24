@@ -4,8 +4,9 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { DialogHeaderOptions } from 'src/app/interfaces/dialog-options.interface';
 import { DialogFooterOptions } from 'src/app/interfaces/dialog-options.interface';
 
-import { ScriptEntry } from 'src/app/interfaces/replay-info.interface';
+
 import { Mode, AddEditScriptParam, AddEditScriptReturn } from 'src/app/interfaces/add-edit-script-entry.interface';
+import { ScriptEntry } from 'src/app/classes/script-entry';
 
 
 @Component({

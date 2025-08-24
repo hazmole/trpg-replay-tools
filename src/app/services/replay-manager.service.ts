@@ -1,23 +1,28 @@
 import { Injectable } from '@angular/core';
-import { ChannelInfo, ReplayConfig, ReplayInfo, ScriptEntry } from 'src/app/interfaces/replay-info.interface';
 import { ParserService } from './parser.service';
 import { StorageManagerService } from './storage-manager.service';
-
-import { ActorInfo, newReplayInfo } from 'src/app/interfaces/replay-info.interface';
-import { mergeActorTable } from './parser/lib-parser';
+import { InheritParams, ReplayConfig, ReplayConfigJSON } from '../classes/replay-config';
+import { ActorCollection } from '../classes/actor-collection';
+import { ChannelCollection } from '../classes/channel-collection';
+import { ScriptEntry } from '../classes/script-entry';
+import { LayoutConfig } from '../classes/layout-config';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ReplayManagerService {
+  
+  private replayCfg: ReplayConfig;
+  private isLoaded: boolean;
 
   constructor(
     private storageServ: StorageManagerService,
-  ) { }
+  ) {
+    this.replayCfg = new ReplayConfig();
+  }
 
-  private replayInfo:ReplayInfo = newReplayInfo();
 
-  public Import(file: File, options: ImportOptions): Promise<any> {
+  public Import(file: File, options: InheritParams): Promise<any> {
     const parser = new ParserService();
     const fileName = file.name;
 
@@ -31,124 +36,58 @@ export class ReplayManagerService {
     })
     // Step 2: Parse
     .then((fileData: string) => {
-      let replayInfo = parser.Parse(fileName, fileData);
-      if(replayInfo == null) {
-        throw "unknown_file_format";
-      }
-      return replayInfo;
+      return parser.Parse(fileData);
     })
     // Step 3: Inherit
     .then((newRpInfo) => {
-      if(options.isInheritActor) {
-        newRpInfo.actors = mergeActorTable(newRpInfo.actors, this.replayInfo.actors);
-      }
-      if(options.isInheritTheme) {
-        newRpInfo.config.colorTheme = this.replayInfo.config.colorTheme;
-      }
-      this.replayInfo = newRpInfo;
+      this.replayCfg.Overwrite(newRpInfo, options);
+      this.isLoaded = true;
     })
   };
 
   public isReplayLoaded(): boolean {
-    return (this.replayInfo.isLoaded);
+    return this.isLoaded;
   }
 
-  /* General */
-  public GetInfo(): ReplayInfo {
-    return this.replayInfo;
+  // Getter
+  public GetReplayConfig(): ReplayConfig {
+    return this.replayCfg;
   }
-  public GetInfoJSON(): Object {
-    return this.replayInfo;
+  public GetLayoutConfig(): LayoutConfig {
+    return this.replayCfg.layoutCfg;
   }
-  public LoadInfoFromJSON(): void {
-    let infoObj = this.storageServ.Load();
-    if(infoObj) this.replayInfo = infoObj;
+  public GetActorColle(): ActorCollection {
+    return this.replayCfg.actorColle;
   }
+  public GetChannelColle(): ChannelCollection {
+    return this.replayCfg.channelColle;
+  }
+  public GetScriptArray(): Array<ScriptEntry> {
+    return this.replayCfg.scriptArray;
+  }
+  public SetScriptArray(newArray: Array<ScriptEntry>): void {
+    this.replayCfg.scriptArray = newArray;
+  }
+
+
+  /* Save & Load */
   public Clear(): void {
-    this.replayInfo.isLoaded = false;
-    this.replayInfo.filename = "";
-    this.replayInfo.config = { title: "未命名團錄" };
-    this.replayInfo.actors = {};
-    this.replayInfo.script.length = 0;
-
+    this.isLoaded = false;
+    this.replayCfg.Clear();
     this.Save();
   }
-
-  /* Config */
-  public GetConfig(): ReplayConfig {
-    return this.replayInfo.config;
+  public Load() {
+    let infoObj = (this.storageServ.Load() as ReplayConfigJSON);
+    if(infoObj) this.replayCfg.LoadFromJson(infoObj);
   }
-  public SetConfig(config: ReplayConfig) {
-    this.replayInfo.config = config;
-    this.Save();
-  }
-
-  /* Actor */
-  public GetActorList(): Record<number, ActorInfo> {
-    return (this.replayInfo.actors);
-  }
-  public SetActorInfo(id: number, newValues: Partial<ActorInfo>){
-    const actorList = this.replayInfo.actors;
-    if(actorList[id] != undefined) {
-      Object.assign(actorList[id], newValues);
-    } else {
-      actorList[id] = Object.assign({ id, name: "", color: "888888", imgUrl: "" }, newValues);
-    }
-    this.Save();
-  }
-  public DeleteActorInfo(id: number) {
-    const actorList = this.replayInfo.actors;
-    delete actorList[id];
-    this.Save();
-  }
-
-  /* Channel */
-  public GetChannelList(): Record<number, ChannelInfo> {
-    return (this.replayInfo.channels);
-  }
-  public SetChannelInfo(id: number, newValues: Partial<ChannelInfo>) {
-    const channelList = this.replayInfo.channels;
-    if(channelList[id] != undefined) {
-      Object.assign(channelList[id], newValues);
-    } else {
-      channelList[id] = Object.assign({ id, name: "", isMain:false, isHidden:false }, newValues);
-    }
-    this.Save();
-  }
-  public DeleteChannel(id: number) {
-    const chList = this.replayInfo.channels;
-    delete chList[id];
-    this.Save();
-  }
-
-
-  /* Script */
-  public GetScriptEntryList(): Array<ScriptEntry> {
-    return (this.replayInfo.script);
-  }
-  public SetScriptEntryList(list: Array<ScriptEntry>): void {
-    this.replayInfo.script = list;
-    this.Save();
-  }
-  public DeleteScriptByActor(actorID: number): void {
-    this.replayInfo.script = this.replayInfo.script.filter(script => script.actorId !== actorID);
-  }
-  public DeleteScriptByChannel(chID: number): void {
-    this.replayInfo.script = this.replayInfo.script.filter(script => script.channelId !== chID);
-  }
-
-
   public Save() {
-    this.storageServ.Save(this.replayInfo);
+    this.storageServ.Save(this.replayCfg.ToJson());
   }
+
+
+  
   public Test() {
-    console.log(this.replayInfo);
+    console.log(this.replayCfg);
   }
 
-}
-
-
-export interface ImportOptions {
-  isInheritActor: boolean;
-  isInheritTheme: boolean;
 }

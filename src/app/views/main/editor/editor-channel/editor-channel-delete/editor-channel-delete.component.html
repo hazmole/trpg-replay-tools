@@ -24,7 +24,7 @@
             <div class="paragraph" *ngIf="isChannelReplaced()">
                 <app-input-title titleText="轉移到新頻道"></app-input-title>
                 <select formControlName="newChannelID" >
-                    <option *ngFor="let item of optionList" [value]="item.id">{{ item.text }}</option>
+                    <option *ngFor="let option of optionList" [value]="option.id">{{ option.text }}</option>
                 </select>
             </div>
 

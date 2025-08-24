@@ -6,8 +6,8 @@ import { DialogFooterOptions } from 'src/app/interfaces/dialog-options.interface
 
 import { ReplayManagerService } from 'src/app/services/replay-manager.service';
 
-import { ScriptEntry } from 'src/app/interfaces/replay-info.interface';
 import { Mode, AddEditScriptParam, AddEditScriptReturn } from 'src/app/interfaces/add-edit-script-entry.interface';
+import { ScriptEntry } from 'src/app/classes/script-entry';
 
 
 @Component({
@@ -32,15 +32,15 @@ export class AddEditTalkComponent implements OnInit {
     }
   };
   formGroup = new FormGroup({
-    actorID: new FormControl<number>(0),
-    channelID: new FormControl<number>(0),
+    actorID: new FormControl<string>(""),
+    channelID: new FormControl<string>(""),
     content: new FormControl<string>(""),
   });
 
   public mode: Mode = "add";
   public dialogTitle: string = "";
   public entryObj: ScriptEntry = {
-    type: "talk",
+    type: "chat",
     content: "",
   };
 
@@ -54,21 +54,19 @@ export class AddEditTalkComponent implements OnInit {
       this.dialogTitle = "新增對話";
     } else {
       this.dialogTitle = "編輯對話";
-      this.formGroup.controls.actorID.setValue(this.data.entry?.actorId || 0);
-      this.formGroup.controls.channelID.setValue(this.data.entry?.channelId || 0);
+      this.formGroup.controls.actorID.setValue(this.data.entry?.actorId || "");
+      this.formGroup.controls.channelID.setValue(this.data.entry?.channelId || "");
       this.formGroup.controls.content.setValue(this.parseHtml(this.data.entry?.content || ""));
     }
 
     //=========
-    const actorList = this.rpManager.GetActorList();
-    this.actorOptionList = Object.values(actorList)
-      .map( actor => {
+    this.actorOptionList = this.rpManager.GetActorColle().GetList().map(actor => {
         return {
           text: `(ID:${actor.id}) ${actor.name}`,
           id: actor.id
         }
       });
-    this.channelOptionList = Object.values(this.rpManager.GetChannelList())
+    this.channelOptionList = this.rpManager.GetChannelColle().GetList()
       .map( channel => {
         return {
           text: channel.name,
@@ -89,8 +87,8 @@ export class AddEditTalkComponent implements OnInit {
     this.dialogRef.close(null);
   }
   onConfirm(): void {
-    this.entryObj.actorId = this.formGroup.controls.actorID.value || 0;
-    this.entryObj.channelId = this.formGroup.controls.channelID.value || 0;
+    this.entryObj.actorId = this.formGroup.controls.actorID.value || "";
+    this.entryObj.channelId = this.formGroup.controls.channelID.value || "";
     this.entryObj.content = this.restoreHtml(this.formGroup.controls.content.value || "");
 
     let retObj: AddEditScriptReturn = {
@@ -104,9 +102,9 @@ export class AddEditTalkComponent implements OnInit {
 
 interface ActorEntry {
   text: string;
-  id: number;
+  id: string;
 }
 interface ChannelEntry {
   text: string;
-  id: number;
+  id: string;
 }

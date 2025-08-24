@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { ChannelInfo } from 'src/app/interfaces/replay-info.interface';
 import { ReplayManagerService } from 'src/app/services/replay-manager.service';
 import { ToolService } from 'src/app/services/tool.service';
 
 import { TwoColumnButtonEntry, TwoColumnClickBehavior } from 'src/app/views/shared/two-column/two-column-frame/two-column-frame.component';
 import { EditorChannelDeleteComponent, DeleteChannelParam, DeleteChannelReturn } from './editor-channel-delete/editor-channel-delete.component';
+import { Channel } from 'src/app/classes/channel-collection';
 
 @Component({
   selector: 'app-editor-channel',
@@ -21,18 +21,16 @@ export class EditorChannelComponent implements OnInit{
 
   public formGroup = new FormGroup({
     chName:   new FormControl<string>(''),
-    isMain:   new FormControl<string>("main"),
+    isMain:   new FormControl<string>('main'),
     isHidden: new FormControl<boolean>(false),
   });
 
   // Two-Colume Selection Frame
   public itemList: Array<TwoColumnButtonEntry> = [];
   public itemBehavior: TwoColumnClickBehavior;
-  public itemSelecteID: number = -1;
+  public itemSelecteID: string;
   
   public totalScriptNum = 0;
-
-  private channelMap: Record<number, ChannelInfo> = {};
 
   ngOnInit(): void {
     this.itemBehavior = {
@@ -41,43 +39,45 @@ export class EditorChannelComponent implements OnInit{
     };
     this.initList();
   }
+
   initList(): void {
-    this.channelMap = this.rpManager.GetChannelList();
-    this.itemList = Object.values(this.channelMap).map(this.parseItem);
+    const channelColle = this.rpManager.GetChannelColle();
+    this.itemList = channelColle.GetList().map((channel) => {
+      return this.parseItem(channel);
+    });
   }
 
   Save(): void {
-    const newValues = { 
+
+    this.rpManager.GetChannelColle().Update(this.itemSelecteID, {
       name:     <string> this.formGroup.controls.chName.value,
-      isMain:  (<string> this.formGroup.controls.isMain.value) == "main",
+      isMain:   (<string> this.formGroup.controls.isMain.value) === "main",
       isHidden: <boolean> this.formGroup.controls.isHidden.value,
-    };
-    this.rpManager.SetChannelInfo(this.itemSelecteID, newValues);
+    });
     this.initList();
+    this.rpManager.Save();
     this.tool.PopupSuccessfulNotify("儲存成功！");
   }
   Select(): void {
-    if(this.itemSelecteID == -1) return ;
-    // update values
-    let chObj = this.channelMap[this.itemSelecteID];
-    this.formGroup.controls.chName.setValue(chObj.name);
-    this.formGroup.controls.isMain.setValue(chObj.isMain? "main": "other");
-    this.formGroup.controls.isHidden.setValue(chObj.isHidden);
+    if(this.itemSelecteID !== "") {
+      // update values
+      const channel = this.rpManager.GetChannelColle().GetByID(this.itemSelecteID);
+      this.formGroup.controls.chName.setValue(channel.name);
+      this.formGroup.controls.isMain.setValue(channel.isMain? "main": "other");
+      this.formGroup.controls.isHidden.setValue(channel.isHidden);
 
-    this.totalScriptNum = Object.values(this.rpManager.GetScriptEntryList())
-      .filter((script) => script?.channelId === chObj.id).length;
-    console.log(this.totalScriptNum);
+      this.totalScriptNum = this.rpManager.GetScriptArray().filter((script) => {
+        return script.channelId === channel.id;
+      }).length;
+    }
   }
   Add(): void {
-    let maxId = this.getMaxID();
-    const newChannel:ChannelInfo = {
-      id: (maxId+1),
+    this.rpManager.GetChannelColle().Add("", {
+      id: "",
       name: "新創頻道",
       isMain: false,
       isHidden: false,
-    };
-
-    this.rpManager.SetChannelInfo(newChannel.id, newChannel);
+    }, true);
     this.initList();
   }
   Remove(): void {
@@ -91,7 +91,8 @@ export class EditorChannelComponent implements OnInit{
       const param: DeleteChannelParam = { channel_id: id };
       this.tool.PopupDialog(EditorChannelDeleteComponent, param, (retObj:DeleteChannelReturn)=>{
         if(retObj.is_delete_related) {
-          this.rpManager.DeleteScriptByChannel(retObj.old_channel_id);
+          this._deleteAllChatOfChannel(retObj.old_channel_id);
+          this._removeChannel(id);
         } else {
           this._replaceChannelOfScripts(retObj.old_channel_id, retObj.new_channel_id);
           this._removeChannel(id);
@@ -101,34 +102,29 @@ export class EditorChannelComponent implements OnInit{
       this.tool.PopupErrorNotify("錯誤：你必須要有至少一個頻道！");
     }
   }
-  private _replaceChannelOfScripts(oldID: number, newID: number): void {
-    this.rpManager.GetScriptEntryList().forEach((entry) => {
-      if(entry.channelId === oldID)
-        entry.channelId = newID;
-    })
+  private _deleteAllChatOfChannel(chID: string): void {
+    const newArr = this.rpManager.GetScriptArray().filter((script) => (script.channelId !== chID));
+    this.rpManager.SetScriptArray(newArr);
   }
-  private _removeChannel(chID: number): void {
+  private _replaceChannelOfScripts(oldID: string, newID: string): void {
+    this.rpManager.GetScriptArray().forEach((script) => {
+      if(script.channelId === oldID)
+        script.channelId = newID;
+    });
+  }
+  private _removeChannel(chID: string): void {
     this.tool.PopupSuccessfulNotify("刪除成功！");
-    this.rpManager.DeleteScriptByChannel(chID);
-    this.rpManager.DeleteChannel(chID);
-    this.itemSelecteID = -1;
+    this.rpManager.GetChannelColle().Remove(chID);
+    this.itemSelecteID = "";
     this.initList();
   }
   
 
-
-  getMaxID(): number {
-    let maxId = -1;
-    Object.values(this.channelMap).forEach(item => {
-      if(maxId < item.id) maxId = item.id;
-    });
-    return maxId;
-  }
-  getChID(): number {
+  getChID(): string {
     return this.itemSelecteID;
   }
 
-  parseItem(item:ChannelInfo): TwoColumnButtonEntry {
+  parseItem(item: Channel): TwoColumnButtonEntry {
     return { id:item.id, text:item.name };
   }
 }
