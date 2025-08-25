@@ -1,13 +1,12 @@
 .btn-icon-outer {
-    background-color: #ffffff26;
     display: flex;
     cursor: pointer;
 }
 .btn-icon-outer:hover {
-    background-color: #ffffff80;
+    background-color: #0000003b;
 }
 .btn-icon-outer.disabled {
-    background-color: #0000003b !important;
+    background-color: #ffffff26 !important;
     cursor: no-drop;
 }
 
