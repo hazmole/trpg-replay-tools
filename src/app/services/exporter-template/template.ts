@@ -87,7 +87,7 @@ const genChannelInfo = (channel:Channel) => {
 
 const genScriptEntryOuter = (type:string, content:string, isHidden:boolean) => {
     return `
-<div class="_script-outer ${isHidden? "_hidden": ""}" data-type="${type}">
+<div class="_script-outer ${isHidden? "_hidden": ""}" data-type="${(type === "chat")? "talk": type}">
     ${content}
 </div><!--EOS-->`.trim();
 };
