@@ -9,6 +9,9 @@
     background-color: #ffffff26 !important;
     cursor: no-drop;
 }
+.btn-icon-outer.disabled .clickable {
+    cursor: no-drop !important;
+}
 
 
 .btn-icon {
