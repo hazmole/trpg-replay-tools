@@ -77,7 +77,7 @@ export class HazWebV2Parser {
         isHidden: (fields["isHidden"] === "true"),
       });
     });
-    const hasChannelInfo = (channelList.length === 0);
+    const hasChannelInfo = (channelList.length > 0);
 
     // Handle Script
     const scriptBlockArr = RegexpService.getArr(this.regexp.scriptBlock, rawBody);
@@ -99,7 +99,17 @@ export class HazWebV2Parser {
             chID = RegexpService.get(this.regexp.scriptChatChannelID, fields["innerData"]);
           } else {
             const channelName = RegexpService.get(this.regexp.scriptChatChannelName, fields["innerData"]);
-            chID = replayConfig.channelColle.GetByName(channelName)?.id || "--unknown--";
+            const channel = replayConfig.channelColle.GetByName(channelName);
+            if (channel) {
+              chID = channel.id;
+            } else {
+              const newChannel = replayConfig.channelColle.Add("", {
+                name: (channelName === "main")? "主要": channelName,
+                isMain: (channelName === "main"),
+                id: "", isHidden: false,
+              });
+              chID = newChannel.id;
+            }
           }
           replayConfig.scriptArray.push(this.genChatEntry(chID, fields["innerData"]));
           break;
