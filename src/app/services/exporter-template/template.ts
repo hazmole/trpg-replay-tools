@@ -20,6 +20,7 @@ const genBasicWeb = (opt:BasicWebOptions) => {
 <html>
     <head>
         <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta property="og:title" content="${opt.title}">
         <meta property="og:description" content="${opt.description}">
         <title>${opt.title}</title>
@@ -30,7 +31,7 @@ const genBasicWeb = (opt:BasicWebOptions) => {
             body { display:flex; flex-direction:column; align-items:center; background:var(--color-bg); }
             h1{ margin: 5px 0; color:var(--color-title); }
             ._hidden { display:none !important; }
-            ._main { display:flex; flex-direction:column; align-items:stretch; gap:10px; width:1080px; }
+            ._main { display:flex; flex-direction:column; align-items:stretch; gap:10px; width:100%; max-width:1080px; }
             ._subtitle { color:var(--color-subtitle); margin-top:20px; }
             ._sctitle { background:#ddd; margin-top:30px; padding:10px;font-weight:bold;font-size:1.3rem;text-align:center; }
 
