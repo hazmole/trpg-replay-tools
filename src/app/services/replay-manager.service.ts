@@ -41,6 +41,7 @@ export class ReplayManagerService {
     // Step 3: Inherit
     .then((newRpInfo) => {
       this.replayCfg.Overwrite(newRpInfo, options);
+      this.replayCfg.filename = fileName;
       this.isLoaded = true;
     })
   };
