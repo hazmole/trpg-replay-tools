@@ -32,7 +32,7 @@ const genBasicWeb = (opt:BasicWebOptions) => {
             h1{ margin: 5px 0; color:var(--color-title); }
             ._hidden { display:none !important; }
             ._main { display:flex; flex-direction:column; align-items:stretch; gap:10px; width:100%; max-width:1080px; }
-            ._subtitle { color:var(--color-subtitle); margin-top:20px; }
+            ._subtitle { color:var(--color-subtitle); margin-top:0; margin-bottom: 20px; }
             ._sctitle { background:#ddd; margin-top:30px; padding:10px;font-weight:bold;font-size:1.3rem;text-align:center; }
 
             ._talk { display:flex; flex-direction:row; gap:2px; background:var(--color-talk-bg); width:100%; border-radius:5px; }
