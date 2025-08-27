@@ -7,6 +7,7 @@ import { Channel } from "src/app/classes/channel-collection";
 export class HazWebV2Parser {
 
   static regexp = {
+    docSubtitle: new RegExp(/<div class="_subtitle">(.*?)<\/div>/, 's'),
     cssActorSelector: new RegExp(/\._actor_([a-z0-9]+) ._name/, 's'),
     channelInfo: new RegExp(/_ch_([a-z0-9]+):? \{ name:"(.*?)"; main:(true|false); hide:(true|false); \}/, 'sg'),
     scriptBlock: new RegExp(/<div class="_script-outer.*?" data-type="(\w+)">(.*?)<\/div><!--EOS-->/, 'smg'),
@@ -33,6 +34,8 @@ export class HazWebV2Parser {
     // Handle DocTitle
     const docTitle = RegexpService.getByKey("htmlTitle", rawHead);
     replayConfig.layoutCfg.title = docTitle;
+    const docSubtitle = RegexpService.get(this.regexp.docSubtitle, rawBody);
+    replayConfig.layoutCfg.subtitle = docSubtitle;
 
     // Handle ColorTheme
     /*
