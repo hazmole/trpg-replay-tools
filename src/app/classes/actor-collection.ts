@@ -10,6 +10,8 @@ export class ActorCollection extends BaseCollection<Actor> {
       if (actor !== undefined) {
         actor.color = oldActor.color;
         actor.imgUrl = oldActor.imgUrl;
+      } else {
+        this.Add("", oldActor);
       }
     });
   }
