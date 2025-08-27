@@ -42,10 +42,10 @@ export class EditorExportComponent implements OnInit  {
 
 
   private getFileName(): string {
-    let timestamp = new Date().toISOString().slice(0,10).replace(/[-:]/g, '');
-    let filename = this.rpManager.GetReplayConfig().filename;
-
-    return `${filename}_${timestamp}.html`;
+    // let timestamp = new Date().toISOString().slice(0,10).replace(/[-:]/g, '');
+    // let filename = this.rpManager.GetReplayConfig().filename;
+    // return `${filename}_${timestamp}.html`;
+    return this.rpManager.GetReplayConfig().filename;
   }
   private getFileData(): string {
     let rpCfg = this.rpManager.GetReplayConfig();
