@@ -7,14 +7,14 @@ import { Channel } from "src/app/classes/channel-collection";
 export class HazWebV2Parser {
 
   static regexp = {
-    cssActorSelector: new RegExp(/\._actor_(\d+) ._name/, 's'),
-    channelInfo: new RegExp(/_ch_(\d+): \{ name:"(.*?)"; main:(true|false); hide:(true|false); \}/, 'sg'),
+    cssActorSelector: new RegExp(/\._actor_([a-z0-9]+) ._name/, 's'),
+    channelInfo: new RegExp(/_ch_([a-z0-9]+):? \{ name:"(.*?)"; main:(true|false); hide:(true|false); \}/, 'sg'),
     scriptBlock: new RegExp(/<div class="_script-outer.*?" data-type="(\w+)">(.*?)<\/div><!--EOS-->/, 'smg'),
     scriptTitleText: new RegExp(/<div class="_sctitle">(.*?)<\/div>/, 's'),
     scriptBgImgUrl: new RegExp(/<img src="(.*?)">/, 's'),
-    scriptChatActor: new RegExp(/<div class="_talk _actor_(\d+) .*?">/, 's'),
+    scriptChatActor: new RegExp(/<div class="_talk _actor_([a-z0-9]+) .*?">/, 's'),
     scriptChatContent: new RegExp(/<div class="_content">(.*?)<\/div>/, 'sm'),
-    scriptChatChannelID: new RegExp(/<channel class="_hidden">(\d+)<\/channel>/, 's'),
+    scriptChatChannelID: new RegExp(/<channel class="_hidden">([a-z0-9]+)<\/channel>/, 's'),
     scriptChatChannelName: new RegExp(/<div class="_channel">\[(.*?)\]<\/div>/, 's'),
   }
 
