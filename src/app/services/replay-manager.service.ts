@@ -79,7 +79,10 @@ export class ReplayManagerService {
   }
   public Load() {
     let infoObj = (this.storageServ.Load() as ReplayConfigJSON);
-    if(infoObj) this.replayCfg.LoadFromJson(infoObj);
+    if(infoObj) {
+      this.replayCfg.LoadFromJson(infoObj);
+      this.isLoaded = true;
+    }
   }
   public Save() {
     this.storageServ.Save(this.replayCfg.ToJson());
